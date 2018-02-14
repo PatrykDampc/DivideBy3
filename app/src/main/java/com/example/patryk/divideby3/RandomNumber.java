@@ -7,9 +7,9 @@ import java.util.Random;
  */
 
 public class RandomNumber {
-    int ranNumInt;
-    String ranNumString;
-    boolean divisibleByThree;
+    private int ranNumInt;
+    private String ranNumString;
+    private boolean divisibleByThree;
 
     public RandomNumber() {
         this.ranNumInt = Numbers.randomNumberGenerator(0,100);

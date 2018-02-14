@@ -15,9 +15,12 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton button;
     TextSwitcher textSwitcher;
+    private boolean started = false;
+    private Handler handler = new Handler();
+    private RandomNumber rn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
+        start();
 
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
 
@@ -45,23 +49,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Handler handler =new Handler();
-        final Runnable r = new Runnable() {
-            public void run() {
-                String text = new RandomNumber().getRanNumString();
-                textSwitcher.setText(text);
-                handler.postDelayed(this, 3000);
+    }
+
+    private Runnable runnable = new Runnable(){
+        @Override
+        public void run() {
+            rn = new RandomNumber();
+            textSwitcher.setText(rn.getRanNumString());
+            if(started){
+                start();
             }
-        };
-        handler.postDelayed(r, 0000);
-
-
-
-
-
-
+        }
+    };
+    public void stop(){
+        started = false;
+        handler.removeCallbacks(runnable);
+    }
+    public void start(){
+        started = true;
+        handler.postDelayed(runnable,2000);
     }
 
 
-
+    @Override
+    public void onClick(View v) {
+        stop();
+    }
 }

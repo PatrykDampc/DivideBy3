@@ -12,7 +12,7 @@ public class RandomNumber {
     private boolean divisibleByThree;
 
     public RandomNumber() {
-        this.ranNumInt = Numbers.randomNumberGenerator(0,100);
+        this.ranNumInt = Numbers.randomNumberGenerator(1,100);
         this.ranNumString = String.valueOf(ranNumInt);
         this.divisibleByThree = Numbers.isDivisibleByThree(ranNumInt);
     }

@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean started = false;
     private Handler handler = new Handler();
     private RandomNumber rn;
+    private int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
         start();
+        button.setOnClickListener(this);
 
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
 
@@ -64,15 +66,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void stop(){
         started = false;
         handler.removeCallbacks(runnable);
+        i=0;
     }
+
+
     public void start(){
         started = true;
         handler.postDelayed(runnable,2000);
     }
 
-
     @Override
     public void onClick(View v) {
-        stop();
+        if(rn.isDivisibleByThree()){
+            success();
+        }else fail();
     }
+
+    public void success(){
+        //punkt+1
+        stop();
+        start();
+
+    }
+
+    public void fail(){
+
+    }
+
 }

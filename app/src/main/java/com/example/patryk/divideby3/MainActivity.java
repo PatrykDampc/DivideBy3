@@ -1,5 +1,6 @@
 package com.example.patryk.divideby3;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     rn.setDivisibleByThree(false);
                     Toast.makeText(MainActivity.this, "gówno gówno", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
                 }
             }
         }.start();
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else {
             cd.cancel();
             Toast.makeText(MainActivity.this, "gówno", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, StartActivity.class));
         }
     }
 

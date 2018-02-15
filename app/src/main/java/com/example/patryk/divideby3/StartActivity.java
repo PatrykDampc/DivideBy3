@@ -14,7 +14,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        startButton = (Button) findViewById(R.id.btn_startGa);
+        startButton = (Button) findViewById(R.id.startGameButtonID);
         startButton.setOnClickListener(this);
     }
 

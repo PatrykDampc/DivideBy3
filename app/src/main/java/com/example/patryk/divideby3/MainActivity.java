@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,6 +15,11 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton button;
@@ -22,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler handler = new Handler();
     private RandomNumber rn;
     private int i = 0;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    ScheduledFuture<?> randHandle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +65,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void run() {
             rn = new RandomNumber();
-            textSwitcher.setText(rn.getRanNumString());
-            if(started){
-                start();
-            }
+            Log.d("RN: ", rn.getRanNumString());
+//            textSwitcher.setText(rn.getRanNumString());
         }
     };
-    public void stop(){
-        started = false;
-        handler.removeCallbacks(runnable);
-        i=0;
-    }
-
-
+//    public void stop(){
+//        started = false;
+//        handler.removeCallbacks(runnable);
+//    }
+//
+//
     public void start(){
-        started = true;
-        handler.postDelayed(runnable,2000);
+        Log.d("Start: ","OK");
+        randHandle = scheduler.scheduleWithFixedDelay(runnable,0,2, TimeUnit.SECONDS);
+    }
+    public void stop(){
+        Log.d("Stop: ","OK");
+        randHandle.cancel(true);
     }
 
     @Override
@@ -86,11 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //punkt+1
         stop();
         start();
-
     }
 
     public void fail(){
-
+        stop();
     }
 
 }

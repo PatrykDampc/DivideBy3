@@ -1,6 +1,7 @@
 package com.example.patryk.divideby3;
 
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,18 +25,13 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton button;
     TextSwitcher textSwitcher;
-    private boolean started = false;
-    private Handler handler = new Handler();
     private RandomNumber rn;
-    private int i = 0;
-    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    ScheduledFuture<?> randHandle;
+    CountDownTimer cd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         button = findViewById(R.id.bumButtonID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
@@ -45,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
-        start();
         button.setOnClickListener(this);
 
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -58,30 +53,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return myText;
             }
         });
+        start();
+
 
     }
 
-    private Runnable runnable = new Runnable(){
-        @Override
-        public void run() {
-            rn = new RandomNumber();
-            Log.d("RN: ", rn.getRanNumString());
-//            textSwitcher.setText(rn.getRanNumString());
-        }
-    };
-//    public void stop(){
-//        started = false;
-//        handler.removeCallbacks(runnable);
-//    }
-//
-//
+
+
     public void start(){
-        Log.d("Start: ","OK");
-        randHandle = scheduler.scheduleWithFixedDelay(runnable,0,2, TimeUnit.SECONDS);
+        cd = new CountDownTimer(Long.MAX_VALUE,5000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                rn = new RandomNumber();
+                textSwitcher.setText(rn.getRanNumString());
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+
     }
     public void stop(){
-        Log.d("Stop: ","OK");
-        randHandle.cancel(true);
+        cd.cancel();
     }
 
     @Override
@@ -93,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void success(){
         //punkt+1
+        Log.d("Success: ", "ok" );
         stop();
         start();
     }
 
     public void fail(){
+        Log.d("Fail: ", "ok" );
         stop();
     }
 

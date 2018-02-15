@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextSwitcher textSwitcher;
     private RandomNumber rn;
     CountDownTimer cd;
+    CountDownTimer loop;
+    boolean condition = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        cd = new CountDownTimer(3000,3000) {
+        cd = new CountDownTimer(3000, 3000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
@@ -57,12 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                if(!rn.isDivisibleByThree())start();
+                if(!rn.isDivisibleByThree()) start();
+                else rn.setDivisibleByThree(false);
             }
         }.start();
 
-    }
 
+    }
 
     public void stop(){
     }
@@ -70,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(rn.isDivisibleByThree()) {
+            Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
             cd.cancel();
             cd.start();
-           Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
         }else {
             cd.cancel();
             Toast.makeText(MainActivity.this, "gówno", Toast.LENGTH_SHORT).show();
@@ -81,11 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void success(){
         //punkt+1
-        Log.d("Success: ", "ok" );
+        condition = true;
     }
 
     public void fail(){
-        Log.d("Fail: ", "ok" );
+        loop.cancel();
     }
 
 

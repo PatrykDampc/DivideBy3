@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.util.concurrent.Executors;
@@ -53,15 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return myText;
             }
         });
-        start();
 
-
-    }
-
-
-
-    public void start(){
-        cd = new CountDownTimer(Long.MAX_VALUE,5000) {
+        cd = new CountDownTimer(3000,3000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
@@ -70,32 +64,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-
+                if(!rn.isDivisibleByThree())start();
             }
         }.start();
 
     }
+
+
     public void stop(){
-        cd.cancel();
     }
 
     @Override
     public void onClick(View v) {
-        if(rn.isDivisibleByThree()){
-            success();
-        }else fail();
+        if(rn.isDivisibleByThree()) {
+            cd.cancel();
+            cd.start();
+            Log.d("SUCCESS ","ok");
+        }else {
+            cd.cancel();
+            Log.d("FAIL ","ok");
+        }
     }
 
     public void success(){
         //punkt+1
         Log.d("Success: ", "ok" );
-        stop();
-        start();
     }
 
     public void fail(){
         Log.d("Fail: ", "ok" );
-        stop();
     }
+
 
 }

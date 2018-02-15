@@ -54,9 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cd = new CountDownTimer(3000, 3000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                rn = new RandomNumber();
-                textSwitcher.setText(rn.getRanNumString());
-                scoreView.setText(String.valueOf(i));
+             onTaskCreated();
             }
 
             @Override
@@ -70,11 +68,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }.start();
+    }
 
 
-
+    public void onTaskCreated(){
+        rn = new RandomNumber();
+        textSwitcher.setText(rn.getRanNumString());
+        scoreView.setText(String.valueOf(i));
 
     }
+
 
 
     @Override

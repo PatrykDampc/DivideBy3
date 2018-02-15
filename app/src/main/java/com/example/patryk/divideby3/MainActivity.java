@@ -1,26 +1,19 @@
 package com.example.patryk.divideby3;
 
 import android.graphics.Color;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -79,10 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(rn.isDivisibleByThree()) {
             cd.cancel();
             cd.start();
-            Log.d("SUCCESS ","ok");
+           Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
         }else {
             cd.cancel();
-            Log.d("FAIL ","ok");
+            Toast.makeText(MainActivity.this, "gówno", Toast.LENGTH_SHORT).show();
         }
     }
 

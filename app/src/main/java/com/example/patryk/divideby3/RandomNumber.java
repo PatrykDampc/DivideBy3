@@ -1,15 +1,13 @@
 package com.example.patryk.divideby3;
 
-import java.util.Random;
-
 /**
  * Created by pszen on 14.02.2018.
  */
 
 public class RandomNumber {
-    private int ranNumInt;
-    private String ranNumString;
-    private boolean divisibleByThree;
+   private int ranNumInt;
+   private String ranNumString;
+   private boolean divisibleByThree;
 
     public RandomNumber() {
         this.ranNumInt = Numbers.randomNumberGenerator(1,100);

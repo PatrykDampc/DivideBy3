@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DivideBy3</string>
+    <string name="btn_start">START GAME</string>
 </resources>

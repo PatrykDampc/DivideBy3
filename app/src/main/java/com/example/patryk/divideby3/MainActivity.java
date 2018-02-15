@@ -60,14 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish() {
                 if(!rn.isDivisibleByThree()) start();
-                else rn.setDivisibleByThree(false);
+                else {
+                    rn.setDivisibleByThree(false);
+
+                }
             }
         }.start();
 
 
-    }
-
-    public void stop(){
     }
 
     @Override
@@ -82,13 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void success(){
-        //punkt+1
-        condition = true;
-    }
+    public void addPoint(){
 
-    public void fail(){
-        loop.cancel();
     }
 
 

@@ -56,13 +56,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
-                i++;
                 scoreView.setText(String.valueOf(i));
             }
 
             @Override
             public void onFinish() {
                 if(!rn.isDivisibleByThree()) {
+                   i++;
                     start();
                 } else {
                     rn.setDivisibleByThree(false);
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(rn.isDivisibleByThree()) {
             Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
+            i = i + 2;
             cd.cancel();
             cd.start();
         }else {

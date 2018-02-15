@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,10 +18,10 @@ import android.widget.ViewSwitcher;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton button;
     TextSwitcher textSwitcher;
+    TextView scoreView;
     private RandomNumber rn;
     CountDownTimer cd;
-    CountDownTimer loop;
-    boolean condition = true;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button = findViewById(R.id.bumButtonID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
+        scoreView = findViewById(R.id.scoreID);
+
         Animation in = AnimationUtils.loadAnimation(this,
                 android.R.anim.slide_in_left);
         Animation out = AnimationUtils.loadAnimation(this,
@@ -55,20 +56,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
+                i++;
+                scoreView.setText(String.valueOf(i));
             }
 
             @Override
             public void onFinish() {
-                if(!rn.isDivisibleByThree()) start();
-                else rn.setDivisibleByThree(false);
+                if(!rn.isDivisibleByThree()) {
+                    start();
+                } else {
+                    rn.setDivisibleByThree(false);
+                    Toast.makeText(MainActivity.this, "gówno gówno", Toast.LENGTH_SHORT).show();
+                }
             }
         }.start();
 
 
+
+
     }
 
-    public void stop(){
-    }
 
     @Override
     public void onClick(View v) {
@@ -82,14 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void success(){
-        //punkt+1
-        condition = true;
-    }
-
-    public void fail(){
-        loop.cancel();
-    }
 
 
 }

@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editor.putInt(HIGH_SCORE, i);
                     highScoreView.setText(highScore);
                 }
+            }
 
                 @Override
                 public void onFinish () {
@@ -93,11 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(MainActivity.this, StartActivity.class));
                     }
                 }
-            }.start();
-        };
+        }.start();
 
     }
-
 
         @Override
         public void onClick (View v){

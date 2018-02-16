@@ -8,11 +8,31 @@ public class RandomNumber {
    private int ranNumInt;
    private String ranNumString;
    private boolean divisibleByThree;
+   private boolean containsThree;
+   private boolean winCondition;
 
     public RandomNumber() {
         this.ranNumInt = Numbers.randomNumberGenerator(1,100);
         this.ranNumString = String.valueOf(ranNumInt);
         this.divisibleByThree = Numbers.isDivisibleByThree(ranNumInt);
+        this.containsThree = ranNumString.contains("3");
+        this.winCondition = divisibleByThree || containsThree;
+    }
+
+    public boolean getWinCondition() {
+        return winCondition;
+    }
+
+    public void setWinCondition(boolean winCondition) {
+        this.winCondition = winCondition;
+    }
+
+    public boolean containsThree() {
+        return containsThree;
+    }
+
+    public void setContainsThree(boolean containsThree) {
+        this.containsThree = containsThree;
     }
 
     public boolean isDivisibleByThree() {

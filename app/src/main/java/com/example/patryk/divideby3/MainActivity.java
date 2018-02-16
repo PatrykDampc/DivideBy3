@@ -48,15 +48,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         highScore = prefs.getInt(HIGH_SCORE, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
-        textSwitcherConfiguration(textSwitcher);
+        textSwitcherConfiguration();
         button.setOnClickListener(this);
-        loop = gameLoop(randomNumber, textSwitcher, scoreView, scoreCount, highScore, highScoreView).start();
+        loop = gameLoop().start();
 
     }
 
     @Override
         public void onClick (View v){
-            if (randomNumber.isDivisibleByThree()) {
+            if (randomNumber.getWinCondition()) {
                 scoreCount = scoreCount + 2;
                 loop.cancel();
                 loop.start();
@@ -66,41 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-    public void backToStart(){
-        Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(MainActivity.this, StartActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-    }
-
-    public void textSwitcherConfiguration(TextSwitcher textSwitcher){
-        this.textSwitcher = textSwitcher;
-        Animation in = AnimationUtils.loadAnimation(this,
-                android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(this,
-                android.R.anim.slide_out_right);
-        textSwitcher.setInAnimation(in);
-        textSwitcher.setOutAnimation(out);
-        
-        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            public View makeView() {
-                TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(70);
-                myText.setTextColor(Color.WHITE);
-                return myText;
-            }
-        });
-        
-    }
-
-    public CountDownTimer gameLoop(RandomNumber loopRandomNumber, TextSwitcher loopTextSwitcher, TextView loopScoreView, int loopScoreCount, int highScoreB, TextView loopHighScoreView){
-        this.randomNumber = loopRandomNumber;
-        this.textSwitcher = loopTextSwitcher;
-        this.scoreView = loopScoreView;
-        this.scoreCount = loopScoreCount;
-        this.highScore = highScoreB;
-        this.highScoreView = loopHighScoreView;
+    public CountDownTimer gameLoop(){
 
         return new CountDownTimer(2000, 2000) {
             @Override
@@ -120,15 +86,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
-                if (!randomNumber.isDivisibleByThree()) {
+                if (!randomNumber.getWinCondition()) {
                     scoreCount++;
                     start();
                 } else {
-                    randomNumber.setDivisibleByThree(false);
+                    randomNumber.setWinCondition(false);
                     backToStart();
                 }
             }
         };
     }
+
+    public void backToStart(){
+        Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(MainActivity.this, StartActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
+    public void textSwitcherConfiguration(){
+        Animation in = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_out_right);
+        textSwitcher.setInAnimation(in);
+        textSwitcher.setOutAnimation(out);
+        
+        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            public View makeView() {
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(70);
+                myText.setTextColor(Color.WHITE);
+                return myText;
+            }
+        });
+        
+    }
+
+
+
 
 }

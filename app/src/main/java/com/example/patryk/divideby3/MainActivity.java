@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     private int highScore;
 
     ImageButton button;
@@ -44,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button = findViewById(R.id.bumButtonID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
+        highScoreView = findViewById(R.id.highScoreTextViewID);
+        prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        editor = prefs.edit();
+        highScore = prefs.getInt(HIGH_SCORE, 0);
 
 
         Animation in = AnimationUtils.loadAnimation(this,
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
+        highScoreView.setText(String.valueOf(highScore));
 
         button.setOnClickListener(this);
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -64,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        highScore = prefs.getInt(HIGH_SCORE, 0);
+
+
 
         cd = new CountDownTimer(3000, 3000) {
             @Override
@@ -73,14 +79,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
                 scoreView.setText(String.valueOf(i));
-                if (i++ == highScore) {
+                if (i == highScore ) {
                     Toast.makeText(MainActivity.this, "new record!", Toast.LENGTH_SHORT).show();
                 }
                 if (i > highScore) {
-                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt(HIGH_SCORE, i);
-                    highScoreView.setText(highScore);
+                    editor.commit();
+                    highScoreView.setText(String.valueOf(i));
                 }
+            }
 
                 @Override
                 public void onFinish () {
@@ -96,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }.start();
         };
 
-    }
+
 
 
         @Override

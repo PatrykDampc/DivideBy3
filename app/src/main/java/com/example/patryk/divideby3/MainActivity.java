@@ -1,5 +1,6 @@
 package com.example.patryk.divideby3;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextSwitcher textSwitcher;
     private TextView scoreView;
     private TextView highScoreView;
+    private ProgressBar regresBar;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
         highScoreView = findViewById(R.id.highScoreTextViewID);
+        regresBar = findViewById(R.id.regresBar);
 
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -54,18 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-        public void onClick (View v){
-            if (randomNumber.getWinCondition()) {
-                scoreCount = scoreCount + 2;
-                loop.cancel();
-                loop.start();
-            } else {
-                loop.cancel();
-                backToStart();
-            }
-        }
-
     public CountDownTimer gameLoop(){
 
         return new CountDownTimer(2000, 2000) {
@@ -73,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 randomNumber = new RandomNumber();
                 textSwitcher.setText(randomNumber.getRanNumString());
+
+                ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
+                animation.setDuration (2000);
+
+               // animation.setInterpolator (new DecelerateInterpolator());
+                animation.start ();
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
                 if (scoreCount == highScore) {
                     Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
@@ -88,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFinish() {
                 if (!randomNumber.getWinCondition()) {
                     scoreCount++;
+                    regresBar.clearAnimation();
                     start();
                 } else {
                     randomNumber.setWinCondition(false);
@@ -95,6 +94,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         };
+
+    }
+    @Override
+    public void onClick (View v){
+        if (randomNumber.getWinCondition()) {
+            scoreCount = scoreCount + 2;
+            regresBar.clearAnimation();
+            loop.cancel();
+            loop.start();
+        } else {
+            loop.cancel();
+            backToStart();
+        }
     }
 
     public void backToStart(){

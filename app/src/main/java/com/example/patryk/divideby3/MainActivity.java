@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  SharedPreferences.Editor editor;
     private int highScore;
     private int scoreCount = 0;
+    private int i =1;
+    private int speed;
     private RandomNumber randomNumber;
     private CountDownTimer loop;
     
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextSwitcher textSwitcher;
     private TextView scoreView;
     private TextView highScoreView;
+    private ConstraintLayout constraintLayout;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
         highScoreView = findViewById(R.id.highScoreTextViewID);
+        constraintLayout = findViewById(R.id.constraintLayout);
 
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -49,26 +55,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
         textSwitcherConfiguration();
+        constraintLayout.setOnClickListener(this);
         button.setOnClickListener(this);
-        loop = gameLoop().start();
+        speed = 2000;
+        loop = gameLoop(speed).start();
 
     }
 
-    @Override
-        public void onClick (View v){
-            if (randomNumber.getWinCondition()) {
-                scoreCount = scoreCount + 2;
-                loop.cancel();
-                loop.start();
-            } else {
-                loop.cancel();
-                backToStart();
-            }
-        }
+    public CountDownTimer gameLoop(int speedValue){
 
-    public CountDownTimer gameLoop(){
+        return new CountDownTimer(speedValue, speedValue) {
 
-        return new CountDownTimer(2000, 2000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 randomNumber = new RandomNumber();
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFinish() {
                 if (!randomNumber.getWinCondition()) {
                     scoreCount++;
-                    start();
+                    success();
                 } else {
                     randomNumber.setWinCondition(false);
                     backToStart();
@@ -96,6 +93,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
     }
+
+    @Override
+    public void onClick (View v) {
+        if (randomNumber.getWinCondition()) {
+            scoreCount += 2;
+            loop.cancel();
+            success();
+        } else {
+            loop.cancel();
+            backToStart();
+        }
+    }
+
+    
 
     public void backToStart(){
         Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
@@ -122,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         
+    }
+
+    public void success() {
+        if (i % 10 == 0 && i <= 30) speed -= 500;
+        i++;
+        loop = gameLoop(speed).start();
     }
 
 

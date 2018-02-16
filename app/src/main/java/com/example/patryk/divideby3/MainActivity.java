@@ -17,26 +17,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    
+    private SharedPreferences prefs;
+    private  SharedPreferences.Editor editor;
     private int highScore;
-
-    Button button;
-    TextSwitcher textSwitcher;
-    TextView scoreView;
-    TextView highScoreView;
-
-
-    private RandomNumber rn;
-    CountDownTimer cd;
-    int i = 0;
-
-
+    private int scoreCount = 0;
+    private RandomNumber randomNumber;
+    private CountDownTimer loop;
+    
+    private Button button;
+    private TextSwitcher textSwitcher;
+    private TextView scoreView;
+    private TextView highScoreView;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,70 +42,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
         highScoreView = findViewById(R.id.highScoreTextViewID);
+
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE, 0);
+        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
-
-        Animation in = AnimationUtils.loadAnimation(this,
-                android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(this,
-                android.R.anim.slide_out_right);
-        textSwitcher.setInAnimation(in);
-        textSwitcher.setOutAnimation(out);
-        highScoreView.setText(this.getText(R.string.high_score) +" "+ String.valueOf(highScore));
-
+        textSwitcherConfiguration(textSwitcher);
         button.setOnClickListener(this);
-        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            public View makeView() {
-                TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(70);
-                myText.setTextColor(Color.WHITE);
-                return myText;
-            }
-        });
+        loop = gameLoop(randomNumber, textSwitcher, scoreView, scoreCount, highScore, highScoreView).start();
 
-
-        cd = new CountDownTimer(2000, 2000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                rn = new RandomNumber();
-                textSwitcher.setText(rn.getRanNumString());
-                scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(i));
-                if (i == highScore) {
-                    Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
-                }
-                if (i > highScore) {
-                    editor.putInt(HIGH_SCORE, i);
-                    editor.commit();
-                    highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(i));
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                if (!rn.isDivisibleByThree()) {
-                    i++;
-                    start();
-                } else {
-                    rn.setDivisibleByThree(false);
-                    backToStart();
-                }
-            }
-        }.start();
     }
-
 
     @Override
         public void onClick (View v){
-            if (rn.isDivisibleByThree()) {
-               // Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
-                i = i + 2;
-                cd.cancel();
-                cd.start();
+            if (randomNumber.isDivisibleByThree()) {
+                scoreCount = scoreCount + 2;
+                loop.cancel();
+                loop.start();
             } else {
-                cd.cancel();
+                loop.cancel();
                 backToStart();
             }
         }
@@ -120,4 +72,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
+
+    public void textSwitcherConfiguration(TextSwitcher textSwitcher){
+        this.textSwitcher = textSwitcher;
+        Animation in = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_out_right);
+        textSwitcher.setInAnimation(in);
+        textSwitcher.setOutAnimation(out);
+        
+        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            public View makeView() {
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(70);
+                myText.setTextColor(Color.WHITE);
+                return myText;
+            }
+        });
+        
+    }
+
+    public CountDownTimer gameLoop(RandomNumber loopRandomNumber, TextSwitcher loopTextSwitcher, TextView loopScoreView, int loopScoreCount, int highScoreB, TextView loopHighScoreView){
+        this.randomNumber = loopRandomNumber;
+        this.textSwitcher = loopTextSwitcher;
+        this.scoreView = loopScoreView;
+        this.scoreCount = loopScoreCount;
+        this.highScore = highScoreB;
+        this.highScoreView = loopHighScoreView;
+
+        return new CountDownTimer(2000, 2000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                randomNumber = new RandomNumber();
+                textSwitcher.setText(randomNumber.getRanNumString());
+                scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+                if (scoreCount == highScore) {
+                    Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
+                }
+                if (scoreCount > highScore) {
+                    editor.putInt(HIGH_SCORE, scoreCount);
+                    editor.commit();
+                    highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                if (!randomNumber.isDivisibleByThree()) {
+                    scoreCount++;
+                    start();
+                } else {
+                    randomNumber.setDivisibleByThree(false);
+                    backToStart();
+                }
+            }
+        };
+    }
+
 }

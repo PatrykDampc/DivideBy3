@@ -71,15 +71,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-
-
         cd = new CountDownTimer(3000, 3000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
                 scoreView.setText(String.valueOf(i));
-                if (i == highScore ) {
+                if (i == highScore) {
                     Toast.makeText(MainActivity.this, "new record!", Toast.LENGTH_SHORT).show();
                 }
                 if (i > highScore) {
@@ -89,21 +87,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-                @Override
-                public void onFinish () {
-                    if (!rn.isDivisibleByThree()) {
-                        i++;
-                        start();
-                    } else {
-                        rn.setDivisibleByThree(false);
-                        Toast.makeText(MainActivity.this, "gówno gówno", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, StartActivity.class));
-                    }
+            @Override
+            public void onFinish() {
+                if (!rn.isDivisibleByThree()) {
+                    i++;
+                    start();
+                } else {
+                    rn.setDivisibleByThree(false);
+                    Toast.makeText(MainActivity.this, "gówno gówno", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
                 }
+            }
         }.start();
-
-
-
+    }
         @Override
         public void onClick (View v){
             if (rn.isDivisibleByThree()) {

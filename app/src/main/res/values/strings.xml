@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">DivideBy3</string>
-    <string name="btn_start">START GAME</string>
+    <string name="app_name">DivisibleBy3</string>
+    <string name="btn_start">PLAY</string>
 </resources>

@@ -13,18 +13,18 @@ import static com.example.patryk.divideby3.MainActivity.PREFERENCES;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener{
     private Button startButton;
-    SharedPreferences prefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+    SharedPreferences prefs;
     TextView highScoreViewStart;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        prefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
 
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
-        highScoreViewStart.setText(String.valueOf(prefs.getInt(HIGH_SCORE, 0)));
-        startButton = (Button) findViewById(R.id.startGameButtonID);
+        highScoreViewStart.setText("High Score: " + String.valueOf(prefs.getInt(HIGH_SCORE, 0)));
+        startButton = (Button) findViewById(R.id.playButtonID);
 
         startButton.setOnClickListener(this);
     }

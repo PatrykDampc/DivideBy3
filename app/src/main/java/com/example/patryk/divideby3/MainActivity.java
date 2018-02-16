@@ -11,7 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences.Editor editor;
     private int highScore;
 
-    ImageButton button;
+    Button button;
     TextSwitcher textSwitcher;
     TextView scoreView;
     TextView highScoreView;
@@ -57,33 +57,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
-        highScoreView.setText(String.valueOf(highScore));
+        highScoreView.setText("High Score: " + String.valueOf(highScore));
 
         button.setOnClickListener(this);
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             public View makeView() {
                 TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(30);
-                myText.setTextColor(Color.RED);
+                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(70);
+                myText.setTextColor(Color.WHITE);
                 return myText;
             }
         });
 
 
-        cd = new CountDownTimer(3000, 3000) {
+        cd = new CountDownTimer(2000, 2000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
-                scoreView.setText(String.valueOf(i));
+                scoreView.setText("Score: " + String.valueOf(i));
                 if (i == highScore) {
-                    Toast.makeText(MainActivity.this, "new record!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
                 }
                 if (i > highScore) {
                     editor.putInt(HIGH_SCORE, i);
                     editor.commit();
-                    highScoreView.setText(String.valueOf(i));
+                    highScoreView.setText("High Score: " + String.valueOf(i));
                 }
             }
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start();
                 } else {
                     rn.setDivisibleByThree(false);
-                    Toast.makeText(MainActivity.this, "gówno gówno", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, StartActivity.class));
                 }
             }
@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onClick (View v){
             if (rn.isDivisibleByThree()) {
-                Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
                 i = i + 2;
                 cd.cancel();
                 cd.start();
             } else {
                 cd.cancel();
-                Toast.makeText(MainActivity.this, "gówno", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MainActivity.this, StartActivity.class));
             }
         }

@@ -1,23 +1,23 @@
 package com.example.patryk.divideby3;
 
-import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextSwitcher;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewSwitcher;
+        import android.animation.ObjectAnimator;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.graphics.Color;
+        import android.os.Bundle;
+        import android.os.CountDownTimer;
+        import android.support.v7.app.AppCompatActivity;
+        import android.view.Gravity;
+        import android.view.View;
+        import android.view.animation.Animation;
+        import android.view.animation.AnimationUtils;
+        import android.widget.Button;
+        import android.widget.ProgressBar;
+        import android.widget.TextSwitcher;
+        import android.widget.TextView;
+        import android.widget.Toast;
+        import android.widget.ViewSwitcher;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  SharedPreferences.Editor editor;
     private int highScore;
     private int scoreCount = 0;
+    private int i =1;
+    private int speed = 2000;
     private RandomNumber randomNumber;
     private CountDownTimer loop;
 
@@ -54,22 +56,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         textSwitcherConfiguration();
         button.setOnClickListener(this);
-        loop = gameLoop().start();
+        loop = gameLoop(speed).start();
 
     }
 
-    public CountDownTimer gameLoop(){
+    public CountDownTimer gameLoop(int speedValue){
 
-        return new CountDownTimer(2000, 2000) {
+        return new CountDownTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
                 randomNumber = new RandomNumber();
                 textSwitcher.setText(randomNumber.getRanNumString());
 
                 ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
-                animation.setDuration (2000);
+                animation.setDuration (speed);
 
-               // animation.setInterpolator (new DecelerateInterpolator());
+                // animation.setInterpolator (new DecelerateInterpolator());
                 animation.start ();
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
                 if (scoreCount == highScore) {
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!randomNumber.getWinCondition()) {
                     scoreCount++;
                     regresBar.clearAnimation();
-                    start();
+                    success();
                 } else {
                     randomNumber.setWinCondition(false);
                     backToStart();
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             scoreCount = scoreCount + 2;
             regresBar.clearAnimation();
             loop.cancel();
-            loop.start();
+            success();
         } else {
             loop.cancel();
             backToStart();
@@ -136,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
-
+    public void success() {
+        if (i % 10 == 0 && i <= 30) speed -= 500;
+        i++;
+        loop = gameLoop(speed).start();
+    }
 }

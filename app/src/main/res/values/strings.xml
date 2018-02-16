@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Divisible By 3</string>
+    <string name="app_name">3\'s</string>
     <string name="btn_start">PLAY</string>
     <string name="high_score">High Score: </string>
     <string name="score">Score: </string>

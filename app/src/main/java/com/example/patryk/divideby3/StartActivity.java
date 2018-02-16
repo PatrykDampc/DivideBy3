@@ -23,7 +23,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         prefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
 
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
-        highScoreViewStart.setText("High Score: " + String.valueOf(prefs.getInt(HIGH_SCORE, 0)));
+        highScoreViewStart.setText(this.getString(R.string.high_score) +" "+ String.valueOf(prefs.getInt(HIGH_SCORE, 0)));
         startButton = (Button) findViewById(R.id.playButtonID);
 
         startButton.setOnClickListener(this);

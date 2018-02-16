@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
-        highScoreView.setText("High Score: " + String.valueOf(highScore));
+        highScoreView.setText(this.getText(R.string.high_score) +" "+ String.valueOf(highScore));
 
         button.setOnClickListener(this);
         textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -76,14 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 rn = new RandomNumber();
                 textSwitcher.setText(rn.getRanNumString());
-                scoreView.setText("Score: " + String.valueOf(i));
+                scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(i));
                 if (i == highScore) {
                     Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
                 }
                 if (i > highScore) {
                     editor.putInt(HIGH_SCORE, i);
                     editor.commit();
-                    highScoreView.setText("High Score: " + String.valueOf(i));
+                    highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(i));
                 }
             }
 
@@ -94,13 +94,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start();
                 } else {
                     rn.setDivisibleByThree(false);
-                    Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, StartActivity.class));
+                    backToStart();
                 }
             }
         }.start();
     }
-        @Override
+
+
+    @Override
         public void onClick (View v){
             if (rn.isDivisibleByThree()) {
                // Toast.makeText(MainActivity.this, "ok", Toast.LENGTH_SHORT).show();
@@ -109,8 +110,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cd.start();
             } else {
                 cd.cancel();
-                Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, StartActivity.class));
+                backToStart();
             }
         }
+
+    public void backToStart(){
+        Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(MainActivity.this, StartActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
 }

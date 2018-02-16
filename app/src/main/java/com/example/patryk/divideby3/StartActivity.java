@@ -13,7 +13,7 @@ import static com.example.patryk.divideby3.MainActivity.PREFERENCES;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener{
     private Button startButton;
-    SharedPreferences prefs;
+    SharedPreferences prefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
     TextView highScoreViewStart;
 
 
@@ -22,13 +22,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        prefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
-
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
         highScoreViewStart.setText(String.valueOf(prefs.getInt(HIGH_SCORE, 0)));
         startButton = (Button) findViewById(R.id.startGameButtonID);
+
         startButton.setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View v) {

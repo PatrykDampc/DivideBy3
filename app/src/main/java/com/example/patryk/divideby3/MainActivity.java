@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int i =1;
     private RandomNumber randomNumber;
     private CountDownTimer loop;
-    private int animVal1;
-    private int animVal2;
     //Views
     private Button button;
     private TextSwitcher textSwitcher;
@@ -77,13 +75,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 textSwitcher.setText(randomNumber.getRanNumString());
                 if(i%2 == 0){
-                    animVal1 = 500;
-                    animVal2 = 0;
-                } else{
-                    animVal1 = 0;
-                    animVal2 = 500;
+
                 }
-                ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", animVal1, animVal2);
+                ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
                 animation.setDuration (time);
                 animation.start ();
 
@@ -131,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         i.putExtra("scoreKey", String.valueOf(scoreCount));
         i.putExtra("numberKey", randomNumber.getRanNumInt());
         startActivity(i);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
     public void textSwitcherConfiguration(){
@@ -157,5 +152,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         i++;
         loop = gameLoop(time).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        loop.cancel();
+        backToStart();
     }
 }

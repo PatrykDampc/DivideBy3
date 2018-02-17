@@ -12,6 +12,7 @@ import static com.example.patryk.divideby3.MainActivity.HIGH_SCORE;
 import static com.example.patryk.divideby3.MainActivity.PREFERENCES;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener{
+
     private Button startButton;
     SharedPreferences prefs;
     TextView highScoreViewStart;
@@ -56,5 +57,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     public void onClick(View v) {
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 }

@@ -1,42 +1,45 @@
 package com.example.patryk.divideby3;
 
-        import android.animation.ObjectAnimator;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.SharedPreferences;
-        import android.graphics.Color;
-        import android.os.Bundle;
-        import android.os.CountDownTimer;
-        import android.support.v7.app.AppCompatActivity;
-        import android.view.Gravity;
-        import android.view.View;
-        import android.view.animation.Animation;
-        import android.view.animation.AnimationUtils;
-        import android.widget.Button;
-        import android.widget.ProgressBar;
-        import android.widget.TextSwitcher;
-        import android.widget.TextView;
-        import android.widget.Toast;
-        import android.widget.ViewSwitcher;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
-
+    //regular variables
     private SharedPreferences prefs;
     private  SharedPreferences.Editor editor;
     private int highScore;
     private int scoreCount = 0;
     private int i =1;
-    private int speed = 2000;
     private RandomNumber randomNumber;
     private CountDownTimer loop;
-
+    //Views
     private Button button;
     private TextSwitcher textSwitcher;
     private TextView scoreView;
     private TextView highScoreView;
     private ProgressBar regresBar;
+    //Game controls
+    private int time = 2500;
+    private int timeDecreaseValue = 500;
+    private int timeDecreaseLevel = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         textSwitcherConfiguration();
         button.setOnClickListener(this);
-        loop = gameLoop(speed).start();
+        loop = gameLoop(time).start();
 
     }
 
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 textSwitcher.setText(randomNumber.getRanNumString());
 
                 ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
-                animation.setDuration (speed);
+                animation.setDuration (time);
 
                 // animation.setInterpolator (new DecelerateInterpolator());
                 animation.start ();
@@ -139,8 +142,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void success() {
-        if (i % 10 == 0 && i <= 30) speed -= 500;
+        if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         i++;
-        loop = gameLoop(speed).start();
+        loop = gameLoop(time).start();
     }
 }

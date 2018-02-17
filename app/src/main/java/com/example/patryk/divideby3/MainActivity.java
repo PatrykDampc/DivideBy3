@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
         textSwitcherConfiguration();
-        button.setOnClickListener(this);
+        button.setOnClickListener(MainActivity.this);
         loop = gameLoop(time).start();
 
     }
@@ -68,14 +68,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return new CountDownTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
-                randomNumber = new RandomNumber();
+                if(i < 15) {
+                    randomNumber = new RandomNumber();
+                } else {
+                    randomNumber = new RandomNumber(50, 333);
+                }
                 textSwitcher.setText(randomNumber.getRanNumString());
 
                 ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
                 animation.setDuration (time);
-
-                // animation.setInterpolator (new DecelerateInterpolator());
                 animation.start ();
+
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
                 if (scoreCount == highScore) {
                     Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
@@ -115,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void backToStart(){
-        Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(MainActivity.this, StartActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.putExtra("scoreKey", String.valueOf(scoreCount));
+        i.putExtra("numberKey", randomNumber.getRanNumInt());
         startActivity(i);
     }
 
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void success() {
-        if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
+       // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         i++;
         loop = gameLoop(time).start();
     }

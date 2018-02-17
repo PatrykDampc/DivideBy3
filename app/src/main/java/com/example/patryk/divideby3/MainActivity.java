@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView highScoreView;
     private ProgressBar regresBar;
     private ProgressBar progressBar;
+    private TextView nextLevel;
     //Game controls
     private int time = 2500;
     private int timeDecreaseValue = 500;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         highScoreView = findViewById(R.id.highScoreTextViewID);
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
+        nextLevel = findViewById(R.id.nextLevelID);
 
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         layout.setOnClickListener(MainActivity.this);
         loop = gameLoop(time).start();
         progressBar.setMax(progressScope);
-
     }
 
     public CountDownTimer gameLoop(int speedValue){
@@ -70,21 +71,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 if(i <= 10) {
                     randomNumber = new RandomNumber();
-                } else if (10 < i && i <=25){
-                    randomNumber = new RandomNumber(40, 180);
+                } else if (i > 10 && i <=25){
+                    randomNumber = new RandomNumber(40,180); //40,180
                     progressScope = 15;
-                } else if (25 < i && i <=45){
-                    randomNumber = new RandomNumber(70,300);
+                } else if (i > 25 && i <=45){
+                    randomNumber = new RandomNumber(70,300); //70,300
                     progressScope = 20;
-                } else if (45 < i && i <=80){
-                    randomNumber = new RandomNumber(200, 550);
+                } else if (i > 45 && i <=80){
+                    randomNumber = new RandomNumber(200,550); //200,550
                     progressScope = 35;
                 } else {
                     progressBar.setVisibility(View.GONE);
+                    nextLevel.setVisibility(View.GONE);
                 }
-                if (progressStatus == progressScope) {
+                if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
+                    progressBar.setProgress(progressStatus);
+                    progressBar.setMax(progressScope);
                 }
 
 
@@ -98,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 animation.setDuration(time).start();
 
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-                if (scoreCount == highScore) {
-                    Toast.makeText(MainActivity.this, "New record!", Toast.LENGTH_SHORT).show();
+                if (scoreCount == highScore && scoreCount != 0) {
+                    Toast.makeText(MainActivity.this, "New Record!", Toast.LENGTH_SHORT).show();
                 }
                 if (scoreCount > highScore) {
                     editor.putInt(HIGH_SCORE, scoreCount);
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick (View v){
         if (randomNumber.getWinCondition()) {
-            scoreCount = scoreCount + 2;
+            scoreCount += 2;
             regresBar.clearAnimation();
             loop.cancel();
             success();

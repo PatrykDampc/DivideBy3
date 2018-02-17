@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RandomNumber randomNumber;
     private CountDownTimer loop;
     private int progressStatus;
+    private int progressScope = 10;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         layout.setOnClickListener(MainActivity.this);
         loop = gameLoop(time).start();
+        progressBar.setMax(progressScope);
 
     }
 
@@ -66,17 +68,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return new CountDownTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if(i < 10) {
+                if(i <= 10) {
                     randomNumber = new RandomNumber();
-                } else if (10 <= i && i <25){
+                } else if (10 < i && i <=25){
                     randomNumber = new RandomNumber(40, 180);
-                } else if (25 <= i && i <45){
+                    progressScope = 15;
+                } else if (25 < i && i <=45){
                     randomNumber = new RandomNumber(70,300);
-                } else if (45 <= i && i <80){
+                    progressScope = 20;
+                } else if (45 < i && i <=80){
                     randomNumber = new RandomNumber(200, 550);
+                    progressScope = 35;
                 } else {
                     progressBar.setVisibility(View.GONE);
                 }
+                if (progressStatus == progressScope) {
+                    Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
+                    progressStatus = 0;
+                }
+
 
 
 
@@ -144,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void success() {
        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         i++;
+        progressBar.setProgress(progressStatus +=1);
         loop = gameLoop(time).start();
     }
 

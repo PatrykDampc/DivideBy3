@@ -44,7 +44,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         }  else if (String.valueOf(number).contains("3")){
             numberViewStart.setText("YOU LOST!\n" + String.valueOf(number) + " CONTAINS \"3\" DIGIT!");
         }  else {
-            numberViewStart.setText("YOU LOST!");
+            numberViewStart.setText("YOU LOST!\n" + String.valueOf(number) + "...");
         }
 
         startButton.setOnClickListener(this);

@@ -13,14 +13,15 @@ public class RandomNumber {
 
     public RandomNumber() {
         this.ranNumInt = Numbers.randomNumberGenerator(1,100);
-        this.ranNumString = String.valueOf(ranNumInt);
-        this.divisibleByThree = Numbers.isDivisibleByThree(ranNumInt);
-        this.containsThree = ranNumString.contains("3");
-        this.winCondition = divisibleByThree || containsThree;
+    }
+
+    public RandomNumber(int minValue,int maxValue){
+        this.ranNumInt = Numbers.randomNumberGenerator(minValue,maxValue);
+
     }
 
     public boolean getWinCondition() {
-        return winCondition;
+        return containsThree() || isDivisibleByThree();
     }
 
     public void setWinCondition(boolean winCondition) {
@@ -28,7 +29,7 @@ public class RandomNumber {
     }
 
     public boolean containsThree() {
-        return containsThree;
+        return String.valueOf(ranNumInt).contains("3");
     }
 
     public void setContainsThree(boolean containsThree) {
@@ -36,7 +37,7 @@ public class RandomNumber {
     }
 
     public boolean isDivisibleByThree() {
-        return divisibleByThree;
+        return ranNumInt%3==0;
     }
 
     public void setDivisibleByThree(boolean divisibleByThree) {
@@ -52,18 +53,14 @@ public class RandomNumber {
     }
 
     public String getRanNumString() {
-        return ranNumString;
+        return String.valueOf(ranNumInt);
     }
 
     public void setRanNumString(String ranNumString) {
         this.ranNumString = ranNumString;
     }
 
-    public RandomNumber(int minValue,int maxValue){
-        this.ranNumInt = Numbers.randomNumberGenerator(minValue,maxValue);
-        this.ranNumString = String.valueOf(ranNumInt);
-        this.divisibleByThree = Numbers.isDivisibleByThree(ranNumInt);
-    }
+
 
 
 }

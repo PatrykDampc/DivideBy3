@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public CountDownTimer gameLoop(int speedValue){
 
-        return new CountDownTimer(speedValue, speedValue+100) {
+        return new CountDownTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
                 randomNumber = new RandomNumber();
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(MainActivity.this, "ZJEBAŁEŚ", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(MainActivity.this, StartActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        Log.d("RandomNumberbla: ", randomNumber.getRanNumString());
         startActivity(i);
     }
 
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void success() {
-        //if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
+        if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         i++;
         loop = gameLoop(time).start();
     }

@@ -12,7 +12,7 @@ public class RandomNumber {
    private boolean winCondition;
 
     public RandomNumber() {
-        this.ranNumInt = Numbers.randomNumberGenerator(1,100);
+        this.ranNumInt = Numbers.randomNumberGenerator(3,100);
     }
 
     public RandomNumber(int minValue,int maxValue){

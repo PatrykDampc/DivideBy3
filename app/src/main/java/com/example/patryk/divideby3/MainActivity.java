@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int i =1;
     private RandomNumber randomNumber;
     private CountDownTimer loop;
+    private int animVal1;
+    private int animVal2;
     //Views
     private Button button;
     private TextSwitcher textSwitcher;
@@ -74,8 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     randomNumber = new RandomNumber(50, 333);
                 }
                 textSwitcher.setText(randomNumber.getRanNumString());
-
-                ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", 500, 0);
+                if(i%2 == 0){
+                    animVal1 = 500;
+                    animVal2 = 0;
+                } else{
+                    animVal1 = 0;
+                    animVal2 = 500;
+                }
+                ObjectAnimator animation = ObjectAnimator.ofInt (regresBar, "progress", animVal1, animVal2);
                 animation.setDuration (time);
                 animation.start ();
 

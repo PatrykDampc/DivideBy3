@@ -5,6 +5,25 @@
     <color name="colorAccent">#FF4081</color>
     <color name="darkGrayBackground">#303030</color>
     <color name="darkerGrayBackground">#2d2d2d</color>
+    <color name="next_level_value">#959595</color>
+
+    <color name="dot_inactive_screen1">#959595</color>
+    <color name="dot_inactive_screen2">#959595</color>
+    <color name="dot_inactive_screen3">#959595</color>
+    <!-- dots active colors -->
+    <color name="dot_active_screen1">#FF4081</color>
+    <color name="dot_active_screen2">#FF4081</color>
+    <color name="dot_active_screen3">#FF4081</color>
+    <array name="array_dot_active">
+        <item>@color/dot_active_screen1</item>
+        <item>@color/dot_active_screen2</item>
+        <item>@color/dot_active_screen3</item>
+    </array>
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive_screen1</item>
+        <item>@color/dot_inactive_screen2</item>
+        <item>@color/dot_inactive_screen3</item>
+    </array>
 
 
 </resources>

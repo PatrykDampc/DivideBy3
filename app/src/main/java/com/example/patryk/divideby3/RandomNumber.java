@@ -12,11 +12,11 @@ public class RandomNumber {
    private boolean winCondition;
 
     public RandomNumber() {
-        this.ranNumInt = Numbers.randomNumberGenerator(3,100);
+        this.ranNumInt = Utils.randomNumberGenerator(3,100);
     }
 
     public RandomNumber(int minValue,int maxValue){
-        this.ranNumInt = Numbers.randomNumberGenerator(minValue,maxValue);
+        this.ranNumInt = Utils.randomNumberGenerator(minValue,maxValue);
 
     }
 

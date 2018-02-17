@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayBackground"
-    tools:context="com.example.patryk.divideby3.StartActivity">
+    tools:context="com.example.patryk.divideby3.StartActivity"
+    >
 
     <Button
         android:id="@+id/playButtonID"
@@ -84,15 +85,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:textAlignment="center"
         android:id="@+id/startActivityNumberViewID"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="107dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="88dp"
+        android:textAlignment="center"
         android:textColor="?android:attr/colorButtonNormal"
         android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/playButtonID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

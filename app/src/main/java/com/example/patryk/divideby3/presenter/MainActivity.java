@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
+    private TextView numberview;
     //Game controls
     private int time = 2500;
     private int timeDecreaseValue = 500;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
+        numberview = findViewById(R.id.textView7);
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     nextLevel.setVisibility(View.GONE);
                 }
                 textSwitcher.setText(String.valueOf(randomNumber.getRanNumInt()));
-
+                numberview.setText(String.valueOf(randomNumber.getRanNumInt()));
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
                     progressStatus = 0;

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import com.example.patryk.divideby3.presenter.MainActivity;
 
 public class PreferenceManager {
-    private static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";
+    public static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";
 
    private SharedPreferences prefs;
    private SharedPreferences.Editor editor;

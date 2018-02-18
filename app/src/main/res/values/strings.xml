@@ -17,5 +17,6 @@
     <string name="numbersincrease">When the game is running for a while, the values of numbers are increasing.</string>
     <string name="looksdifficult">Looks difficult? Only at first glance. There is a rule in math, that says: if sum of every digit in a number is divisible by 3, then whole number is divisible.\n 174: 1 + 7 + 4 = 12, 12 ÷ 3 = 4\nSee? Simple!  </string>
     <string name="tryagain">TRY AGAIN</string>
+    <string name="tutorial">Tutorial</string>
 
 </resources>

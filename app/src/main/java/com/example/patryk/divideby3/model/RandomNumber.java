@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3.logic;
+package com.example.patryk.divideby3.model;
 
 import com.example.patryk.divideby3.util.Utils;
 

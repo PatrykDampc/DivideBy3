@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progressBar.setVisibility(View.GONE);
                     nextLevel.setVisibility(View.GONE);
                 }
-                textSwitcher.setText(String.valueOf(randomNumber.getRanNumInt()));
+                textSwitcher.setText(randomNumber.getRanNumString());
                 numberview.setText(String.valueOf(randomNumber.getRanNumInt()));
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             loop.cancel();
             backToStart();
+            randomNumber = null;
         }
     }
 
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         loop.cancel();
+        randomNumber = null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.patryk.divideby3.R;
 import com.example.patryk.divideby3.model.RandomNumber;
+import com.example.patryk.divideby3.util.CustomTimer;
 import com.example.patryk.divideby3.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int scoreCount = 0;
     private int i =1;
     private RandomNumber randomNumber;
-    private CountDownTimer loop;
+    private CustomTimer loop;
     private int progressStatus;
     private int progressScope = 10;
     Vibrator vibe;
@@ -73,11 +75,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public CountDownTimer gameLoop(int speedValue){
+    public CustomTimer gameLoop(int speedValue){
 
-        return new CountDownTimer(speedValue, speedValue) {
+        return new CustomTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
+                Log.d("onTick: ","ok");
                 if(i <= 10) {
                     randomNumber = new RandomNumber();
                 } else if (i > 10 && i <=25){
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFinish() {
+                Log.d("onFinish: ","ok");
                 if (!randomNumber.getWinCondition()) {
                     scoreCount++;
                     regresBar.clearAnimation();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CountDownTimer loop;
     private int progressStatus;
     private int progressScope = 10;
+    Vibrator vibe;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         //Views setup
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             scoreCount += 2;
             regresBar.clearAnimation();
             loop.cancel();
+            vibe.vibrate(50);
             success();
         } else {
             loop.cancel();
@@ -155,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void success() {
         // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
+        vibe.vibrate(20);
         i++;
         progressBar.setProgress(progressStatus +=1);
         loop = gameLoop(time).start();

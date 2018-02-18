@@ -9,7 +9,7 @@
         android:useLevel="true"
         android:innerRadiusRatio="3"
         android:shape="ring"
-        android:thickness="13sp">
+        android:thickness="25sp">
         <solid android:color="@color/colorAccent" />
     </shape>
 </rotate>

@@ -43,10 +43,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
             } else if(Utils.isDivisibleByThree(number)){
                 int result = number/3;
                 numberViewStart.setText(this.getString(R.string.your_lost) +" "+ String.valueOf(number) +" ÷ 3 = "+ result);
+                startButton.setText(this.getString(R.string.tryagain));
             }  else if (String.valueOf(number).contains("3")){
                 numberViewStart.setText(this.getString(R.string.your_lost) +" "+ String.valueOf(number) +" "+ this.getString(R.string.contains));
+                startButton.setText(this.getString(R.string.tryagain));
             }  else {
                 numberViewStart.setText(this.getString(R.string.your_lost) +" "+ String.valueOf(number) + "...");
+                startButton.setText(this.getString(R.string.tryagain));
             }
 
         startButton.setOnClickListener(this);

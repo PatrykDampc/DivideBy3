@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
-    private TextView numberview;
     //Game controls
     private int time = 2500;
     private int timeDecreaseValue = 500;
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
-        numberview = findViewById(R.id.textView7);
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     nextLevel.setVisibility(View.GONE);
                 }
                 textSwitcher.setText(randomNumber.getRanNumString());
-                numberview.setText(String.valueOf(randomNumber.getRanNumInt()));
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
@@ -150,6 +147,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void success() {
+        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
+        vibe.vibrate(25);
+        i++;
+        progressBar.setProgress(progressStatus +=1);
+        loop = gameLoop(time).start();
+    }
+
     //returns to startAcvivity, contains info about last shown number and earned score
     public void backToStart(){
         Intent i = new Intent(MainActivity.this, StartActivity.class);
@@ -158,14 +163,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         i.putExtra("numberKey", randomNumber.getRanNumInt());
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-    }
-
-    public void success() {
-        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
-        vibe.vibrate(20);
-        i++;
-        progressBar.setProgress(progressStatus +=1);
-        loop = gameLoop(time).start();
     }
 
     @Override

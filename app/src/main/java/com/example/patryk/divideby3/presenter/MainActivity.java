@@ -16,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.patryk.divideby3.R;
+import com.example.patryk.divideby3.model.CustomTimer;
 import com.example.patryk.divideby3.model.RandomNumber;
-import com.example.patryk.divideby3.util.CustomTimer;
 import com.example.patryk.divideby3.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

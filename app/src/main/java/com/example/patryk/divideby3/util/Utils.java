@@ -68,6 +68,7 @@ public class Utils {
         }
     }
 
+
     public static void ifHasFocus(boolean ifHas, Activity activity){
         if (ifHas) {
             activity.getWindow().getDecorView().setSystemUiVisibility(

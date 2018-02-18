@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progressBar.setVisibility(View.GONE);
                     nextLevel.setVisibility(View.GONE);
                 }
+                textSwitcher.setText(String.valueOf(randomNumber.getRanNumInt()));
+
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
@@ -102,11 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progressBar.setMax(progressScope);
                 }
 
-
-                textSwitcher.setText(randomNumber.getRanNumString());
-                if(i%2 == 0){
-
-                }
                 ObjectAnimator animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0);
                 animation.setDuration(time).start();
 

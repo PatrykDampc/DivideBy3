@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3;
+package com.example.patryk.divideby3.presenter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -13,6 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.patryk.divideby3.R;
+import com.example.patryk.divideby3.logic.RandomNumber;
+import com.example.patryk.divideby3.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
@@ -45,24 +49,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-        layout = (ConstraintLayout) findViewById(R.id.mainActivityLayoutID);
+        //Views setup
+        layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
         highScoreView = findViewById(R.id.highScoreTextViewID);
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
-
+        //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
-
+        //Set up main game info & controls
+        progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         layout.setOnClickListener(MainActivity.this);
         loop = gameLoop(time).start();
-        progressBar.setMax(progressScope);
+
     }
 
     public CountDownTimer gameLoop(int speedValue){
@@ -91,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
                 }
-
-
 
 
                 textSwitcher.setText(randomNumber.getRanNumString());
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //returns to startAcvivity, contains info about last shown number and earned score
     public void backToStart(){
         Intent i = new Intent(MainActivity.this, StartActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -149,6 +153,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
+    public void success() {
+        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
+        i++;
+        progressBar.setProgress(progressStatus +=1);
+        loop = gameLoop(time).start();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -156,25 +167,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         backToStart();
     }
 
-    public void success() {
-       // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
-        i++;
-        progressBar.setProgress(progressStatus +=1);
-        loop = gameLoop(time).start();
-    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        }
+        Utils.ifHasFocus(hasFocus, this);
     }
 
 

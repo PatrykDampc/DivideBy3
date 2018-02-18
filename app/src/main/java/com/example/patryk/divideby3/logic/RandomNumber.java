@@ -1,4 +1,6 @@
-package com.example.patryk.divideby3;
+package com.example.patryk.divideby3.logic;
+
+import com.example.patryk.divideby3.util.Utils;
 
 /**
  * Created by pszen on 14.02.2018.

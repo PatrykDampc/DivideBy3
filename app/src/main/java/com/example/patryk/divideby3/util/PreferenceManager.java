@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3;
+package com.example.patryk.divideby3.util;
 
 /**
  * Created by patryk on 17.02.2018.
@@ -6,6 +6,8 @@ package com.example.patryk.divideby3;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.patryk.divideby3.presenter.MainActivity;
 
 public class PreferenceManager {
     private static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayBackground"
-    tools:context="com.example.patryk.divideby3.MainActivity"
+    tools:context="com.example.patryk.divideby3.presenter.MainActivity"
     tools:layout_editor_absoluteY="81dp"
     android:keepScreenOn="true">
 

@@ -156,14 +156,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick (View v){
         if (Utils.succesCondition(randomNumber)) {
             //happens when user taps screen on number that meets conditions;
+            loop.cancel();
             scoreCount += 2;
             regresBar.clearAnimation();
-            loop.cancel();
             vibe.vibrate(50);
             success();
         } else {
             //happens when user taps screen on number that doesn't meets conditions
-            loop.cancel();
             backToStart();
         }
     }
@@ -178,12 +177,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //returns to startAcvivity, contains info about last shown number and earned score
     public void backToStart(){
+        loop.cancel();
         Intent i = new Intent(MainActivity.this, StartActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.putExtra("scoreKey", String.valueOf(scoreCount));
         i.putExtra("numberKey", randomNumber);
         startActivity(i);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+        onPause();
+        layout.setClickable(false);
     }
 
     @Override
@@ -193,10 +195,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         loop.cancel();
+        onPause();
+        layout.setClickable(false);
     }
-
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

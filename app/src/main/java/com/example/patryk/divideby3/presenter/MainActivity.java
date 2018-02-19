@@ -80,8 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public CustomTimer gameLoop(int speedValue){
-        return new CustomTimer(speedValue, speedValue) {
+    public CustomTimer gameLoop(int time){
+        this.time = time;
+        return new CustomTimer(time, time + 5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ","ok");

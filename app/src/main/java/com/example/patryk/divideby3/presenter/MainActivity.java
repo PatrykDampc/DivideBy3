@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  Vibrator vibe;
     private int randomNumber;
     private Random random = new Random();
-    private int scopeMin;
-    private int scopeMax;
+    private int scopeMin=3;
+    private int scopeMax=100;
+    private ObjectAnimator animation;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
+        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
@@ -88,26 +90,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ","ok");
                 //setting level depending on game itaration count
-                if(i <= 10) {
-                    scopeMin = 3;
-                    scopeMax = 100;
-                } else if (i > 10 && i <=25){
-                    scopeMin = 49;
-                    scopeMax = 200;
-                    progressScope = 15;
-                } else if (i > 25 && i <=45){
-                    scopeMin = 120;
-                    scopeMax = 300;
-                    progressScope = 20;
-                } else if (i > 45 && i <=80){
-                    scopeMin = 390;
-                    scopeMax = 620;
-                    progressScope = 35;
-                } else {
-                    //disabling progress,because there's no more levels
-                    progressBar.setVisibility(View.GONE);
-                    nextLevel.setVisibility(View.GONE);
+                switch (i){
+                    case 10:
+                        scopeMin = 49;
+                        scopeMax = 200;
+                        progressScope = 15;
+                        break;
+                    case 25:
+                        scopeMin = 120;
+                        scopeMax = 300;
+                        progressScope = 20;
+                        break;
+                    case 45:
+                        scopeMin = 390;
+                        scopeMax = 620;
+                        progressScope = 35;
+                        break;
+                    case 80:
+                        //disabling progress,because there are no more levels
+                        progressBar.setVisibility(View.GONE);
+                        nextLevel.setVisibility(View.GONE);
+                        break;
                 }
+
                 //load random;
                 randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);
                 //present random to player
@@ -121,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progressBar.setMax(progressScope);
                 }
                 //circle time animation
-                ObjectAnimator animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0);
-                animation.setDuration(time).start();
+                animation.start();
 
                 //score count logic
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
@@ -172,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vibe.vibrate(25);
         i++;
         progressBar.setProgress(progressStatus +=1);
-        loop = gameLoop(time).start();
+        loop.start();
     }
 
     //returns to startAcvivity, contains info about last shown number and earned score

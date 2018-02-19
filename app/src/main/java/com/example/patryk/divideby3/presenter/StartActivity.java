@@ -42,7 +42,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         int number = intent.getIntExtra("numberKey", 0);
         String score = intent.getStringExtra("scoreKey");
         Utils.printLostMessage(number, score, numberViewStart, scoreViewStart, startButton, this);
-
+        scoreViewStart.setText(this.getString(R.string.your_score) +" "+ score);
 
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);

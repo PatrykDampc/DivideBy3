@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Set up main game info & controls
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
-        layout.setOnClickListener(MainActivity.this);
         loop = gameLoop(time).start();
+        layout.setOnClickListener(MainActivity.this);
 
     }
 
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ","ok");
+                //setting level depending on game itaration count
                 if(i <= 10) {
                     scopeMin = 3;
                     scopeMax = 100;
@@ -100,23 +101,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     scopeMax = 620;
                     progressScope = 35;
                 } else {
+                    //disabling progress,because there's no more levels
                     progressBar.setVisibility(View.GONE);
                     nextLevel.setVisibility(View.GONE);
                 }
-
+                //load random;
                 randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);
+                //present random to player
                 textSwitcher.setText(String.valueOf(randomNumber));
 
+                //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
                 }
-
+                //circle time animation
                 ObjectAnimator animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0);
                 animation.setDuration(time).start();
 
+                //score count logic
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
                 if (scoreCount == highScore && scoreCount != 0) {
                     Toast.makeText(MainActivity.this, "New Record!", Toast.LENGTH_SHORT).show();
@@ -132,33 +137,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFinish() {
                 Log.d("onFinish: ","ok");
                 if (!Utils.succesCondition(randomNumber)) {
+                    //happens then user didn't do anything when he shouldn't
                     scoreCount++;
                     regresBar.clearAnimation();
                     success();
                 } else {
-                   // Utils.succesCondition(randomNumber) = false;
+                   //happens then user didn't tap the screen, but number was meeting conditions;
                     backToStart();
                 }
             }
         };
-
     }
+
     @Override
     public void onClick (View v){
         if (Utils.succesCondition(randomNumber)) {
+            //happens when user taps screen on number that meets conditions;
             scoreCount += 2;
             regresBar.clearAnimation();
             loop.cancel();
             vibe.vibrate(50);
             success();
         } else {
+            //happens when user taps screen on number that doesn't meets conditions
             loop.cancel();
             backToStart();
         }
     }
 
+
     public void success() {
-        // if (i % 10 == 0 && i <= timeDecreaseLevel) time -= timeDecreaseValue;
         vibe.vibrate(25);
         i++;
         progressBar.setProgress(progressStatus +=1);
@@ -183,8 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         loop.cancel();
     }
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

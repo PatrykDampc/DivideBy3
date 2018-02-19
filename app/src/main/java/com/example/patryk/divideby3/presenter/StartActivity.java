@@ -27,24 +27,23 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
+        //setup views
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
         scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
         numberViewStart = findViewById(R.id.startActivityNumberViewID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
-
+        //reading saved high score
         prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
         editor = prefs.edit();
         highScoreViewStart.setText(this.getString(R.string.high_score) +" "+ String.valueOf(prefs.getInt(MainActivity.HIGH_SCORE, 0)));
-
+        //receiving scores from lost game session
         Intent intent = getIntent();
         int number = intent.getIntExtra("numberKey", 0);
         String score = intent.getStringExtra("scoreKey");
-
         Utils.printLostMessage(number, score, numberViewStart, scoreViewStart, startButton, this);
 
-        scoreViewStart.setText(this.getString(R.string.your_score) +" "+ score);
+
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
     }

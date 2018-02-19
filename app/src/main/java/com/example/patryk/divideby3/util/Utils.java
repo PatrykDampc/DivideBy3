@@ -14,22 +14,20 @@ import android.widget.ViewSwitcher;
 
 import com.example.patryk.divideby3.R;
 
-import java.util.Random;
-
 /**
  * Created by pszen on 14.02.2018.
  */
 
 public class Utils {
 
-
-    public static int randomNumberGenerator(int minValue, int maxValue){
-        Random ran = new Random();
-        return minValue + ran.nextInt(maxValue - minValue +1);
-    }
-
     public static boolean isDivisibleByThree(int number){
         return number%3 == 0 ? true : false;
+    }
+
+    public static boolean succesCondition(int number){
+        boolean containsThree = String.valueOf(number).contains("3");
+        boolean isDivisible =  number%3==0;
+        return containsThree || isDivisible;
     }
 
     public static void textSwitcherConfiguration(TextSwitcher textSwitcher, final Context context) {

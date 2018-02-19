@@ -16,10 +16,10 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
     private Button startButton;
     private Button tutorialButton;
-    private SharedPreferences prefs;
     private TextView highScoreViewStart;
     private TextView scoreViewStart;
     private TextView numberViewStart;
+    private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
     @Override
@@ -43,10 +43,10 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         String score = intent.getStringExtra("scoreKey");
 
         Utils.printLostMessage(number, score, numberViewStart, scoreViewStart, startButton, this);
+
         scoreViewStart.setText(this.getString(R.string.your_score) +" "+ score);
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
-
     }
 
     @Override

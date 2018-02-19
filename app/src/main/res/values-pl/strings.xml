@@ -19,4 +19,6 @@
     <string name="tryagain">PONÓW</string>
     <string name="tutorial">Samouczek</string>
     <string name="btn_start">GRAJ</string>
+    <string name="level_up">Nowy poziom!</string>
+    <string name="new_record">Nowy rekord!</string>
 </resources>

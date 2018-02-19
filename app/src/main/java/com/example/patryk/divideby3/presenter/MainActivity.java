@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
-                    Toast.makeText(MainActivity.this,"Level Up!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //score count logic
                 scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
                 if (scoreCount == highScore && scoreCount != 0) {
-                    Toast.makeText(MainActivity.this, "New Record!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
                 }
                 if (scoreCount > highScore) {
                     editor.putInt(HIGH_SCORE, scoreCount);

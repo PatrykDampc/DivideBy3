@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         //Views setup
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         layout = findViewById(R.id.mainActivityLayoutID);
@@ -65,11 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
+
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
+
         //Set up main game info & controls
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
@@ -191,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         loop.cancel();
     }
+
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

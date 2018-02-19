@@ -26,7 +26,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         //setup views
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
         scoreViewStart = findViewById(R.id.startAcvityScoreViewID);

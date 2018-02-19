@@ -4,7 +4,7 @@
     <string name="high_score">Rekord:</string>
     <string name="score">Wynik:</string>
     <string name="your_score">Twój wynik:</string>
-    <string name="your_lost">Przegrałeś! \n</string>
+    <string name="your_lost">Przegrałeś!\n</string>
     <string name="contains">zawiera cyfrę \"3\"!</string>
     <string name="next_level">Następny poziom:</string>
     <string name="next">Dalej</string>

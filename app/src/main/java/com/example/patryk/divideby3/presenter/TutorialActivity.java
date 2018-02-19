@@ -35,6 +35,7 @@ public class TutorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // Checking for first time launch - before calling setContentView()
         prefManager = new PreferenceManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
@@ -121,6 +122,7 @@ public class TutorialActivity extends AppCompatActivity {
         prefManager.setFirstTimeLaunch(false);
         Intent intent = new Intent(TutorialActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         startActivity(intent);
         finish();
     }

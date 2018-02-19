@@ -12,14 +12,24 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".presenter.SplashActivity" android:theme="@style/SplashTheme">
+            <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                    <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
         <activity android:name="com.example.patryk.divideby3.presenter.TutorialActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".presenter.StartActivity"
             android:launchMode="singleTop"
@@ -27,10 +37,10 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".presenter.MainActivity"
             android:screenOrientation="portrait"

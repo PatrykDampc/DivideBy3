@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         prefManager = new PreferenceManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             startActivity(new Intent(this, StartActivity.class));
-            overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);
+            overridePendingTransition(R.anim.slide_from_down,R.anim.slide_to_up);
             finish();
         }
         startActivity(new Intent(this, TutorialActivity.class));

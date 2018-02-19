@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
-                    Toast.makeText(MainActivity.this,MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);

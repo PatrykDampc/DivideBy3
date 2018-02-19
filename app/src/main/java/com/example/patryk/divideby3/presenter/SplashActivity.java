@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.patryk.divideby3.R;
 import com.example.patryk.divideby3.util.PreferenceManager;
 
 /**
@@ -22,11 +21,11 @@ public class SplashActivity extends AppCompatActivity {
         prefManager = new PreferenceManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             startActivity(new Intent(this, StartActivity.class));
-            overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);
+           // overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            finish();
+        } else {
+            startActivity(new Intent(this, TutorialActivity.class));
             finish();
         }
-        startActivity(new Intent(this, TutorialActivity.class));
-        finish();
     }
-
 }

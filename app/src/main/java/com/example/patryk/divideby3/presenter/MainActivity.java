@@ -19,8 +19,6 @@ import com.example.patryk.divideby3.R;
 import com.example.patryk.divideby3.model.CustomTimer;
 import com.example.patryk.divideby3.util.Utils;
 
-import java.util.Random;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
@@ -35,10 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int progressStatus;
     private int progressScope = 10;
     private  Vibrator vibe;
-    private int randomNumber;
-    private Random random = new Random();
-    private int scopeMin=3;
-    private int scopeMax=100;
     private ObjectAnimator animation;
     private int time = 2500;
     //Views
@@ -105,9 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         nextLevel.setVisibility(View.GONE);
                         break;
                 }
-
-                //load random;
-//                randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);
                 //present random to player
                 textSwitcher.setText(String.valueOf(randomArray[i]));
 
@@ -120,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 //circle time animation
                 animation.start();
-
             }
 
             @Override

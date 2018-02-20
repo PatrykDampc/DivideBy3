@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int scopeMin=3;
     private int scopeMax=100;
     private ObjectAnimator animation;
+    private int time = 2500;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -48,10 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
-    //Game controls
-    private int time = 2500;
-    private int timeDecreaseValue = 500;
-    private int timeDecreaseLevel = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,16 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //circle time animation
                 animation.start();
 
-                //score count logic
-                scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-                if (scoreCount == highScore && scoreCount != 0) {
-                    Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
-                }
-                if (scoreCount > highScore) {
-                    editor.putInt(HIGH_SCORE, scoreCount);
-                    editor.commit();
-                    highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
-                }
             }
 
             @Override
@@ -175,6 +162,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void success() {
+        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+        if (scoreCount == highScore && scoreCount != 0) {
+            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
+        }
+        if (scoreCount > highScore) {
+            editor.putInt(HIGH_SCORE, scoreCount);
+            editor.commit();
+            highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
+        }
         vibe.vibrate(25);
         i++;
         progressBar.setProgress(progressStatus +=1);

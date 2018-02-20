@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int highScore;
     private int scoreCount = 0;
     private int i =1;
+    private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
     private int progressScope = 10;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
         //Set up main game info & controls
+        randomArray = Utils.generateRandomNumberArray(200);
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         loop = gameLoop(time).start();
@@ -85,38 +87,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public CustomTimer gameLoop(int speedValue){
 
-        return new CustomTimer(speedValue, speedValue) {
+        return new CustomTimer(speedValue, speedValue+5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ","ok");
                 //setting level depending on game itaration count
-                switch (i){
-                    case 10:
-                        scopeMin = 49;
-                        scopeMax = 200;
-                        progressScope = 15;
-                        break;
-                    case 25:
-                        scopeMin = 120;
-                        scopeMax = 300;
-                        progressScope = 20;
-                        break;
-                    case 45:
-                        scopeMin = 390;
-                        scopeMax = 620;
-                        progressScope = 35;
-                        break;
-                    case 80:
-                        //disabling progress,because there are no more levels
-                        progressBar.setVisibility(View.GONE);
-                        nextLevel.setVisibility(View.GONE);
-                        break;
-                }
+//                switch (i){
+//                    case 10:
+//                        scopeMin = 49;
+//                        scopeMax = 200;
+//                        progressScope = 15;
+//                        break;
+//                    case 25:
+//                        scopeMin = 120;
+//                        scopeMax = 300;
+//                        progressScope = 20;
+//                        break;
+//                    case 45:
+//                        scopeMin = 390;
+//                        scopeMax = 620;
+//                        progressScope = 35;
+//                        break;
+//                    case 80:
+//                        //disabling progress,because there are no more levels
+//                        progressBar.setVisibility(View.GONE);
+//                        nextLevel.setVisibility(View.GONE);
+//                        break;
+//                }
 
                 //load random;
-                randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);
+//                randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);
                 //present random to player
-                textSwitcher.setText(String.valueOf(randomNumber));
+                textSwitcher.setText(String.valueOf(randomArray[i]));
 
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFinish() {
                 Log.d("onFinish: ","ok");
-                if (!Utils.succesCondition(randomNumber)) {
+                if (!Utils.succesCondition(randomArray[i])) {
                     //happens then user didn't do anything when he shouldn't
                     scoreCount++;
                     regresBar.clearAnimation();
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick (View v){
-        if (Utils.succesCondition(randomNumber)) {
+        if (Utils.succesCondition(randomArray[i])) {
             //happens when user taps screen on number that meets conditions;
             loop.cancel();
             scoreCount += 2;
@@ -182,11 +184,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //returns to startAcvivity, contains info about last shown number and earned score
     public void backToStart(){
         loop.cancel();
-        Intent i = new Intent(MainActivity.this, StartActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        i.putExtra("scoreKey", String.valueOf(scoreCount));
-        i.putExtra("numberKey", randomNumber);
-        startActivity(i);
+        Intent intent = new Intent(MainActivity.this, StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("scoreKey", String.valueOf(scoreCount));
+        intent.putExtra("numberKey", randomArray[i]);
+        startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         onPause();
         layout.setClickable(false);

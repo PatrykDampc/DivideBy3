@@ -14,6 +14,8 @@ import android.widget.ViewSwitcher;
 
 import com.example.patryk.divideby3.R;
 
+import java.util.Random;
+
 /**
  * Created by pszen on 14.02.2018.
  */
@@ -77,5 +79,18 @@ public class Utils {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    public static int generateRanNum(int minValue, int maxValue){
+        Random random = new Random();
+        return minValue + random.nextInt(maxValue - minValue +1);
+    }
+
+    public static int[] generateRandomNumberArray(int ammountOfNumbers){
+        int [] array = new int[ammountOfNumbers];
+        for (int i = 0; i < ammountOfNumbers; i++) {
+            array[i]= generateRanNum(3,100);
+        }
+        return array;
     }
 }

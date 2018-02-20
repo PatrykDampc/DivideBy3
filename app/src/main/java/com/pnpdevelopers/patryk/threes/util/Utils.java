@@ -101,10 +101,12 @@ public class Utils {
                         max = 200;
                         break;
                     case 45:
-                        min = 49;
-                        max = 200;
+                        min = 90;
+                        max = 310;
                         break;
-
+                    case 80:
+                        min = 396;
+                        max = 720;
                 }
             array[i]= generateRanNum(min,max);
         }

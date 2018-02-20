@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayBackground"
-    tools:context="com.example.patryk.divideby3.presenter.StartActivity">
+    tools:context="com.pnpdevelopers.patryk.threes.presenter.StartActivity">
 
     <Button
         android:id="@+id/playButtonID"
@@ -45,7 +45,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Copyright © 2018 by P&amp;P Development. All rights reserved."
+        android:text="Created by P&amp;P Developers. 2018"
         android:textColor="?android:attr/colorButtonNormal"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"

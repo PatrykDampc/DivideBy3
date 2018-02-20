@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3.util;
+package com.pnpdevelopers.patryk.threes.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.example.patryk.divideby3.R;
+import com.pnpdevelopers.patryk.threes.R;
 
 import java.util.Random;
 

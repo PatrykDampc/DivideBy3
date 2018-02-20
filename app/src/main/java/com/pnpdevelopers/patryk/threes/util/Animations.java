@@ -1,10 +1,10 @@
-package com.example.patryk.divideby3.util;
+package com.pnpdevelopers.patryk.threes.util;
 
 import android.content.Context;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 
-import com.example.patryk.divideby3.R;
+import com.pnpdevelopers.patryk.threes.R;
 
 /**
  * Created by patryk on 17.02.2018.

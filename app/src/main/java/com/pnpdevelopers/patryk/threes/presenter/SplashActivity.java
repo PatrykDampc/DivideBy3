@@ -1,11 +1,11 @@
-package com.example.patryk.divideby3.presenter;
+package com.pnpdevelopers.patryk.threes.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.patryk.divideby3.util.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 
 /**
  * Created by patryk on 19.02.2018.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.patryk.divideby3.model;
+package com.pnpdevelopers.patryk.threes.model;
 
 import android.os.Handler;
 import android.os.Message;

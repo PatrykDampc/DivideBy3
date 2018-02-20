@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3.presenter;
+package com.pnpdevelopers.patryk.threes.presenter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -15,9 +15,9 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.patryk.divideby3.R;
-import com.example.patryk.divideby3.model.CustomTimer;
-import com.example.patryk.divideby3.util.Utils;
+import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.model.CustomTimer;
+import com.pnpdevelopers.patryk.threes.util.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";

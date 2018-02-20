@@ -1,4 +1,4 @@
-package com.example.patryk.divideby3.presenter;
+package com.pnpdevelopers.patryk.threes.presenter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.patryk.divideby3.R;
-import com.example.patryk.divideby3.util.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 
 public class TutorialActivity extends AppCompatActivity {
 

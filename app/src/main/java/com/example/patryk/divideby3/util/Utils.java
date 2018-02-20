@@ -88,8 +88,25 @@ public class Utils {
 
     public static int[] generateRandomNumberArray(int ammountOfNumbers){
         int [] array = new int[ammountOfNumbers];
+        int min = 3;
+        int max = 100;
         for (int i = 0; i < ammountOfNumbers; i++) {
-            array[i]= generateRanNum(3,100);
+            switch (i){
+                    case 10:
+                        min = 49;
+                        max = 200;
+                        break;
+                    case 25:
+                        min = 49;
+                        max = 200;
+                        break;
+                    case 45:
+                        min = 49;
+                        max = 200;
+                        break;
+
+                }
+            array[i]= generateRanNum(min,max);
         }
         return array;
     }

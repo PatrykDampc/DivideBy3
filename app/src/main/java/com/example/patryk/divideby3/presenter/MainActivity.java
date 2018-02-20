@@ -89,28 +89,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ","ok");
                 //setting level depending on game itaration count
-//                switch (i){
-//                    case 10:
-//                        scopeMin = 49;
-//                        scopeMax = 200;
-//                        progressScope = 15;
-//                        break;
-//                    case 25:
-//                        scopeMin = 120;
-//                        scopeMax = 300;
-//                        progressScope = 20;
-//                        break;
-//                    case 45:
-//                        scopeMin = 390;
-//                        scopeMax = 620;
-//                        progressScope = 35;
-//                        break;
-//                    case 80:
-//                        //disabling progress,because there are no more levels
-//                        progressBar.setVisibility(View.GONE);
-//                        nextLevel.setVisibility(View.GONE);
-//                        break;
-//                }
+                switch (i){
+                    case 10:
+                        progressScope = 15;
+                        break;
+                    case 25:
+                        progressScope = 20;
+                        break;
+                    case 45:
+                        progressScope = 35;
+                        break;
+                    case 80:
+                        //disabling progress,because there are no more levels
+                        progressBar.setVisibility(View.GONE);
+                        nextLevel.setVisibility(View.GONE);
+                        break;
+                }
 
                 //load random;
 //                randomNumber = scopeMin + random.nextInt(scopeMax - scopeMin +1);

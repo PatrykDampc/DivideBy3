@@ -19,7 +19,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Score: 0"
+        android:text="@string/start_score"
         android:textColor="?android:attr/colorButtonNormal"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/progressBarID"

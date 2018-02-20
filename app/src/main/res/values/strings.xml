@@ -20,5 +20,6 @@
     <string name="tutorial">Tutorial</string>
     <string name="level_up">Level up!</string>
     <string name="new_record">New record!</string>
+    <string name="start_score">Score: 0</string>
 
 </resources>

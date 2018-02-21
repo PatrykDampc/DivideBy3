@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.CustomTimer;
@@ -63,13 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
-        
-        adView = findViewById(R.id.adView2);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("4EE1CC4EF1B48EE44234994B3C43D55").build();
-        adRequest.isTestDevice(this);
+        adView = findViewById(R.id.adView2);
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
         //read High Score from Shared Preferences

@@ -3,14 +3,22 @@ package com.pnpdevelopers.patryk.threes.presenter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener{
 
@@ -21,6 +29,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private TextView numberViewStart;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,14 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         numberViewStart = findViewById(R.id.startActivityNumberViewID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
+        adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("4EE1CC4EF1B48EE44234994B3C43D55").build();
+        adRequest.isTestDevice(this);
+
+
         //reading saved high score
         prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
         editor = prefs.edit();
@@ -71,6 +88,25 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Utils.ifHasFocus(hasFocus, this);
+    }
+
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

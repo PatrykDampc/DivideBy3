@@ -1,6 +1,7 @@
 package com.pnpdevelopers.patryk.threes.presenter;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,11 +19,13 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.CustomTimer;
+import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{ //implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
+    private static final float CLICK_DURATION = 100;
     //regular variables
     private SharedPreferences prefs;
     private  SharedPreferences.Editor editor;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView nextLevel;
     private AdView adView;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +82,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         loop = gameLoop(time).start();
-        layout.setOnClickListener(MainActivity.this);
+        //layout.setOnClickListener(MainActivity.this);
+
+        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+
+            @Override
+            public void onClick() {
+                super.onClick();
+                if (Utils.succesCondition(randomArray[i])) {
+                    //happens when user taps screen on number that meets conditions;
+                    loop.cancel();
+                    scoreCount += 2;
+                    regresBar.clearAnimation();
+                   // vibe.vibrate(25);
+                    success();
+                } else {
+                    //happens when user taps screen on number that doesn't meets conditions
+                    backToStart();
+                }
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                loop.cancel();
+                loop.onFinish();
+            }
+        });
 
     }
+
 
     public CustomTimer gameLoop(int speedValue){
 
@@ -135,20 +165,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
     }
 
-    @Override
-    public void onClick (View v){
-        if (Utils.succesCondition(randomArray[i])) {
-            //happens when user taps screen on number that meets conditions;
-            loop.cancel();
-            scoreCount += 2;
-            regresBar.clearAnimation();
-            vibe.vibrate(50);
-            success();
-        } else {
-            //happens when user taps screen on number that doesn't meets conditions
-            backToStart();
-        }
-    }
+//    @Override
+//    public void onClick (View v){
+//        if (Utils.succesCondition(randomArray[i])) {
+//            //happens when user taps screen on number that meets conditions;
+//            loop.cancel();
+//            scoreCount += 2;
+//            regresBar.clearAnimation();
+//            vibe.vibrate(50);
+//            success();
+//        } else {
+//            //happens when user taps screen on number that doesn't meets conditions
+//            backToStart();
+//        }
+//    }
 
 
     public void success() {

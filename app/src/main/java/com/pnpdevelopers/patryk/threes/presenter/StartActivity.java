@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
@@ -42,12 +43,12 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         numberViewStart = findViewById(R.id.startActivityNumberViewID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
-        adView = new AdView(this);
-        adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+       // MobileAds.initialize(this,"ca-app-pub-9589942427963055~6195596040");
+        adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("4EE1CC4EF1B48EE44234994B3C43D55").build();
         adRequest.isTestDevice(this);
+        adView.loadAd(adRequest);
 
 
         //reading saved high score

@@ -15,6 +15,9 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.CustomTimer;
 import com.pnpdevelopers.patryk.threes.util.Utils;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
+        
+        adView = findViewById(R.id.adView2);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("4EE1CC4EF1B48EE44234994B3C43D55").build();
+        adRequest.isTestDevice(this);
+        adView.loadAd(adRequest);
 
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);

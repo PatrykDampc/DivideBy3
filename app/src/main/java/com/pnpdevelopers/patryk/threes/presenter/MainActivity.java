@@ -16,8 +16,6 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.CustomTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -48,7 +46,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
-    private AdView adView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -68,10 +65,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         nextLevel = findViewById(R.id.nextLevelID);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
-//        adView = findViewById(R.id.adView2);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        adView.loadAd(adRequest);
-
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
@@ -83,7 +76,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         loop = gameLoop(time).start();
-        //layout.setOnClickListener(MainActivity.this);
 
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -100,7 +92,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     success();
                 } else {
                     //happens when user taps screen on number that doesn't meets conditions
-                    backToStart();
+                    fail();
                 }
             }
             @Override
@@ -161,27 +153,11 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     success();
                 } else {
                    //happens then user didn't tap the screen, but number was meeting conditions;
-                    backToStart();
+                    fail();
                 }
             }
         };
     }
-
-//    @Override
-//    public void onClick (View v){
-//        if (Utils.succesCondition(randomArray[i])) {
-//            //happens when user taps screen on number that meets conditions;
-//            loop.cancel();
-//            scoreCount += 2;
-//            regresBar.clearAnimation();
-//            vibe.vibrate(50);
-//            success();
-//        } else {
-//            //happens when user taps screen on number that doesn't meets conditions
-//            backToStart();
-//        }
-//    }
-
 
     public void success() {
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
@@ -200,28 +176,30 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     }
 
     //returns to startAcvivity, contains info about last shown number and earned score
-    public void backToStart(){
+    public void fail(){
         loop.cancel();
         onPause();
+        layout.setOnTouchListener(null);
+
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
         intent.putExtra("numberKey", randomArray[i]);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-        layout.setOnTouchListener(null);
 
     }
 
     @Override
     public void onBackPressed() {
+        loop.cancel();
+        onPause();
+        layout.setOnTouchListener(null);
+
         super.onBackPressed();
         startActivity(new Intent(MainActivity.this, StartActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-        loop.cancel();
-        onPause();
-        layout.setOnTouchListener(null);
     }
 
     @Override

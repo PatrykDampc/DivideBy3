@@ -21,10 +21,11 @@
             android:layout_marginTop="24dp"
             android:text="@string/start_score"
             android:textColor="?android:attr/colorButtonNormal"
-            android:textSize="24sp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@+id/progressBarID"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.509" />
 
         <TextView
             android:id="@+id/highScoreTextViewID"
@@ -35,7 +36,7 @@
             android:layout_marginTop="24dp"
             android:text="High Score: 0"
             android:textColor="?android:attr/colorButtonNormal"
-            android:textSize="24sp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@+id/progressBarID"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -107,5 +108,3 @@
             app:layout_constraintTop_toBottomOf="@+id/highScoreTextViewID" />
 
 </android.support.constraint.ConstraintLayout>
-
-

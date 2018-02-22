@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.util.Utils;
 
 public class TutorialActivity extends AppCompatActivity {
 
@@ -200,4 +201,11 @@ public class TutorialActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Utils.fullScreenIfHasFocus(hasFocus, this);
+    }
+
 }

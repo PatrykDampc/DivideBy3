@@ -81,7 +81,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Utils.ifHasFocus(hasFocus, this);
+        Utils.fullScreenIfHasFocus(hasFocus, this);
     }
 
     public String md5(String s) {

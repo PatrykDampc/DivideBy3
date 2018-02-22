@@ -22,10 +22,9 @@ import com.pnpdevelopers.patryk.threes.model.CustomTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
-public class MainActivity extends AppCompatActivity{ //implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{  //implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
-    private static final float CLICK_DURATION = 100;
     //regular variables
     private SharedPreferences prefs;
     private  SharedPreferences.Editor editor;
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity{ //implements View.OnClickLi
         loop = gameLoop(time).start();
         //layout.setOnClickListener(MainActivity.this);
 
+        //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
 
             @Override
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity{ //implements View.OnClickLi
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Utils.ifHasFocus(hasFocus, this);
+        Utils.fullScreenIfHasFocus(hasFocus, this);
     }
 
 

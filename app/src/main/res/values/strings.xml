@@ -11,7 +11,7 @@
     <string name="skip">Skip</string>
     <string name="start">Start</string>
     <string name="Start">Threes! \n Number 3 is the only rule. \n Seems simple? We\'ll see!</string>
-    <string name="clock_is_ticking">Clock is ticking! You have limited time to reaction, otherwise you loose! </string>
+    <string name="clock_is_ticking">Clock is ticking! You have limited time for reaction, otherwise you loose! </string>
     <string name="numberpresented">Every 3 seconds a number is presented to you. If number contains \'3\' digit or is divisible by it, simply tap the screen</string>
     <string name="ifdosent">If number doesn\'t meet the conditions, just let it disappear and wait for the next one</string>
     <string name="numbersincrease">When the game is running for a while, \n the values of numbers are increasing.</string>

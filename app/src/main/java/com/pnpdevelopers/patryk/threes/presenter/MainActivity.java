@@ -16,6 +16,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.CustomTimer;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int highScore;
     private int scoreCount = 0;
     private int i =0;
+    private int ammountOfNumbersInArray = 1000;
     private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
         //Set up main game info & controls
-        randomArray = Utils.generateRandomNumberArray(200);
+        randomArray = Utils.generateRandomNumberArray(ammountOfNumbersInArray);
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         loop = gameLoop(time).start();

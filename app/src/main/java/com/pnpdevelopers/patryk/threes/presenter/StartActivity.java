@@ -37,9 +37,9 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
 
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+//        adView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
+//        adView.loadAd(adRequest);
 
 
         //reading saved high score

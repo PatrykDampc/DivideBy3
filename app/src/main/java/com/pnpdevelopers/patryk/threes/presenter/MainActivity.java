@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private  SharedPreferences.Editor editor;
     private int highScore;
     private int scoreCount = 0;
-    private int i =1;
+    private int i =0;
     private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+
             @Override
             public void onClick() {
                 super.onClick();
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         loop.cancel();
         onPause();
-        layout.setClickable(false);
+        layout.setOnTouchListener(null);
     }
 
     @Override

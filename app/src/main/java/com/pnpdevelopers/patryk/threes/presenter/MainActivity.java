@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-
             @Override
             public void onClick() {
                 super.onClick();
@@ -200,14 +199,15 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     //returns to startAcvivity, contains info about last shown number and earned score
     public void backToStart(){
         loop.cancel();
+        onPause();
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
         intent.putExtra("numberKey", randomArray[i]);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-        onPause();
-        layout.setClickable(false);
+        layout.setOnTouchListener(null);
+
     }
 
     @Override

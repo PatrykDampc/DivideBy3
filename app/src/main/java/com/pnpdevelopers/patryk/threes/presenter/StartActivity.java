@@ -13,10 +13,7 @@ import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-public class StartActivity extends AppCompatActivity  implements View.OnClickListener{
+public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
 
     private Button startButton;
     private Button tutorialButton;
@@ -47,13 +44,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         //reading saved high score
         prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
         editor = prefs.edit();
-        highScoreViewStart.setText(this.getString(R.string.high_score) +" "+ String.valueOf(prefs.getInt(MainActivity.HIGH_SCORE, 0)));
+        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(MainActivity.HIGH_SCORE, 0)));
         //receiving scores from lost game session
         Intent intent = getIntent();
         int number = intent.getIntExtra("numberKey", 0);
         String score = intent.getStringExtra("scoreKey");
         Utils.printLostMessage(number, score, numberViewStart, scoreViewStart, startButton, this);
-        scoreViewStart.setText(this.getString(R.string.your_score) +" "+ score);
+        scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
 
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
@@ -64,7 +61,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
 
             case R.id.playButtonID:
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
             case R.id.tutorialButtonID:
@@ -82,25 +79,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Utils.fullScreenIfHasFocus(hasFocus, this);
-    }
-
-    public String md5(String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
 }

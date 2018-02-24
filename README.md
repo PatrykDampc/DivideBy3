@@ -2,4 +2,4 @@ Simple Clicker game made in raw Android Studio, finished and relased on Play Sto
 
 Further updates may include Google Play Games implementation, for now testing and balancing levels, listening users opinions
 
-<img src="iDivideBy3/Screenshots/2018-02-23 18.54.15.jpg" width="425"/> <img src="DivideBy3/Screenshots/2018-02-23 18.55.17.jpg" width="425"/>  <img src="DivideBy3/Screenshots/2018-02-23 18.57.13.jpg" width="425"/> 
+<img src="DivideBy3/Screenshots/2018-02-23 18.54.15.jpg" width="425"/> <img src="DivideBy3/Screenshots/2018-02-23 18.55.17.jpg" width="425"/>  <img src="https://github.com/PatrykDampc/DivideBy3/blob/master/Screenshots/2018-02-23%2018.57.13.jpg?raw=true" width="425"/> 

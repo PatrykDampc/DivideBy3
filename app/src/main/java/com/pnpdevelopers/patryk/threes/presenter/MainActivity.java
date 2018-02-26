@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int highScore;
     private int scoreCount = 0;
     private int i =0;
-    private int ammountOfNumbersInArray = 1000;
+    private int ammountOfNumbersInArray = 2000;
     private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
         //Set up main game info & controls
         randomArray = Utils.generateRandomNumberArray(ammountOfNumbersInArray);
+        Utils.customArrayShuffle(randomArray);
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
         loop = gameLoop(time).start();

@@ -14,6 +14,8 @@ import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
+import java.util.Collections;
+
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
 
     private Button startButton;

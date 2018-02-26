@@ -15,6 +15,7 @@ import android.widget.ViewSwitcher;
 import com.pnpdevelopers.patryk.threes.R;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by pszen on 14.02.2018.
@@ -38,24 +39,58 @@ public class Utils {
         for (int i = 0; i < ammountOfNumbers; i++) {
             switch (i){
                 case 10:
-                    min = 49;
+                    min = 101;  //49
                     max = 200;
                     break;
                 case 25:
-                    min = 90;
+                    min = 201;  //90
                     max = 310;
                     break;
                 case 45:
-                    min = 396;
+                    min = 396; //396
                     max = 720;
                     break;
                 case 80:
-                    min = 550;
+                    min = 721; //550
                     max = 999;
             }
             array[i]= generateRanNum(min,max);
         }
         return array;
+    }
+
+
+    public static void customArrayShuffle(int[] ar){
+        int min = 80;
+        int max = ar.length-1;
+
+        for (int i = ar.length - 1; i > 0; i--)
+        {
+            switch(i){
+                case 80:
+                    min = 45;
+                    max = 79;
+                    break;
+                case 45:
+                    min = 25;
+                    max = 44;
+                    break;
+                case 25:
+                    min = 10;
+                    max = 24;
+                    break;
+                case 10:
+                    min = 0;
+                    max = 9;
+                    break;
+            }
+            // Simple swap
+            int index1 = generateRanNum(min,max);
+            int index2 = generateRanNum(min,max);
+            int a = ar[index1];
+            ar[index1] = ar[index2];
+            ar[index2] = a;
+        }
     }
 
     public static boolean succesCondition(int number){
@@ -111,4 +146,13 @@ public class Utils {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+    public static int[] generateRandomNumberArray(int min, int max, int numOf){
+        int [] array = new int[numOf];
+        for(int i = 0; i < numOf; i++){
+            array[i] = generateRanNum(min,max);
+        }
+        return array;
+    }
+
 }

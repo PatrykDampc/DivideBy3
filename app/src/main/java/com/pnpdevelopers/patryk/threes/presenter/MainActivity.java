@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.CustomTimer;
+import com.pnpdevelopers.patryk.threes.util.CustomTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
+    private int level = 1;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
+        nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
 
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
@@ -87,9 +89,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                 if (Utils.succesCondition(randomArray[i])) {
                     //happens when user taps screen on number that meets conditions;
                     loop.cancel();
-                    scoreCount += 2;
                     regresBar.clearAnimation();
-                   // vibe.vibrate(25);
                     success();
                 } else {
                     //happens when user taps screen on number that doesn't meets conditions
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                         progressScope = Utils.LEVEL_TWO - Utils.LEVEL_ONE;
                         break;
                     case Utils.LEVEL_TWO:
-                        progressScope = Utils.LEVEL_THREE - Utils.LEVEL_FOUR;
+                        progressScope = Utils.LEVEL_THREE - Utils.LEVEL_TWO;
                         break;
                     case Utils.LEVEL_THREE:
                         progressScope = Utils.LEVEL_FOUR - Utils.LEVEL_THREE;
@@ -137,6 +137,8 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
+                    level++;
+                    nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
                     progressStatus = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
@@ -150,7 +152,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                 Log.d("onFinish: ","ok");
                 if (!Utils.succesCondition(randomArray[i])) {
                     //happens then user didn't do anything when he shouldn't
-                    scoreCount++;
                     regresBar.clearAnimation();
                     success();
                 } else {
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         vibe.vibrate(25);
         i++;
         progressBar.setProgress(progressStatus +=1);
+        scoreCount++;
         loop.start();
     }
 

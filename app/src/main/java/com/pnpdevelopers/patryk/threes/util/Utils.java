@@ -15,7 +15,6 @@ import android.widget.ViewSwitcher;
 import com.pnpdevelopers.patryk.threes.R;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by pszen on 14.02.2018.
@@ -173,3 +172,6 @@ public class Utils {
 
 
 }
+
+
+// GÓWNO

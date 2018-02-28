@@ -21,5 +21,7 @@
     <string name="level_up">Level up!</string>
     <string name="new_record">New record!</string>
     <string name="start_score">Score: 0</string>
+    <string name="level">"Level: "</string>
+    <string name="next_level_progress">,  Next level:</string>
 
 </resources>

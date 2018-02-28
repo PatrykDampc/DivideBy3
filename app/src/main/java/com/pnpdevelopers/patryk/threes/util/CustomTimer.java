@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pnpdevelopers.patryk.threes.model;
+package com.pnpdevelopers.patryk.threes.util;
 
 import android.os.Handler;
 import android.os.Message;

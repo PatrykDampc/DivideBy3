@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int highScore;
     private int scoreCount = 0;
     private int i =0;
-    private int ammountOfNumbersInArray = 2000;
+    private int ammountOfNumbersInArray = 10000;
     private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
-    private int progressScope = 10;
+    private int progressScope = Utils.LEVEL_ONE;
     private  Vibrator vibe;
     private ObjectAnimator animation;
     private int time = 2500;
@@ -112,22 +112,23 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         return new CustomTimer(speedValue, speedValue+5000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.d("onTick: ","ok");
+                Log.d("onTick: ", "ok");
                 //setting level depending on game itaration count
-                switch (i){
-                    case 10:
-                        progressScope = 15;
+                switch (i) {
+                    case Utils.LEVEL_ONE:
+                        progressScope = Utils.LEVEL_TWO - Utils.LEVEL_ONE;
                         break;
-                    case 25:
-                        progressScope = 20;
+                    case Utils.LEVEL_TWO:
+                        progressScope = Utils.LEVEL_THREE - Utils.LEVEL_FOUR;
                         break;
-                    case 45:
-                        progressScope = 35;
+                    case Utils.LEVEL_THREE:
+                        progressScope = Utils.LEVEL_FOUR - Utils.LEVEL_THREE;
                         break;
-                    case 80:
-                        //disabling progress,because there are no more levels
-                        progressBar.setVisibility(View.GONE);
-                        nextLevel.setVisibility(View.GONE);
+                    case Utils.LEVEL_FOUR:
+                        progressScope = Utils.LEVEL_FIVE - Utils.LEVEL_FOUR;
+                        break;
+                    case Utils.LEVEL_SIX:
+                        progressScope = randomArray.length;
                         break;
                 }
                 //present random to player
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
-                    Toast.makeText(MainActivity.this,MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
                     progressStatus = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);

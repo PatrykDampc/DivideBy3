@@ -22,6 +22,13 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 public class Utils {
+    // number of iterations for new level, to add new level u need to make changes in generateRandomNumberArray, customArrayShuffle, MainActivity.Ontick
+    public static final int LEVEL_ONE = 13;
+    public static final int LEVEL_TWO = 31;
+    public static final int LEVEL_THREE = 56;
+    public static final int LEVEL_FOUR = 106;
+    public static final int LEVEL_FIVE = 214;
+    public static final int LEVEL_SIX = 284;
 
     public static boolean isDivisibleByThree(int number){
         return number%3 == 0 ? true : false;
@@ -38,21 +45,29 @@ public class Utils {
         int max = 100;
         for (int i = 0; i < ammountOfNumbers; i++) {
             switch (i){
-                case 10:
+                case LEVEL_ONE:
                     min = 101;  //49
                     max = 200;
                     break;
-                case 25:
+                case LEVEL_TWO:
                     min = 201;  //90
                     max = 310;
                     break;
-                case 45:
+                case LEVEL_THREE:
                     min = 396; //396
                     max = 720;
                     break;
-                case 80:
+                case LEVEL_FOUR:
                     min = 721; //550
                     max = 999;
+                    break;
+                case LEVEL_FIVE:
+                    min = 1000;
+                    max = 1310;
+                    break;
+                case LEVEL_SIX:
+                    min = 1396;
+                    max = 2000;
             }
             array[i]= generateRanNum(min,max);
         }
@@ -61,27 +76,35 @@ public class Utils {
 
 
     public static void customArrayShuffle(int[] ar){
-        int min = 80;
+        int min = LEVEL_FOUR;
         int max = ar.length-1;
 
         for (int i = ar.length - 1; i > 0; i--)
         {
             switch(i){
-                case 80:
-                    min = 45;
-                    max = 79;
+                case LEVEL_SIX:
+                    min = LEVEL_FIVE;
+                    max = LEVEL_SIX-1;
                     break;
-                case 45:
-                    min = 25;
-                    max = 44;
+                case LEVEL_FIVE:
+                    min = LEVEL_FOUR;
+                    max = LEVEL_FIVE-1;
                     break;
-                case 25:
-                    min = 10;
-                    max = 24;
+                case LEVEL_FOUR:
+                    min = LEVEL_THREE;
+                    max = LEVEL_FOUR-1;
                     break;
-                case 10:
+                case LEVEL_THREE:
+                    min = LEVEL_TWO;
+                    max = LEVEL_THREE-1;
+                    break;
+                case LEVEL_TWO:
+                    min = LEVEL_ONE;
+                    max = LEVEL_TWO-1;
+                    break;
+                case LEVEL_ONE:
                     min = 0;
-                    max = 9;
+                    max = LEVEL_ONE-1;
                     break;
             }
             // Simple swap
@@ -147,12 +170,6 @@ public class Utils {
         }
     }
 
-    public static int[] generateRandomNumberArray(int min, int max, int numOf){
-        int [] array = new int[numOf];
-        for(int i = 0; i < numOf; i++){
-            array[i] = generateRanNum(min,max);
-        }
-        return array;
-    }
+
 
 }

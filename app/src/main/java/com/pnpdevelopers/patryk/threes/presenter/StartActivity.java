@@ -8,16 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
-import java.util.Collections;
-
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
-
     private Button startButton;
     private Button tutorialButton;
     private TextView highScoreViewStart;
@@ -43,7 +39,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 //        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
 //        adView.loadAd(adRequest);
 
-
         //reading saved high score
         prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
         editor = prefs.edit();
@@ -62,7 +57,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.playButtonID:
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -76,7 +70,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 break;
         }
     }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

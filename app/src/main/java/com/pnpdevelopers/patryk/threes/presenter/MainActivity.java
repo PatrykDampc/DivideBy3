@@ -23,21 +23,17 @@ import com.pnpdevelopers.patryk.threes.util.Utils;
 
 public class MainActivity extends AppCompatActivity{  //implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
-    public static final String HIGH_SCORE = "HIGH_SCORE_KEY";
+    public static final String HIGH_SCORE = "HIGH_SCORE_KEY_BALANCED";
     //regular variables
     private SharedPreferences prefs;
     private  SharedPreferences.Editor editor;
-    private int highScore;
-    private int scoreCount = 0;
-    private int i =0;
-    private int ammountOfNumbersInArray = 10000;
     private int[] randomArray;
     private CustomTimer loop;
     private int progressStatus;
     private int progressScope = Utils.LEVEL_ONE;
     private  Vibrator vibe;
-    private ObjectAnimator animation;
-    private int time = 2500;
+    private int level = 1;
+    private int highScore;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -46,7 +42,11 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private ProgressBar regresBar;
     private ProgressBar progressBar;
     private TextView nextLevel;
-    private int level = 1;
+    private ObjectAnimator animation;
+    //game variables
+    private int scoreCount = 0;
+    private int ammountOfNumbersInArray = 10000;
+    private int time = 2500;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
-        nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
 
         //read High Score from Shared Preferences
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
@@ -74,6 +73,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
 
         //Set up main game info & controls
+        nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
         randomArray = Utils.generateRandomNumberArray(ammountOfNumbersInArray);
         Utils.customArrayShuffle(randomArray);
         progressBar.setMax(progressScope);
@@ -82,14 +82,12 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-
             @Override
             public void onClick() {
                 super.onClick();
-                if (Utils.succesCondition(randomArray[i])) {
+                if (Utils.succesCondition(randomArray[scoreCount])) {
                     //happens when user taps screen on number that meets conditions;
                     loop.cancel();
-                    regresBar.clearAnimation();
                     success();
                 } else {
                     //happens when user taps screen on number that doesn't meets conditions
@@ -103,18 +101,15 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                 loop.onFinish();
             }
         });
-
     }
 
-
     public CustomTimer gameLoop(int speedValue){
-
         return new CustomTimer(speedValue, speedValue+5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.d("onTick: ", "ok");
-                //setting level depending on game itaration count
-                switch (i) {
+                //setting level depending on game score
+                switch (scoreCount) {
                     case Utils.LEVEL_ONE:
                         progressScope = Utils.LEVEL_TWO - Utils.LEVEL_ONE;
                         break;
@@ -132,8 +127,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                         break;
                 }
                 //present random to player
-                textSwitcher.setText(String.valueOf(randomArray[i]));
-
+                textSwitcher.setText(String.valueOf(randomArray[scoreCount]));
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
@@ -150,9 +144,8 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             @Override
             public void onFinish() {
                 Log.d("onFinish: ","ok");
-                if (!Utils.succesCondition(randomArray[i])) {
+                if (!Utils.succesCondition(randomArray[scoreCount])) {
                     //happens then user didn't do anything when he shouldn't
-                    regresBar.clearAnimation();
                     success();
                 } else {
                    //happens then user didn't tap the screen, but number was meeting conditions;
@@ -161,7 +154,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             }
         };
     }
-
     public void success() {
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         if (scoreCount == highScore && scoreCount != 0) {
@@ -173,9 +165,9 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
         vibe.vibrate(25);
-        i++;
-        progressBar.setProgress(progressStatus +=1);
+        regresBar.clearAnimation();
         scoreCount++;
+        progressBar.setProgress(progressStatus++);
         loop.start();
     }
 
@@ -188,7 +180,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
-        intent.putExtra("numberKey", randomArray[i]);
+        intent.putExtra("numberKey", randomArray[scoreCount]);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
 

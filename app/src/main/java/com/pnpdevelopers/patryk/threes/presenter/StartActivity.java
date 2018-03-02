@@ -2,6 +2,8 @@ package com.pnpdevelopers.patryk.threes.presenter;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +45,11 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         musicView = findViewById(R.id.musicButtonID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
+
+        numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
+                getResources().getColor(R.color.colorAccent),
+                getResources().getColor(R.color.colorAccentLostMessageGradient),
+                Shader.TileMode.REPEAT));
 
         prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
         editor = prefs.edit();

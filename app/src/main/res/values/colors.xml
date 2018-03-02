@@ -7,6 +7,7 @@
     <color name="darkerGrayBackground">#2d2d2d</color>
     <color name="next_level_value">#959595</color>
     <color name="colorAccentProgress">#64051d</color>
+    <color name="colorAccentLostMessageGradient">#ff0008</color>
 
     <color name="dot_inactive_screen1">#959595</color>
     <color name="dot_inactive_screen2">#959595</color>

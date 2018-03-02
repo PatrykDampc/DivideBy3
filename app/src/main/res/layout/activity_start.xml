@@ -10,12 +10,15 @@
 
     <Button
         android:id="@+id/playButtonID"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="170dp"
+
         android:layout_height="70dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:background="@drawable/drawable_gradient"
+        android:elevation="24dp"
         android:text="@string/btn_start"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/tutorialButtonID"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,9 +48,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Created by P&amp;P Developers. 2018"
+        android:text="Created by P&amp;P Developers. 2018 \n Music: www.bensound.com"
+        android:textAlignment="center"
         android:textColor="?android:attr/colorButtonNormal"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -64,6 +68,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="?android:attr/textColorLink"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -126,6 +131,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/musicButtonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        android:onClick="musicMute"
+        ads:layout_constraintBottom_toTopOf="@+id/adView"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:srcCompat="@drawable/ic_music_note_white_36dp" />
 
 
 </android.support.constraint.ConstraintLayout>

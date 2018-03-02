@@ -5,11 +5,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
@@ -31,9 +31,10 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private CustomTimer loop;
     private int progressStatus;
     private int progressScope = Utils.LEVEL_ONE;
-    private  Vibrator vibe;
     private int level = 1;
     private int highScore;
+    private  Vibrator vibe;
+    private MediaPlayer mediaPlayer2;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -48,12 +49,26 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int ammountOfNumbersInArray = 10000;
     private int time = 2500;
 
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+        prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
+        mediaPlayer2.setLooping(true);
+        mediaPlayer2.start();
+        if(prefs.getBoolean(StartActivity.MUSIC_KEY, true)){
+            mediaPlayer2.setVolume(1,1);
+        } else {
+            mediaPlayer2.setVolume(0,0);
+        }
 
         //Views setup
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -67,7 +82,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
         //read High Score from Shared Preferences
-        prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
@@ -107,7 +121,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         return new CustomTimer(speedValue, speedValue+5000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.d("onTick: ", "ok");
+               // Log.d("onTick: ", "ok");
                 //setting level depending on game score
                 switch (scoreCount) {
                     case Utils.LEVEL_ONE:
@@ -143,7 +157,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
             @Override
             public void onFinish() {
-                Log.d("onFinish: ","ok");
+               // Log.d("onFinish: ","ok");
                 if (!Utils.succesCondition(randomArray[scoreCount])) {
                     //happens then user didn't do anything when he shouldn't
                     success();
@@ -155,6 +169,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         };
     }
     public void success() {
+        scoreCount++;
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         if (scoreCount == highScore && scoreCount != 0) {
             Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
@@ -166,13 +181,14 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         }
         vibe.vibrate(25);
         regresBar.clearAnimation();
-        scoreCount++;
-        progressBar.setProgress(progressStatus++);
+        progressBar.setProgress(++progressStatus);
         loop.start();
     }
 
     //returns to startAcvivity, contains info about last shown number and earned score
     public void fail(){
+        mediaPlayer2.stop();
+        mediaPlayer2.release();
         loop.cancel();
         onPause();
         layout.setOnTouchListener(null);
@@ -188,6 +204,8 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+        mediaPlayer2.stop();
+        mediaPlayer2.release();
         loop.cancel();
         onPause();
         layout.setOnTouchListener(null);
@@ -197,6 +215,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

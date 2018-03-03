@@ -62,8 +62,8 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
             musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
         }
         numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
-                getResources().getColor(R.color.colorAccent),
                 getResources().getColor(R.color.colorAccentLostMessageGradient),
+                getResources().getColor(R.color.colorAccent),
                 Shader.TileMode.REPEAT));
 
 //        adView = findViewById(R.id.adView);

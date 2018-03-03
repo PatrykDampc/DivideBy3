@@ -47,14 +47,25 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         musicView = findViewById(R.id.musicButtonID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
+        prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
+        editor = prefs.edit();
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
 
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        if(prefs.getBoolean(MUSIC_KEY, true)){
+            mediaPlayer.setVolume(0.3f,0.3f);
+            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        } else {
+            mediaPlayer.setVolume(0,0);
+            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
+        }
         numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
                 getResources().getColor(R.color.colorAccent),
                 getResources().getColor(R.color.colorAccentLostMessageGradient),
                 Shader.TileMode.REPEAT));
-
-        prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
-        editor = prefs.edit();
 
 //        adView = findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
@@ -71,20 +82,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
-
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-
-        if(prefs.getBoolean(MUSIC_KEY, true)){
-            mediaPlayer.setVolume(0.3f,0.3f);
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
-        } else {
-            mediaPlayer.setVolume(0,0);
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        }
-
     }
 
     @Override

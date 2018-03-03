@@ -32,12 +32,13 @@ public class RandomArray {
     }
 
     public RandomArray( int from, int to) {
-        randomArrayList = new ArrayList<Integer>();
+        randomArrayList = new ArrayList<>();
         this.from = from;
         this.to = to;
 
-        for (int i = from ; i <(to-from) ; i++) {
-            randomArrayList.add(i);
+        for (int i = 0 ; i <(to-from) ; i++) {
+            randomArrayList.add(from);
+            from++;
         }
         Collections.shuffle(randomArrayList);
         setRandomArrayList(randomArrayList);

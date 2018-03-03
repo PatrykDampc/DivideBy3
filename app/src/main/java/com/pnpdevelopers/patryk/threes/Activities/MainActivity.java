@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int[] randomArray;
     private CountDownTimer loop;
     private int progressStatus;
-    private int progressScope = 0;
+    private int progressScope = 13;
     private int level = 1;
     private int highScore;
     private  Vibrator vibe;
@@ -135,19 +135,19 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                         progressScope = 31;
                         currentArray = array2.getRandomArrayList();
                         break;
-                    case 31:
+                    case 43:
                         progressScope = 56;
                         currentArray = array3.getRandomArrayList();
                         break;
-                    case 56:
+                    case 99:
                         progressScope = 106;
                         currentArray = array4.getRandomArrayList();
                         break;
-                    case 106:
+                    case 205:
                         progressScope = 214;
                         currentArray = array5.getRandomArrayList();
                         break;
-                    case 214:
+                    case 419:
                         progressScope = currentArray.size();
                         currentArray = array6.getRandomArrayList();
                         break;

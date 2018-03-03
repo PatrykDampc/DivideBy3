@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         inLevelIterator++;
     }
 
-    //returns to startAcvivity, contains info about last shown number and earned score
+    //returns to startActivity, contains info about last shown number and earned score
     public void fail(){
         loop.cancel();
         mediaPlayer2.stop();

@@ -35,7 +35,6 @@ public class RandomArrayFactory {
         randomArrayList = new ArrayList<>();
         this.from = from;
         this.to = to;
-
         for (int i = 0 ; i <(to-from) ; i++) {
             randomArrayList.add(from);
             from++;

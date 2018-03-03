@@ -86,7 +86,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     protected void onPause() {
         super.onPause();
         mediaPlayer.pause();
-
     }
 
     @Override
@@ -94,7 +93,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         super.onResume();
         mediaPlayer.start();
         mediaPlayer.seekTo(random.nextInt(100000));
-
     }
 
     @Override

@@ -19,13 +19,13 @@ import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import java.util.Random;
 
+import static com.pnpdevelopers.patryk.threes.util.Constants.HIGH_SCORE_KEY;
+import static com.pnpdevelopers.patryk.threes.util.Constants.MUSIC_KEY;
+import static com.pnpdevelopers.patryk.threes.util.Constants.PREFERENCES_KEY;
+
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
-    public static final String MUSIC_KEY = "MUSIC_KEY";
-    private Button startButton;
-    private Button tutorialButton;
-    private TextView highScoreViewStart;
-    private TextView scoreViewStart;
-    private TextView numberViewStart;
+    private Button startButton, tutorialButton;
+    private TextView highScoreViewStart, scoreViewStart, numberViewStart;
     private ImageView musicView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -47,14 +47,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         musicView = findViewById(R.id.musicButtonID);
         startButton = findViewById(R.id.playButtonID);
         tutorialButton = findViewById(R.id.tutorialButtonID);
-        prefs = getSharedPreferences(MainActivity.PREFERENCES, MODE_PRIVATE);
+        prefs = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
         editor = prefs.edit();
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
 
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-
         if(prefs.getBoolean(MUSIC_KEY, true)){
             mediaPlayer.setVolume(0.3f,0.3f);
             musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
@@ -72,14 +71,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 //        adView.loadAd(adRequest);
 
         //reading saved high score
-        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(MainActivity.HIGH_SCORE, 0)));
+        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(HIGH_SCORE_KEY, 0)));
         //receiving scores from lost game session
         Intent intent = getIntent();
         lostNumber = intent.getIntExtra("numberKey", 0);
         score = intent.getStringExtra("scoreKey");
         printLostMessage();
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
-
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
     }
@@ -147,9 +145,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
             startButton.setText(StartActivity.this.getString(R.string.tryagain));
         }
     }
-
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

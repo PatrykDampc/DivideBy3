@@ -100,11 +100,9 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             public void onClick() {
                 super.onClick();
                 if (Utils.succesCondition(randomArray[scoreCount])) {
-                    //happens when user taps screen on number that meets conditions;
                     loop.cancel();
                     success();
                 } else {
-                    //happens when user taps screen on number that doesn't meets conditions
                     fail();
                 }
             }
@@ -118,10 +116,11 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     }
 
     public CustomTimer gameLoop(int speedValue){
-        return new CustomTimer(speedValue, speedValue+5000) {
+        return new CustomTimer(speedValue, speedValue) {
             @Override
             public void onTick(long millisUntilFinished) {
-               // Log.d("onTick: ", "ok");
+                //circle time animation
+                animation.start();
                 //setting level depending on game score
                 switch (scoreCount) {
                     case Utils.LEVEL_ONE:
@@ -151,24 +150,21 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
                 }
-                //circle time animation
-                animation.start();
             }
 
             @Override
             public void onFinish() {
-               // Log.d("onFinish: ","ok");
                 if (!Utils.succesCondition(randomArray[scoreCount])) {
-                    //happens then user didn't do anything when he shouldn't
                     success();
                 } else {
-                   //happens then user didn't tap the screen, but number was meeting conditions;
                     fail();
                 }
             }
         };
     }
     public void success() {
+        regresBar.clearAnimation();
+        loop.start();
         scoreCount++;
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         if (scoreCount == highScore && scoreCount != 0) {
@@ -180,16 +176,14 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
         vibe.vibrate(25);
-        regresBar.clearAnimation();
         progressBar.setProgress(++progressStatus);
-        loop.start();
     }
 
     //returns to startAcvivity, contains info about last shown number and earned score
     public void fail(){
+        loop.cancel();
         mediaPlayer2.stop();
         mediaPlayer2.release();
-        loop.cancel();
         onPause();
         layout.setOnTouchListener(null);
 
@@ -199,14 +193,13 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         intent.putExtra("numberKey", randomArray[scoreCount]);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-
     }
 
     @Override
     public void onBackPressed() {
+        loop.cancel();
         mediaPlayer2.stop();
         mediaPlayer2.release();
-        loop.cancel();
         onPause();
         layout.setOnTouchListener(null);
 

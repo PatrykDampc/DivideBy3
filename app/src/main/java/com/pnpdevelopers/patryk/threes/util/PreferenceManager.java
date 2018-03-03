@@ -7,7 +7,7 @@ package com.pnpdevelopers.patryk.threes.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.pnpdevelopers.patryk.threes.presenter.MainActivity;
+import com.pnpdevelopers.patryk.threes.Activities.MainActivity;
 
 public class PreferenceManager {
     public static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";

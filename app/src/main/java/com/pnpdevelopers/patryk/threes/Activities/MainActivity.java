@@ -1,4 +1,4 @@
-package com.pnpdevelopers.patryk.threes.presenter;
+package com.pnpdevelopers.patryk.threes.Activities;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,24 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.util.CustomTimer;
+import com.pnpdevelopers.patryk.threes.model.RandomArray;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{  //implements View.OnClickListener {
     public static final String PREFERENCES = "Prefs";
     public static final String HIGH_SCORE = "HIGH_SCORE_KEY_BALANCED";
-    //regular variables
-    private SharedPreferences prefs;
-    private  SharedPreferences.Editor editor;
-    private int[] randomArray;
-    private CustomTimer loop;
-    private int progressStatus;
-    private int progressScope = Utils.LEVEL_ONE;
-    private int level = 1;
-    private int highScore;
-    private  Vibrator vibe;
-    private MediaPlayer mediaPlayer2;
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -44,12 +36,23 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private ProgressBar progressBar;
     private TextView nextLevel;
     private ObjectAnimator animation;
+    //regular variables
+    private SharedPreferences prefs;
+    private  SharedPreferences.Editor editor;
+    private int[] randomArray;
+    private CountDownTimer loop;
+    private int progressStatus;
+    private int progressScope = 0;
+    private int level = 1;
+    private int highScore;
+    private  Vibrator vibe;
+    private MediaPlayer mediaPlayer2;
+    private RandomArray array1, array2, array3, array4, array5, array6;
+    private ArrayList<Integer> currentArray;
+    private int inLevelIterator = 0;
     //game variables
     private int scoreCount = 0;
-    private int ammountOfNumbersInArray = 10000;
     private int time = 2500;
-
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -59,18 +62,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         prefs = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-
-        mediaPlayer2 = new MediaPlayer();
-        mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
-        mediaPlayer2.setLooping(true);
-        mediaPlayer2.start();
-        if(prefs.getBoolean(StartActivity.MUSIC_KEY, true)){
-            mediaPlayer2.setVolume(1,1);
-        } else {
-            mediaPlayer2.setVolume(0,0);
-        }
-
-        //Views setup
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
@@ -80,18 +71,31 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
-
-        //read High Score from Shared Preferences
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE, 0);
-        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
 
-        //Set up main game info & controls
+        array1 = new RandomArray(3,100);
+        array2 = new RandomArray(101,200);
+        array3 = new RandomArray(201,310);
+        array4 = new RandomArray(396,720);
+        array5 = new RandomArray(721,999);
+        array5 = new RandomArray(1000,1310);
+        array6 = new RandomArray(1396,2000);
+
+        mediaPlayer2.setLooping(true);
+        mediaPlayer2.start();
+        if(prefs.getBoolean(StartActivity.MUSIC_KEY, true)){
+            mediaPlayer2.setVolume(1,1);
+        } else {
+            mediaPlayer2.setVolume(0,0);
+        }
+        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
-        randomArray = Utils.generateRandomNumberArray(ammountOfNumbersInArray);
-        Utils.customArrayShuffle(randomArray);
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
+
         loop = gameLoop(time).start();
 
         //noinspection AndroidLintClickableViewAccessibility
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             @Override
             public void onClick() {
                 super.onClick();
-                if (Utils.succesCondition(randomArray[scoreCount])) {
+                if (Utils.succesCondition(currentArray.get(progressStatus))) {
                     loop.cancel();
                     success();
                 } else {
@@ -115,46 +119,56 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         });
     }
 
-    public CustomTimer gameLoop(int speedValue){
-        return new CustomTimer(speedValue, speedValue) {
+    public CountDownTimer gameLoop(int time){
+        return new CountDownTimer(time, time) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //circle time animation
                 animation.start();
                 //setting level depending on game score
                 switch (scoreCount) {
-                    case Utils.LEVEL_ONE:
-                        progressScope = Utils.LEVEL_TWO - Utils.LEVEL_ONE;
+                    case 0:
+                        progressScope = 13;
+                        currentArray = array1.getRandomArrayList();
                         break;
-                    case Utils.LEVEL_TWO:
-                        progressScope = Utils.LEVEL_THREE - Utils.LEVEL_TWO;
+                    case 13:
+                        progressScope = 31;
+                        currentArray = array2.getRandomArrayList();
                         break;
-                    case Utils.LEVEL_THREE:
-                        progressScope = Utils.LEVEL_FOUR - Utils.LEVEL_THREE;
+                    case 31:
+                        progressScope = 56;
+                        currentArray = array3.getRandomArrayList();
                         break;
-                    case Utils.LEVEL_FOUR:
-                        progressScope = Utils.LEVEL_FIVE - Utils.LEVEL_FOUR;
+                    case 56:
+                        progressScope = 106;
+                        currentArray = array4.getRandomArrayList();
                         break;
-                    case Utils.LEVEL_SIX:
-                        progressScope = randomArray.length;
+                    case 106:
+                        progressScope = 214;
+                        currentArray = array5.getRandomArrayList();
+                        break;
+                    case 214:
+                        progressScope = currentArray.size();
+                        currentArray = array6.getRandomArrayList();
                         break;
                 }
+
                 //present random to player
-                textSwitcher.setText(String.valueOf(randomArray[scoreCount]));
+                textSwitcher.setText(String.valueOf(currentArray.get(inLevelIterator)));
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
                     level++;
                     nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
                     progressStatus = 0;
+                    inLevelIterator = 0;
                     progressBar.setProgress(progressStatus);
                     progressBar.setMax(progressScope);
                 }
             }
-
             @Override
             public void onFinish() {
-                if (!Utils.succesCondition(randomArray[scoreCount])) {
+                if (!Utils.succesCondition(currentArray.get(inLevelIterator))) {
                     success();
                 } else {
                     fail();
@@ -177,6 +191,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         }
         vibe.vibrate(25);
         progressBar.setProgress(++progressStatus);
+        inLevelIterator++;
     }
 
     //returns to startAcvivity, contains info about last shown number and earned score
@@ -190,7 +205,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
-        intent.putExtra("numberKey", randomArray[scoreCount]);
+        intent.putExtra("numberKey", currentArray.get(inLevelIterator));
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
@@ -208,7 +223,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

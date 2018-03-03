@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayBackground"
-    tools:context="com.pnpdevelopers.patryk.threes.presenter.StartActivity">
+    tools:context="com.pnpdevelopers.patryk.threes.Activities.StartActivity">
 
     <Button
         android:id="@+id/playButtonID"

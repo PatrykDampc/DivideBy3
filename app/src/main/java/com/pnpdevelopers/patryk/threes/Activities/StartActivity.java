@@ -1,4 +1,4 @@
-package com.pnpdevelopers.patryk.threes.presenter;
+package com.pnpdevelopers.patryk.threes.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +32,8 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private AdView adView;
     private MediaPlayer mediaPlayer;
     private Random random = new Random();
+    private int lostNumber;
+    private String score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +64,9 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(MainActivity.HIGH_SCORE, 0)));
         //receiving scores from lost game session
         Intent intent = getIntent();
-        int number = intent.getIntExtra("numberKey", 0);
-        String score = intent.getStringExtra("scoreKey");
-        Utils.printLostMessage(number, score, numberViewStart, scoreViewStart, startButton, this);
+        lostNumber = intent.getIntExtra("numberKey", 0);
+        score = intent.getStringExtra("scoreKey");
+        printLostMessage();
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
 
         startButton.setOnClickListener(this);
@@ -130,6 +132,23 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
             musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
         }
         editor.apply();
+    }
+
+    public void printLostMessage(){
+        if( lostNumber == 0 && score == null){
+            numberViewStart.setVisibility(View.GONE);
+            scoreViewStart.setVisibility(View.GONE);
+        } else if(Utils.isDivisibleByThree(lostNumber)){
+            int result = lostNumber/3;
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }  else if (String.valueOf(lostNumber).contains("3")){
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ StartActivity.this.getString(R.string.contains));
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }  else {
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) + "...");
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }
     }
 
 

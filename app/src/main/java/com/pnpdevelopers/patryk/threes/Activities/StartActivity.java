@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.model.Conditions;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import java.util.Random;
 
-import static com.pnpdevelopers.patryk.threes.util.Constants.HIGH_SCORE_KEY;
-import static com.pnpdevelopers.patryk.threes.util.Constants.MUSIC_KEY;
-import static com.pnpdevelopers.patryk.threes.util.Constants.PREFERENCES_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
     private Button startButton, tutorialButton;
@@ -131,7 +132,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         if( lostNumber == 0 && score == null){
             numberViewStart.setVisibility(View.GONE);
             scoreViewStart.setVisibility(View.GONE);
-        } else if(Utils.isDivisibleByThree(lostNumber)){
+        } else if(Conditions.isDivisibleByThree(lostNumber)){
             int result = lostNumber/3;
             numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
             startButton.setText(StartActivity.this.getString(R.string.tryagain));

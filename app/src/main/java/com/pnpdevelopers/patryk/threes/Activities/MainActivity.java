@@ -18,15 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.model.Conditions;
 import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import java.util.ArrayList;
 
-import static com.pnpdevelopers.patryk.threes.util.Constants.HIGH_SCORE_KEY;
-import static com.pnpdevelopers.patryk.threes.util.Constants.MUSIC_KEY;
-import static com.pnpdevelopers.patryk.threes.util.Constants.PREFERENCES_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
+import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
 
 public class MainActivity extends AppCompatActivity{  //implements View.OnClickListener {
     //Views
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             @Override
             public void onClick() {
                 super.onClick();
-                if (Utils.succesCondition(number)) {
+                if (Conditions.succesCondition(number)) {
                     loop.cancel();
                     success();
                 } else {
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             }
             @Override
             public void onFinish() {
-                if (!Utils.succesCondition(number)) {
+                if (!Conditions.succesCondition(number)) {
                     success();
                 } else {
                     fail();

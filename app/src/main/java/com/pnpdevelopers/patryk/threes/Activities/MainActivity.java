@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.RandomArray;
+import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     private int highScore;
     private  Vibrator vibe;
     private MediaPlayer mediaPlayer2;
-    private RandomArray array1, array2, array3, array4, array5, array6;
+    private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private ArrayList<Integer> currentArray;
     private int inLevelIterator = 0;
-    //game variables
     private int scoreCount = 0;
     private int time = 2500;
+    private int number;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -76,13 +76,13 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         mediaPlayer2 = new MediaPlayer();
         mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
 
-        array1 = new RandomArray(3,100);
-        array2 = new RandomArray(101,200);
-        array3 = new RandomArray(201,310);
-        array4 = new RandomArray(396,720);
-        array5 = new RandomArray(721,999);
-        array5 = new RandomArray(1000,1310);
-        array6 = new RandomArray(1396,2000);
+        array1 = new RandomArrayFactory(3,100);
+        array2 = new RandomArrayFactory(101,200);
+        array3 = new RandomArrayFactory(201,310);
+        array4 = new RandomArrayFactory(396,720);
+        array5 = new RandomArrayFactory(721,999);
+        array5 = new RandomArrayFactory(1000,1310);
+        array6 = new RandomArrayFactory(1396,2000);
 
         mediaPlayer2.setLooping(true);
         mediaPlayer2.start();
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             @Override
             public void onClick() {
                 super.onClick();
-                if (Utils.succesCondition(currentArray.get(progressStatus))) {
+                if (Utils.succesCondition(number)) {
                     loop.cancel();
                     success();
                 } else {
@@ -152,9 +152,9 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                         currentArray = array6.getRandomArrayList();
                         break;
                 }
-
+                number = currentArray.get(inLevelIterator);
                 //present random to player
-                textSwitcher.setText(String.valueOf(currentArray.get(inLevelIterator)));
+                textSwitcher.setText(String.valueOf(number));
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {
                     Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             }
             @Override
             public void onFinish() {
-                if (!Utils.succesCondition(currentArray.get(inLevelIterator))) {
+                if (!Utils.succesCondition(number)) {
                     success();
                 } else {
                     fail();
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
-        intent.putExtra("numberKey", currentArray.get(inLevelIterator));
+        intent.putExtra("numberKey", number);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }

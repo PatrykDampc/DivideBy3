@@ -7,7 +7,7 @@ import java.util.Collections;
  * Created by patryk on 02.03.2018.
  */
 
-public class RandomArray {
+public class RandomArrayFactory {
     private ArrayList<Integer> randomArrayList;
     private int from;
     private int to;
@@ -31,7 +31,7 @@ public class RandomArray {
         this.to = to;
     }
 
-    public RandomArray( int from, int to) {
+    public RandomArrayFactory(int from, int to) {
         randomArrayList = new ArrayList<>();
         this.from = from;
         this.to = to;

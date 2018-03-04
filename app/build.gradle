@@ -6,8 +6,8 @@ android {
         applicationId "com.pnpdevelopers.patryk.threes"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 8
+        versionName "1.5.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

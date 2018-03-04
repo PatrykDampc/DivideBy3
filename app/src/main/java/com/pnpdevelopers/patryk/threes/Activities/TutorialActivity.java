@@ -1,4 +1,4 @@
-package com.pnpdevelopers.patryk.threes.presenter;
+package com.pnpdevelopers.patryk.threes.Activities;
 
 import android.content.Context;
 import android.content.Intent;

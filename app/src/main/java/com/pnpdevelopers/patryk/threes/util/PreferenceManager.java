@@ -7,9 +7,11 @@ package com.pnpdevelopers.patryk.threes.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.pnpdevelopers.patryk.threes.presenter.MainActivity;
 
 public class PreferenceManager {
+    public static final String PREFERENCES_KEY = "Prefs";
+    public static final String HIGH_SCORE_KEY = "HIGH_SCORE_KEY_BALANCED";
+    public static final String MUSIC_KEY = "MUSIC_KEY";
     public static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";
 
    private SharedPreferences prefs;
@@ -18,7 +20,7 @@ public class PreferenceManager {
 
     public PreferenceManager(Context context) {
         this.context = context;
-        prefs = context.getSharedPreferences(MainActivity.PREFERENCES, Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }
 

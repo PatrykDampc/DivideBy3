@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.Conditions;
 import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
+import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Vibrator vibe;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private CountDownTimer loop;
+    private CustomCountDownTimer loop;
     private MediaPlayer mediaPlayer2;
     private ArrayList<Integer> currentArray;
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
@@ -109,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public CountDownTimer gameLoop(int time){
-        return new CountDownTimer(time, 5000) {
+    public CustomCountDownTimer gameLoop(int time){
+        return new CustomCountDownTimer(time, 5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //setting array depending on score count. more score = more difficult numbers array

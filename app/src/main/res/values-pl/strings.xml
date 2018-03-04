@@ -15,7 +15,7 @@
     <string name="numberpresented">Co 3 sekundy pojawia się liczba. Jeżeli zawiera cyfrę \"3\" lub jest przez 3 podzielna musisz tapnąć ekran</string>
     <string name="ifdosent">Jeżeli liczba nie spełnia warunków, zniknie sama po 3 sekundach. Możesz to przyspieszyć przesuwając palcem w prawo</string>
     <string name="numbersincrease">W trakcie trwania gry zwiększa się jej trudność, zaczynają pojawiać się większe liczby.</string>
-    <string name="looksdifficult">Wygląda na trudne? tylko na pierwszy rzut oka. Jest zasada w matematycie mówiąca, że jeżeli w liczbie suma wszystkich cyfr jest podzielna przez 3, wówczas cała liczba jest przez nią podzielna. \n 174: 1 + 7 + 4 = 12, 12 ÷ 3 = 4\nWidzisz? Proste! </string>
+    <string name="looksdifficult">Wygląda na trudne? tylko na pierwszy rzut oka. Jest zasada w matematyce mówiąca, że jeżeli w liczbie suma wszystkich cyfr jest podzielna przez 3, wówczas cała liczba jest przez nią podzielna. \n\n 174: 1 + 7 + 4 = 12, 12 ÷ 3 = 4\nWidzisz? Proste! </string>
     <string name="tryagain">PONÓW</string>
     <string name="tutorial">Samouczek</string>
     <string name="btn_start">GRAJ</string>

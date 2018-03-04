@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,8 +29,8 @@ import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
     private Button startButton, tutorialButton;
-    private TextView highScoreViewStart, scoreViewStart, numberViewStart;
-    private ImageView musicView;
+    private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyryghtView;
+    private ImageView musicView, logoView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private AdView adView;
@@ -43,7 +45,18 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        Animation stampAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        stampAnimation.reset();
+        Animation inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
+        inFromTop.reset();
+        Animation inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
+        inFromBottom.reset();
+        Animation buttonAnim = AnimationUtils.loadAnimation(this,R.anim.button_slide_in);
+        buttonAnim.reset();
+
         //setup views
+        copyryghtView = findViewById(R.id.copyrightViewID);
+        logoView = findViewById(R.id.logoViewID);
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
         scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
         numberViewStart = findViewById(R.id.startActivityNumberViewID);
@@ -83,6 +96,25 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
+
+        highScoreViewStart.clearAnimation();
+        logoView.clearAnimation();
+        numberViewStart.clearAnimation();
+        scoreViewStart.clearAnimation();
+        startButton.clearAnimation();
+        tutorialButton.clearAnimation();
+        copyryghtView.clearAnimation();
+        musicView.clearAnimation();
+
+        scoreViewStart.startAnimation(buttonAnim);
+        startButton.startAnimation(buttonAnim);
+        tutorialButton.startAnimation(inFromBottom);
+        copyryghtView.startAnimation(inFromBottom);
+        musicView.startAnimation(inFromBottom);
+        highScoreViewStart.startAnimation(inFromTop);
+        logoView.startAnimation(inFromTop);
+        numberViewStart.startAnimation(stampAnimation);
+
     }
 
     @Override
@@ -111,6 +143,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 editor.putBoolean(PreferenceManager.IS_FIRST_TIME_LAUNCH, true);
                 editor.apply();
                 startActivity(new Intent(this, TutorialActivity.class));
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
                 break;
             default:
                 break;

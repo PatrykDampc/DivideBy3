@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -124,19 +123,19 @@ public class MainActivity extends AppCompatActivity {
                         progressScope = 31;
                         currentArray = array2.getRandomArrayList();
                         break;
-                    case 43:
+                    case 44:
                         progressScope = 56;
                         currentArray = array3.getRandomArrayList();
                         break;
-                    case 99:
+                    case 100:
                         progressScope = 106;
                         currentArray = array4.getRandomArrayList();
                         break;
-                    case 205:
+                    case 206:
                         progressScope = 214;
                         currentArray = array5.getRandomArrayList();
                         break;
-                    case 419:
+                    case 420:
                         progressScope = currentArray.size();
                         currentArray = array6.getRandomArrayList();
                         break;
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
             highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
-        vibe.vibrate(25);
+        vibe.vibrate(40);
         progressBar.setProgress(++progressStatus);
         inLevelIterator++;
     }

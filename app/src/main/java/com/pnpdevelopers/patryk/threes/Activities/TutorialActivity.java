@@ -208,4 +208,11 @@ public class TutorialActivity extends AppCompatActivity {
         Utils.fullScreenIfHasFocus(hasFocus, this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(TutorialActivity.this, StartActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+       }
+
 }

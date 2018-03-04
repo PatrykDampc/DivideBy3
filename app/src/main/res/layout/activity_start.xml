@@ -37,10 +37,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        ads:layout_constraintTop_toBottomOf="@+id/logoViewID" />
 
     <TextView
-        android:id="@+id/copyright"
+        android:id="@+id/copyrightViewID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -94,7 +94,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logoViewID"
         android:layout_width="310sp"
         android:layout_height="224dp"
         android:layout_marginBottom="164dp"
@@ -141,7 +141,7 @@
         android:layout_marginStart="8dp"
         android:onClick="musicMute"
         ads:layout_constraintBottom_toTopOf="@+id/adView"
-        ads:layout_constraintEnd_toStartOf="@+id/copyright"
+        ads:layout_constraintEnd_toStartOf="@+id/copyrightViewID"
         ads:layout_constraintStart_toStartOf="parent"
         ads:srcCompat="@drawable/ic_music_note_white_36dp" />
 

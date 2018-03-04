@@ -29,7 +29,7 @@ import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
 
-public class MainActivity extends AppCompatActivity{  //implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     //Views
     private ConstraintLayout layout;
     private TextSwitcher textSwitcher;
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     }
 
     public CountDownTimer gameLoop(int time){
-        return new CountDownTimer(time, time+5000) {
+        return new CountDownTimer(time, 5000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //setting array depending on score count. more score = more difficult numbers array

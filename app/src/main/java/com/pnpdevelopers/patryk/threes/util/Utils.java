@@ -13,7 +13,6 @@ import android.widget.ViewSwitcher;
 
 public class Utils {
 
-
     public static void textSwitcherConfiguration(TextSwitcher textSwitcher, final Context context) {
         Animation in = AnimationUtils.loadAnimation(context,
                 android.R.anim.slide_in_left);

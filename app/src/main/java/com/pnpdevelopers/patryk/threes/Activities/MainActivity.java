@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             public void onClick() {
                 super.onClick();
                 if (Conditions.succesCondition(number)) {
-                    loop.cancel();
                     success();
                 } else {
                     fail();
@@ -111,12 +110,10 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
     }
 
     public CountDownTimer gameLoop(int time){
-        return new CountDownTimer(time, time) {
+        return new CountDownTimer(time, time+5000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                //circle time animation
-                animation.start();
-                //setting level depending on game score
+                //setting array depending on score count. more score = more difficult numbers array
                 switch (scoreCount) {
                     case 0:
                         progressScope = 13;
@@ -143,6 +140,8 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                         currentArray = array6.getRandomArrayList();
                         break;
                 }
+                //circle time animation
+                animation.start();
                 number = currentArray.get(inLevelIterator);
                 textSwitcher.setText(String.valueOf(number));
                 //progress bar logic
@@ -166,7 +165,9 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
             }
         };
     }
+
     public void success() {
+        loop.cancel();
         regresBar.clearAnimation();
         loop.start();
         scoreCount++;
@@ -184,7 +185,6 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         inLevelIterator++;
     }
 
-    //returns to startActivity, contains info about last shown number and earned score
     public void fail(){
         loop.cancel();
         mediaPlayer2.stop();

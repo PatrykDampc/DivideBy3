@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         };
     }
     public void success() {
+        scoreCount++;
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         if (scoreCount == highScore && scoreCount != 0) {
             Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
@@ -166,8 +167,7 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
         }
         vibe.vibrate(25);
         regresBar.clearAnimation();
-        scoreCount++;
-        progressBar.setProgress(progressStatus++);
+        progressBar.setProgress(++progressStatus);
         loop.start();
     }
 
@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity{  //implements View.OnClickL
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

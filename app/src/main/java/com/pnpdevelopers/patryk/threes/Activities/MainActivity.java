@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 loop.onFinish();
             }
         });
-        Log.d("MainActivity", "onCreate");
+        Log.d("MAIN","ON                                          ON CREATE");
     }
 
     @Override
@@ -115,14 +115,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mediaPlayer2.setVolume(0,0);
         }
-
-        Log.d("MainActivity","onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("MainActivity", "onPause");
     }
 
     public CustomCountDownTimer gameLoop(int time){
@@ -204,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     public void fail(){
         gameStop();
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
-       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
         intent.putExtra("numberKey", number);
         startActivity(intent);
@@ -216,12 +208,9 @@ public class MainActivity extends AppCompatActivity {
         gameStop();
         super.onBackPressed();
         startActivity(new Intent(MainActivity.this, StartActivity.class)
-                   // .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                     );
+                   .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
-
-
 
     public void gameStop(){
         loop.cancel();

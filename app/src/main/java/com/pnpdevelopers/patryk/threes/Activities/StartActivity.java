@@ -7,7 +7,6 @@ import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -55,7 +54,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         buttonAnim = AnimationUtils.loadAnimation(this,R.anim.button_slide_in);
         buttonAnim.reset();
 
-        //setup views
+        //setup
         copyryghtView = findViewById(R.id.copyrightViewID);
         logoView = findViewById(R.id.logoViewID);
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
@@ -74,33 +73,21 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 getResources().getColor(R.color.colorAccentLostMessageGradient),
                 getResources().getColor(R.color.colorAccent),
                 Shader.TileMode.REPEAT));
-
+        startButton.setOnClickListener(this);
+        tutorialButton.setOnClickListener(this);
 //        adView = findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
 //        adView.loadAd(adRequest);
 
         //reading saved high score
 
-        startButton.setOnClickListener(this);
-        tutorialButton.setOnClickListener(this);
-        Log.d("StartActivity", "onCreate");
-    }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mediaPlayer.pause();
-        Log.d("StartActivity", "onPause");
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mediaPlayer.start();
-        mediaPlayer.seekTo(random.nextInt(100000));
-
-
+    protected void onStart() {
+        super.onStart();
         mediaPlayer.start();
         if(prefs.getBoolean(MUSIC_KEY, true)){
             mediaPlayer.setVolume(0.3f,0.3f);
@@ -135,8 +122,20 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         highScoreViewStart.startAnimation(inFromTop);
         logoView.startAnimation(inFromTop);
         numberViewStart.startAnimation(stampAnimation);
-        Log.d("StartActivity", "onResume");
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer.start();
+        mediaPlayer.seekTo(random.nextInt(100000));
     }
 
     @Override

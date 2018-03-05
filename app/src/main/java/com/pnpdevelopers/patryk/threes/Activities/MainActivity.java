@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -77,12 +76,10 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer2 = new MediaPlayer();
         mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
         mediaPlayer2.setLooping(true);
-
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
-
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             @Override
@@ -106,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         highScoreView.clearAnimation();
         progressBar.clearAnimation();
         nextLevel.clearAnimation();
-
         scoreView.startAnimation(in);
         highScoreView.startAnimation(in);
         progressBar.startAnimation(in);
@@ -127,20 +123,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mediaPlayer2.setVolume(0,0);
         }
-
-        Log.d("MAIN","ON                                          ON CREATE");
     }
-
-
 
     @Override
     protected void onResume() {
         super.onResume();
         if(gameleft){
-            Intent intent = new Intent(MainActivity.this, StartActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra("scoreKey", String.valueOf(scoreCount));
-            startActivity(intent);
+            startActivity(gameStop());
         }
     }
 
@@ -229,32 +218,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fail(){
-        gameStop();
-        Intent intent = new Intent(MainActivity.this, StartActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("scoreKey", String.valueOf(scoreCount));
-        intent.putExtra("numberKey", number);
-        startActivity(intent);
+        startActivity(gameStop().putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
     @Override
     public void onBackPressed() {
-        gameStop();
-        super.onBackPressed();
-
-        Intent intent = new Intent(MainActivity.this, StartActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("scoreKey", String.valueOf(scoreCount));
-        startActivity(intent);
+        startActivity(gameStop());
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+        super.onBackPressed();
     }
 
-    public void gameStop(){
+    public Intent gameStop(){
         loop.cancel();
         mediaPlayer2.stop();
         layout.setOnTouchListener(null);
-
+        return new Intent(MainActivity.this, StartActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra("scoreKey", String.valueOf(scoreCount));
     }
 
     @Override

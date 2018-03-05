@@ -148,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         loop.cancel();
-//        mediaPlayer2.stop();
-//        mediaPlayer2.release();
+        mediaPlayer2.stop();
         gameleft = true;
     }
 
@@ -254,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
     public void gameStop(){
         loop.cancel();
         mediaPlayer2.stop();
-        mediaPlayer2.release();
         layout.setOnTouchListener(null);
 
     }

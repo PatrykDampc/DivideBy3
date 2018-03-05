@@ -12,6 +12,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
+    private Animation in;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         gameleft = false;
 
+        Animation in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
+        in.reset();
         layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
@@ -96,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 loop.onFinish();
             }
         });
+
+        scoreView.clearAnimation();
+        highScoreView.clearAnimation();
+        progressBar.clearAnimation();
+        nextLevel.clearAnimation();
+
+        scoreView.startAnimation(in);
+        highScoreView.startAnimation(in);
+        progressBar.startAnimation(in);
+        nextLevel.startAnimation(in);
+
         Log.d("MAIN","ON                                          ON CREATE");
     }
 
@@ -135,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         loop.cancel();
+        mediaPlayer2.pause();
         gameleft = true;
     }
 

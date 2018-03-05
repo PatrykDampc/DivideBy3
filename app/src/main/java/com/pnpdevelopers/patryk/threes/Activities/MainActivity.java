@@ -69,26 +69,12 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer2 = new MediaPlayer();
         mediaPlayer2 = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
         mediaPlayer2.setLooping(true);
-        mediaPlayer2.start();
-        if(prefs.getBoolean(MUSIC_KEY, true)){
-            mediaPlayer2.setVolume(1,1);
-        } else {
-            mediaPlayer2.setVolume(0,0);
-        }
+
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
         progressBar.setMax(progressScope);
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
 
-        array1 = new RandomArrayFactory(3,100);
-        array2 = new RandomArrayFactory(101,200);
-        array3 = new RandomArrayFactory(201,310);
-        array4 = new RandomArrayFactory(396,720);
-        array5 = new RandomArrayFactory(721,999);
-        array5 = new RandomArrayFactory(1000,1310);
-        array6 = new RandomArrayFactory(1396,2000);
-
-        loop = gameLoop(time).start();
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             @Override
@@ -107,6 +93,26 @@ public class MainActivity extends AppCompatActivity {
                 loop.onFinish();
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        array1 = new RandomArrayFactory(3,100);
+        array2 = new RandomArrayFactory(101,200);
+        array3 = new RandomArrayFactory(201,310);
+        array4 = new RandomArrayFactory(396,720);
+        array5 = new RandomArrayFactory(721,999);
+        array5 = new RandomArrayFactory(1000,1310);
+        array6 = new RandomArrayFactory(1396,2000);
+
+        loop = gameLoop(time).start();
+        mediaPlayer2.start();
+        if(prefs.getBoolean(MUSIC_KEY, true)){
+            mediaPlayer2.setVolume(1,1);
+        } else {
+            mediaPlayer2.setVolume(0,0);
+        }
     }
 
     public CustomCountDownTimer gameLoop(int time){
@@ -208,8 +214,9 @@ public class MainActivity extends AppCompatActivity {
         loop.cancel();
         mediaPlayer2.stop();
         mediaPlayer2.release();
-        onPause();
         layout.setOnTouchListener(null);
+        onPause();
+        onStop();
     }
 
     @Override

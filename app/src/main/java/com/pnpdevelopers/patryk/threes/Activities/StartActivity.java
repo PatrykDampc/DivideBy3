@@ -38,20 +38,20 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private Random random = new Random();
     private int lostNumber;
     private String score;
-
+    private Animation stampAnimation, inFromTop, inFromBottom, buttonAnim;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Animation stampAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        stampAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
         stampAnimation.reset();
-        Animation inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
+        inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         inFromTop.reset();
-        Animation inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
+        inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
         inFromBottom.reset();
-        Animation buttonAnim = AnimationUtils.loadAnimation(this,R.anim.button_slide_in);
+        buttonAnim = AnimationUtils.loadAnimation(this,R.anim.button_slide_in);
         buttonAnim.reset();
 
         //setup views
@@ -69,14 +69,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
 
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-        if(prefs.getBoolean(MUSIC_KEY, true)){
-            mediaPlayer.setVolume(0.3f,0.3f);
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
-        } else {
-            mediaPlayer.setVolume(0,0);
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        }
         numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
                 getResources().getColor(R.color.colorAccentLostMessageGradient),
                 getResources().getColor(R.color.colorAccent),
@@ -87,6 +79,24 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 //        adView.loadAd(adRequest);
 
         //reading saved high score
+
+        startButton.setOnClickListener(this);
+        tutorialButton.setOnClickListener(this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mediaPlayer.start();
+        if(prefs.getBoolean(MUSIC_KEY, true)){
+            mediaPlayer.setVolume(0.3f,0.3f);
+            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        } else {
+            mediaPlayer.setVolume(0,0);
+            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
+        }
+
         highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(HIGH_SCORE_KEY, 0)));
         //receiving scores from lost game session
         Intent intent = getIntent();
@@ -94,8 +104,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         score = intent.getStringExtra("scoreKey");
         printLostMessage();
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
-        startButton.setOnClickListener(this);
-        tutorialButton.setOnClickListener(this);
 
         highScoreViewStart.clearAnimation();
         logoView.clearAnimation();
@@ -135,11 +143,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
             case R.id.playButtonID:
                 onPause();
+                onStop();
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
             case R.id.tutorialButtonID:
                 onPause();
+                onStop();
                 editor.putBoolean(PreferenceManager.IS_FIRST_TIME_LAUNCH, true);
                 editor.apply();
                 startActivity(new Intent(this, TutorialActivity.class));

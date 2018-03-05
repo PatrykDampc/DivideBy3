@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         array1 = new RandomArrayFactory(3,100);
         array2 = new RandomArrayFactory(101,200);
         array3 = new RandomArrayFactory(201,310);
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
     public void fail(){
         gameStop();
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("scoreKey", String.valueOf(scoreCount));
         intent.putExtra("numberKey", number);
         startActivity(intent);
@@ -206,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
         gameStop();
         super.onBackPressed();
         startActivity(new Intent(MainActivity.this, StartActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                   // .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                     );
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
@@ -216,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer2.release();
         layout.setOnTouchListener(null);
         onPause();
-        onStop();
     }
 
     @Override

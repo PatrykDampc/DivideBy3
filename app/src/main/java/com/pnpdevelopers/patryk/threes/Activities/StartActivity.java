@@ -85,9 +85,20 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer.start();
+        mediaPlayer.seekTo(random.nextInt(100000));
+
+
         mediaPlayer.start();
         if(prefs.getBoolean(MUSIC_KEY, true)){
             mediaPlayer.setVolume(0.3f,0.3f);
@@ -126,30 +137,15 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mediaPlayer.pause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mediaPlayer.start();
-        mediaPlayer.seekTo(random.nextInt(100000));
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.playButtonID:
                 onPause();
-                onStop();
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
             case R.id.tutorialButtonID:
                 onPause();
-                onStop();
                 editor.putBoolean(PreferenceManager.IS_FIRST_TIME_LAUNCH, true);
                 editor.apply();
                 startActivity(new Intent(this, TutorialActivity.class));

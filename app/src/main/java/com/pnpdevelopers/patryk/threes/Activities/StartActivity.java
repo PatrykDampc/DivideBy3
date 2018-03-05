@@ -7,6 +7,7 @@ import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -82,7 +83,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
-
+        Log.d("StartActivity", "onCreate");
     }
 
 
@@ -90,6 +91,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     protected void onPause() {
         super.onPause();
         mediaPlayer.pause();
+        Log.d("StartActivity", "onPause");
     }
 
     @Override
@@ -133,6 +135,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         highScoreViewStart.startAnimation(inFromTop);
         logoView.startAnimation(inFromTop);
         numberViewStart.startAnimation(stampAnimation);
+        Log.d("StartActivity", "onResume");
 
     }
 

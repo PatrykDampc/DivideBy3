@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 loop.onFinish();
             }
         });
+        Log.d("MainActivity", "onCreate");
     }
 
     @Override
@@ -113,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mediaPlayer2.setVolume(0,0);
         }
+
+        Log.d("MainActivity","onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("MainActivity", "onPause");
     }
 
     public CustomCountDownTimer gameLoop(int time){
@@ -210,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
                      );
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
+
+
 
     public void gameStop(){
         loop.cancel();

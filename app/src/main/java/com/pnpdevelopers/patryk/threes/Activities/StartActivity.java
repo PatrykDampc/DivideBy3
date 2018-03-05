@@ -165,9 +165,11 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     }
 
     public void printLostMessage(){
-        if( lostNumber == 0 && score == null){
-            numberViewStart.setVisibility(View.GONE);
+        if(score == null){
             scoreViewStart.setVisibility(View.GONE);
+        }
+        if( lostNumber == 0){
+            numberViewStart.setVisibility(View.GONE);
         } else if(Conditions.isDivisibleByThree(lostNumber)){
             int result = lostNumber/3;
             numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);

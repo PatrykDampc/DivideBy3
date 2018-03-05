@@ -112,12 +112,6 @@ public class MainActivity extends AppCompatActivity {
         progressBar.startAnimation(in);
         nextLevel.startAnimation(in);
 
-        Log.d("MAIN","ON                                          ON CREATE");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         array1 = new RandomArrayFactory(3,100);
         array2 = new RandomArrayFactory(101,200);
         array3 = new RandomArrayFactory(201,310);
@@ -133,7 +127,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mediaPlayer2.setVolume(0,0);
         }
+
+        Log.d("MAIN","ON                                          ON CREATE");
     }
+
+
 
     @Override
     protected void onResume() {
@@ -142,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, StartActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra("scoreKey", String.valueOf(scoreCount));
-            intent.putExtra("numberKey", number);
             startActivity(intent);
         }
     }
@@ -151,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         loop.cancel();
-        mediaPlayer2.pause();
+//        mediaPlayer2.stop();
+//        mediaPlayer2.release();
         gameleft = true;
     }
 
@@ -245,8 +243,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         gameStop();
         super.onBackPressed();
-        startActivity(new Intent(MainActivity.this, StartActivity.class)
-                   .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+
+        Intent intent = new Intent(MainActivity.this, StartActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("scoreKey", String.valueOf(scoreCount));
+        startActivity(intent);
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
@@ -255,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer2.stop();
         mediaPlayer2.release();
         layout.setOnTouchListener(null);
+
     }
 
     @Override

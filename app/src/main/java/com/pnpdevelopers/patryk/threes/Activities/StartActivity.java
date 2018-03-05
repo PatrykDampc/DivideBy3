@@ -180,6 +180,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         }
     }
 
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> currentArray;
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
+    private boolean gameleft;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        gameleft = false;
 
         layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
@@ -98,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         array1 = new RandomArrayFactory(3,100);
         array2 = new RandomArrayFactory(101,200);
         array3 = new RandomArrayFactory(201,310);
@@ -115,6 +117,25 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mediaPlayer2.setVolume(0,0);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(gameleft){
+            Intent intent = new Intent(MainActivity.this, StartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("scoreKey", String.valueOf(scoreCount));
+            intent.putExtra("numberKey", number);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        loop.cancel();
+        gameleft = true;
     }
 
     public CustomCountDownTimer gameLoop(int time){
@@ -217,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer2.stop();
         mediaPlayer2.release();
         layout.setOnTouchListener(null);
-        onPause();
     }
 
     @Override

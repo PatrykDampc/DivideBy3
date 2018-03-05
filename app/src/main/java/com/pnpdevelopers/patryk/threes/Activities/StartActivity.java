@@ -82,12 +82,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         //reading saved high score
 
 
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         mediaPlayer.start();
         if(prefs.getBoolean(MUSIC_KEY, true)){
             mediaPlayer.setVolume(0.3f,0.3f);
@@ -122,7 +116,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         highScoreViewStart.startAnimation(inFromTop);
         logoView.startAnimation(inFromTop);
         numberViewStart.startAnimation(stampAnimation);
-
     }
 
     @Override

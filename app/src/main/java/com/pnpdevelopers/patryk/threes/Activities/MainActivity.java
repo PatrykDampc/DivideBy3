@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
-    private Animation in;
+    private Animation in, scale;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         Animation in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         in.reset();
+        Animation scale = AnimationUtils.loadAnimation(this,R.anim.scale);
         layout = findViewById(R.id.mainActivityLayoutID);
         textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
@@ -103,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         highScoreView.clearAnimation();
         progressBar.clearAnimation();
         nextLevel.clearAnimation();
+        regresBar.clearAnimation();;
+        regresBar.startAnimation(scale);
         scoreView.startAnimation(in);
         highScoreView.startAnimation(in);
         progressBar.startAnimation(in);

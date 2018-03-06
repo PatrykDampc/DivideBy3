@@ -38,21 +38,19 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private Random random = new Random();
     private int lostNumber;
     private String score;
-    private Animation stampAnimation, inFromTop, inFromBottom, buttonAnim;
+    private Animation stampAnimation, inFromTop, inFromBottom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        stampAnimation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        stampAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp);
         stampAnimation.reset();
         inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         inFromTop.reset();
         inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
         inFromBottom.reset();
-        buttonAnim = AnimationUtils.loadAnimation(this,R.anim.button_slide_in);
-        buttonAnim.reset();
 
         //setup
         copyryghtView = findViewById(R.id.copyrightViewID);
@@ -108,8 +106,8 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         copyryghtView.clearAnimation();
         musicView.clearAnimation();
 
-        scoreViewStart.startAnimation(buttonAnim);
-        startButton.startAnimation(buttonAnim);
+        scoreViewStart.startAnimation(inFromBottom);
+        startButton.startAnimation(inFromBottom);
         tutorialButton.startAnimation(inFromBottom);
         copyryghtView.startAnimation(inFromBottom);
         musicView.startAnimation(inFromBottom);

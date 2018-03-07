@@ -13,15 +13,15 @@ public class RandomArrayFactory {
     private int to;
     private int arrayLength;
 
-    public Integer[] getNumberList() {
-        return numberList;
+    public int[] getNumbertab() {
+        return numbertab;
     }
 
-    public void setNumberList(Integer[] numberList) {
-        this.numberList = numberList;
+    public void setNumbertab(int[] numbertab) {
+        this.numbertab = numbertab;
     }
 
-    private Integer[] numberList;
+    private int[] numbertab;
 
     public ArrayList<Integer> getRandomArrayList() {
         return randomArrayList;
@@ -58,7 +58,11 @@ public class RandomArrayFactory {
             from++;
         }
         Collections.shuffle(randomArrayList);
-        Integer[] list = randomArrayList.toArray(new Integer[randomArrayList.size()]);
-        setNumberList(list);
+        int[] ret = new int[randomArrayList.size()];
+        for (int i=0; i < ret.length; i++)
+        {
+            ret[i] = randomArrayList.get(i).intValue();
+        }
+        setNumbertab(ret);
     }
 }

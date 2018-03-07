@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private CustomCountDownTimer loop;
     private MediaPlayer mediaPlayer2;
-    private Integer[] currentArray;
+    private int[] currentArray;
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
@@ -150,27 +150,27 @@ public class MainActivity extends AppCompatActivity {
                 switch (scoreCount) {
                     case 0:
                         progressScope = 13;
-                        currentArray = array1.getNumberList();
+                        currentArray = array1.getNumbertab();
                         break;
                     case 13:
                         progressScope = 31;
-                        currentArray = array2.getNumberList();
+                        currentArray = array2.getNumbertab();
                         break;
                     case 44:
                         progressScope = 56;
-                        currentArray = array3.getNumberList();
+                        currentArray = array3.getNumbertab();
                         break;
                     case 100:
                         progressScope = 106;
-                        currentArray = array4.getNumberList();
+                        currentArray = array4.getNumbertab();
                         break;
                     case 206:
                         progressScope = 214;
-                        currentArray = array5.getNumberList();
+                        currentArray = array5.getNumbertab();
                         break;
                     case 420:
                         progressScope = 700;
-                        currentArray = array6.getNumberList();
+                        currentArray = array6.getNumbertab();
                         break;
                 }
                 //circle time animation

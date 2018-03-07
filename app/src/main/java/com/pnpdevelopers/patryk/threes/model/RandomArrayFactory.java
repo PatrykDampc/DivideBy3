@@ -13,6 +13,16 @@ public class RandomArrayFactory {
     private int to;
     private int arrayLength;
 
+    public Integer[] getNumberList() {
+        return numberList;
+    }
+
+    public void setNumberList(Integer[] numberList) {
+        this.numberList = numberList;
+    }
+
+    private Integer[] numberList;
+
     public ArrayList<Integer> getRandomArrayList() {
         return randomArrayList;
     }
@@ -20,7 +30,7 @@ public class RandomArrayFactory {
         this.randomArrayList = randomArrayList;
     }
 
-    public int getArrayLength() {
+     public int getArrayLength() {
         return randomArrayList.size();
     }
     public void setArrayLength(int arrayLength) {
@@ -48,6 +58,7 @@ public class RandomArrayFactory {
             from++;
         }
         Collections.shuffle(randomArrayList);
-        setRandomArrayList(randomArrayList);
+        Integer[] list = randomArrayList.toArray(new Integer[randomArrayList.size()]);
+        setNumberList(list);
     }
 }

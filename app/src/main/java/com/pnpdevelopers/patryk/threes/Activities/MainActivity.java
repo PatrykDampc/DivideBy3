@@ -25,8 +25,6 @@ import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
-import java.util.ArrayList;
-
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private CustomCountDownTimer loop;
     private MediaPlayer mediaPlayer2;
-    private ArrayList<Integer> currentArray;
+    private Integer[] currentArray;
     private RandomArrayFactory array1, array2, array3, array4, array5, array6;
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
@@ -145,39 +143,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public CustomCountDownTimer gameLoop(int time){
-        return new CustomCountDownTimer(time, 5000) {
+        return new CustomCountDownTimer(time, 50000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //setting array depending on score count. more score = more difficult numbers array
                 switch (scoreCount) {
                     case 0:
                         progressScope = 13;
-                        currentArray = array1.getRandomArrayList();
+                        currentArray = array1.getNumberList();
                         break;
                     case 13:
                         progressScope = 31;
-                        currentArray = array2.getRandomArrayList();
+                        currentArray = array2.getNumberList();
                         break;
                     case 44:
                         progressScope = 56;
-                        currentArray = array3.getRandomArrayList();
+                        currentArray = array3.getNumberList();
                         break;
                     case 100:
                         progressScope = 106;
-                        currentArray = array4.getRandomArrayList();
+                        currentArray = array4.getNumberList();
                         break;
                     case 206:
                         progressScope = 214;
-                        currentArray = array5.getRandomArrayList();
+                        currentArray = array5.getNumberList();
                         break;
                     case 420:
-                        progressScope = currentArray.size();
-                        currentArray = array6.getRandomArrayList();
+                        progressScope = 700;
+                        currentArray = array6.getNumberList();
                         break;
                 }
                 //circle time animation
                 animation.start();
-                number = currentArray.get(inLevelIterator);
+                number = currentArray[inLevelIterator];
                 textSwitcher.setText(String.valueOf(number));
                 //progress bar logic
                 if (progressBar.getProgress() == progressBar.getMax()) {

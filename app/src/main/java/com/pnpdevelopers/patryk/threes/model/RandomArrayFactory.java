@@ -11,30 +11,25 @@ public class RandomArrayFactory {
     private ArrayList<Integer> randomArrayList;
     private int from;
     private int to;
-    private int arrayLength;
+    private int[] numbertab;
 
     public int[] getNumbertab() {
         return numbertab;
     }
-
     public void setNumbertab(int[] numbertab) {
         this.numbertab = numbertab;
     }
-
-    private int[] numbertab;
-
     public ArrayList<Integer> getRandomArrayList() {
         return randomArrayList;
     }
     public void setRandomArrayList(ArrayList<Integer> randomArrayList) {
         this.randomArrayList = randomArrayList;
     }
-
     public int getArrayLength() {
         return randomArrayList.size();
     }
     public void setArrayLength(int arrayLength) {
-        this.arrayLength = arrayLength;
+        int arrayLength1 = arrayLength;
     }
     public int getFrom() {
         return from;
@@ -48,6 +43,8 @@ public class RandomArrayFactory {
     public void setTo(int to) {
         this.to = to;
     }
+
+
 
     public RandomArrayFactory(int from, int to) {
         randomArrayList = new ArrayList<>();

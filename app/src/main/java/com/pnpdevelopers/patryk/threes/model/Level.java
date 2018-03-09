@@ -1,8 +1,6 @@
 package com.pnpdevelopers.patryk.threes.model;
 
 
-import android.os.CountDownTimer;
-
 /**
  * Created by patryk on 08.03.2018.
  */

@@ -177,9 +177,6 @@ public class MainActivity extends AppCompatActivity {
                progressScope = currentLevel.getProgressScope();
 
 
-
-
-
                 //setting array depending on score count. more score = more difficult numbers array
 //                switch (scoreCount) {
 //                    case 0:
@@ -207,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
 //                        currentArray = array6.getNumbertab();
 //                        break;
 //                }
+
+
                 //circle time animation
                 animation.start();
                 number = currentArray[inLevelIterator];

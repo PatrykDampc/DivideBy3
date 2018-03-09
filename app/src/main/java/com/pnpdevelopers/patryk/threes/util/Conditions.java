@@ -1,4 +1,4 @@
-package com.pnpdevelopers.patryk.threes.model;
+package com.pnpdevelopers.patryk.threes.util;
 
 /**
  * Created by patryk on 04.03.2018.

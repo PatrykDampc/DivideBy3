@@ -1,6 +1,6 @@
 package com.pnpdevelopers.patryk.threes;
 
-import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
+import com.pnpdevelopers.patryk.threes.model.RandomTab;
 
 import junit.framework.Assert;
 
@@ -10,11 +10,11 @@ import org.junit.Test;
  * Created by pszen on 08.03.2018.
  */
 
-public class RandomArrayFactoryTest {
+public class RandomTabTest {
     int from = 0 ;
     int to = 100;
-    RandomArrayFactory randomArrayFactory = new RandomArrayFactory(from,to);
-    int[] array = randomArrayFactory.getNumbertab();
+    RandomTab randomTab = new RandomTab(from,to);
+    int[] array = randomTab.getNumbertab();
 
     @Test
     public void numbersInArrayShouldBeWithinTheScope() {

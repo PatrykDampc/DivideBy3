@@ -9,24 +9,33 @@ public class Level {
 
 
 
-    private RandomArrayFactory randomArrayFactory;
+    private RandomTab randomTab;
     private int scopeFrom;
     private int scopeTo;
     private int progressScope;
+    private int levelScope;
 
 
 
     public Level(int numbersFrom, int NumbersTo , int scopeFrom, int scopeTo) {
-        this.randomArrayFactory = new RandomArrayFactory(numbersFrom,NumbersTo);
+        this.randomTab = new RandomTab(numbersFrom,NumbersTo);
         this.scopeFrom = scopeFrom;
         this.scopeTo = scopeTo;
         this.progressScope = scopeTo - scopeFrom;
     }
 
+    public Level(int numbersFrom, int NumbersTo , int progressScope) {
+        this.randomTab =  new RandomTab(numbersFrom,NumbersTo);
+        this.progressScope = progressScope;
+    }
 
+    public int getLevelScope() {
+        return levelScope;
+    }
 
-
-
+    public void setLevelScope(int levelScope) {
+        this.levelScope = levelScope;
+    }
     public int getProgressScope() {
         return progressScope;
     }
@@ -35,12 +44,12 @@ public class Level {
         this.progressScope = progressScope;
     }
 
-    public RandomArrayFactory getRandomArrayFactory() {
-        return randomArrayFactory;
+    public RandomTab getRandomTab() {
+        return randomTab;
     }
 
-    public void setRandomArrayFactory(RandomArrayFactory randomArrayFactory) {
-        this.randomArrayFactory = randomArrayFactory;
+    public void setRandomTab(RandomTab randomTab) {
+        this.randomTab = randomTab;
     }
 
     public int getScopeFrom() {

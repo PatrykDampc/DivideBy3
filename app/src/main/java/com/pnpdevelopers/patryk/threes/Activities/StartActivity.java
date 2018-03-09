@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.Conditions;
+import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 

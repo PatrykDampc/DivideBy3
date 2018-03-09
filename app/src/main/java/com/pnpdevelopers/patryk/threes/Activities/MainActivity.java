@@ -116,12 +116,12 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.startAnimation(in);
 
         levels = new ArrayList<>();
-        levels.add(new LevelFactory(3,100, 0, 13));
-        levels.add(new LevelFactory(101,200, 14, 43));
-        levels.add(new LevelFactory(201,310, 44, 100));
-        levels.add(new LevelFactory(396,720, 101, 206));
-        levels.add(new LevelFactory(721,999, 206, 419));
-        levels.add(new LevelFactory(1000,1310, 420, 2000));
+        levels.add(new LevelFactory(3,100, 13));
+        levels.add(new LevelFactory(101,200, 31));
+        levels.add(new LevelFactory(201,310, 56));
+        levels.add(new LevelFactory(396,720, 106));
+        levels.add(new LevelFactory(721,999, 214));
+        levels.add(new LevelFactory(1000,1310, 2000));
 
 
 
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
     public LevelFactory findLevel(List<LevelFactory> levels, int currentScore ) {
         for (LevelFactory level : levels) {
-            if (currentScore >= level.getScopeFrom()) {
+            if (currentScore >= level.getProgressScope()) {
                 return level;
             }
         }
@@ -176,9 +176,6 @@ public class MainActivity extends AppCompatActivity {
                currentLevel = findLevel(levels, scoreCount);
                currentArray = currentLevel.getRandomArrayFactory().getNumbertab();
                progressScope = currentLevel.getProgressScope();
-
-
-
 
 
                 //setting array depending on score count. more score = more difficult numbers array
@@ -208,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
 //                        currentArray = array6.getNumbertab();
 //                        break;
 //                }
+
+
                 //circle time animation
                 animation.start();
                 number = currentArray[inLevelIterator];

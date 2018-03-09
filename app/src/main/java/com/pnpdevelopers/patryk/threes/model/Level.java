@@ -1,11 +1,13 @@
 package com.pnpdevelopers.patryk.threes.model;
 
 
+import android.os.CountDownTimer;
+
 /**
  * Created by patryk on 08.03.2018.
  */
 
-public class LevelFactory {
+public class Level {
 
 
 
@@ -16,7 +18,7 @@ public class LevelFactory {
 
 
 
-    public LevelFactory(int numbersFrom, int NumbersTo , int scopeFrom, int scopeTo) {
+    public Level(int numbersFrom, int NumbersTo , int scopeFrom, int scopeTo) {
         this.randomArrayFactory = new RandomArrayFactory(numbersFrom,NumbersTo);
         this.scopeFrom = scopeFrom;
         this.scopeTo = scopeTo;

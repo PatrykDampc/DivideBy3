@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.Conditions;
-import com.pnpdevelopers.patryk.threes.model.LevelFactory;
+import com.pnpdevelopers.patryk.threes.model.Level;
 import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
 import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
     private Animation in, scale;
-    private List<LevelFactory> levels;
-    private LevelFactory currentLevel;
+    private List<Level> levels;
+    private Level currentLevel;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -116,13 +116,13 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.startAnimation(in);
 
         levels = new ArrayList<>();
-        levels.add(new LevelFactory(3,100, 0, 13));
-        levels.add(new LevelFactory(101,200, 14, 43));
-        levels.add(new LevelFactory(201,310, 44, 100));
-        levels.add(new LevelFactory(396,720, 101, 206));
-        levels.add(new LevelFactory(721,999, 206, 419));
-        levels.add(new LevelFactory(1000,1310, 420, 2000));
-
+        levels.add(new Level(3,100, 0, 13));
+        levels.add(new Level(101,200, 14, 43));
+        levels.add(new Level(201,310, 44, 100));
+        levels.add(new Level(396,720, 101, 206));
+        levels.add(new Level(721,999, 206, 419));
+        levels.add(new Level(1000,1310, 420, 2000));
+        currentLevel = levels.get(0);
 
 
 
@@ -159,13 +159,12 @@ public class MainActivity extends AppCompatActivity {
         gameleft = true;
     }
 
-    public LevelFactory findLevel(List<LevelFactory> levels, int currentScore ) {
-        for (LevelFactory level : levels) {
-            if (currentScore >= level.getScopeFrom()) {
+    public Level findLevel(List<Level> levels, int currentScore ) {
+        for (Level level : levels) {
+            if (currentScore == level.getScopeFrom()-1) {
                 return level;
             }
-        }
-        throw new RuntimeException("gówno");
+        }return currentLevel;
     }
 
     public CustomCountDownTimer gameLoop(int time){

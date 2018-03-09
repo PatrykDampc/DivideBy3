@@ -20,10 +20,14 @@ import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.Conditions;
+import com.pnpdevelopers.patryk.threes.model.LevelFactory;
 import com.pnpdevelopers.patryk.threes.model.RandomArrayFactory;
 import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
     private Animation in, scale;
+    private List<LevelFactory> levels;
+    private LevelFactory currentLevel;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -109,13 +115,24 @@ public class MainActivity extends AppCompatActivity {
         progressBar.startAnimation(in);
         nextLevel.startAnimation(in);
 
-        array1 = new RandomArrayFactory(3,100);
-        array2 = new RandomArrayFactory(101,200);
-        array3 = new RandomArrayFactory(201,310);
-        array4 = new RandomArrayFactory(396,720);
-        array5 = new RandomArrayFactory(721,999);
-        array5 = new RandomArrayFactory(1000,1310);
-        array6 = new RandomArrayFactory(1396,2000);
+        levels = new ArrayList<>();
+        levels.add(new LevelFactory(3,100, 0, 13));
+        levels.add(new LevelFactory(101,200, 14, 43));
+        levels.add(new LevelFactory(201,310, 44, 100));
+        levels.add(new LevelFactory(396,720, 101, 206));
+        levels.add(new LevelFactory(721,999, 206, 419));
+        levels.add(new LevelFactory(1000,1310, 420, 2000));
+
+
+
+
+//        array1 = new RandomArrayFactory(3,100);
+//        array2 = new RandomArrayFactory(101,200);
+//        array3 = new RandomArrayFactory(201,310);
+//        array4 = new RandomArrayFactory(396,720);
+//        array5 = new RandomArrayFactory(721,999);
+//        array5 = new RandomArrayFactory(1000,1310);
+//        array6 = new RandomArrayFactory(1396,2000);
 
         loop = gameLoop(time).start();
         mediaPlayer2.start();
@@ -142,37 +159,55 @@ public class MainActivity extends AppCompatActivity {
         gameleft = true;
     }
 
+    public LevelFactory findLevel(List<LevelFactory> levels, int currentScore ) {
+        for (LevelFactory level : levels) {
+            if (currentScore >= level.getScopeFrom()) {
+                return level;
+            }
+        }
+        throw new RuntimeException("gówno");
+    }
+
     public CustomCountDownTimer gameLoop(int time){
         return new CustomCountDownTimer(time, 50000) {
             @Override
             public void onTick(long millisUntilFinished) {
+
+               currentLevel = findLevel(levels, scoreCount);
+               currentArray = currentLevel.getRandomArrayFactory().getNumbertab();
+               progressScope = currentLevel.getProgressScope();
+
+
+
+
+
                 //setting array depending on score count. more score = more difficult numbers array
-                switch (scoreCount) {
-                    case 0:
-                        progressScope = 13;
-                        currentArray = array1.getNumbertab();
-                        break;
-                    case 13:
-                        progressScope = 31;
-                        currentArray = array2.getNumbertab();
-                        break;
-                    case 44:
-                        progressScope = 56;
-                        currentArray = array3.getNumbertab();
-                        break;
-                    case 100:
-                        progressScope = 106;
-                        currentArray = array4.getNumbertab();
-                        break;
-                    case 206:
-                        progressScope = 214;
-                        currentArray = array5.getNumbertab();
-                        break;
-                    case 420:
-                        progressScope = 700;
-                        currentArray = array6.getNumbertab();
-                        break;
-                }
+//                switch (scoreCount) {
+//                    case 0:
+//                        progressScope = 13;
+//                        currentArray = array1.getNumbertab();
+//                        break;
+//                    case 13:
+//                        progressScope = 31;
+//                        currentArray = array2.getNumbertab();
+//                        break;
+//                    case 44:
+//                        progressScope = 56;
+//                        currentArray = array3.getNumbertab();
+//                        break;
+//                    case 100:
+//                        progressScope = 106;
+//                        currentArray = array4.getNumbertab();
+//                        break;
+//                    case 206:
+//                        progressScope = 214;
+//                        currentArray = array5.getNumbertab();
+//                        break;
+//                    case 420:
+//                        progressScope = currentArray.length;
+//                        currentArray = array6.getNumbertab();
+//                        break;
+//                }
                 //circle time animation
                 animation.start();
                 number = currentArray[inLevelIterator];

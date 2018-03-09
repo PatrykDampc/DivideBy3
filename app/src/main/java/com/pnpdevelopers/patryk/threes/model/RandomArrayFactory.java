@@ -30,7 +30,7 @@ public class RandomArrayFactory {
         this.randomArrayList = randomArrayList;
     }
 
-     public int getArrayLength() {
+    public int getArrayLength() {
         return randomArrayList.size();
     }
     public void setArrayLength(int arrayLength) {
@@ -53,7 +53,7 @@ public class RandomArrayFactory {
         randomArrayList = new ArrayList<>();
         this.from = from;
         this.to = to;
-        for (int i = 0 ; i <(to-from) ; i++) {
+        for (int i = 0 ; i <(to-this.from) ; i++) {
             randomArrayList.add(from);
             from++;
         }

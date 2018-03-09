@@ -100,14 +100,6 @@ public class MainActivity extends AppCompatActivity {
         progressBar.startAnimation(in);
         nextLevel.startAnimation(in);
 
-//        levels = new ArrayList<>();
-//        levels.add(new Level(3,100, 0, 13));
-//        levels.add(new Level(101,200, 14, 43));
-//        levels.add(new Level(201,310, 44, 100));
-//        levels.add(new Level(396,720, 101, 206));
-//        levels.add(new Level(721,999, 206, 419));
-//        levels.add(new Level(1000,1310, 420, 2000));
-//        currentLevel = levels.get(0);
 
         Levels levelArrayDirectory = new Levels();
         levels = levelArrayDirectory.getLevels();
@@ -135,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Level setLevel(List<Level> levels, int currentScore ) {
         for (Level level : levels) {
-            if (currentScore == level.getProgressScope()-1) {
+            if (currentScore == level.getScopeFrom()-1) {
                 return level;
             }
         }return currentLevel;

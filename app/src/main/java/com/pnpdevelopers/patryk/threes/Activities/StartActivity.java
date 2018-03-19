@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +72,10 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 getResources().getColor(R.color.colorAccentLostMessageGradient),
                 getResources().getColor(R.color.colorAccent),
                 Shader.TileMode.REPEAT));
+        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/SPETETRIAL.ttf");
+        numberViewStart.setTypeface(type);
+
+
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
 //        adView = findViewById(R.id.adView);

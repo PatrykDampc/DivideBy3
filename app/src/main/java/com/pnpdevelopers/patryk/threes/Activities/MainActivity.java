@@ -5,11 +5,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,18 +19,14 @@ import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.Level;
-import com.pnpdevelopers.patryk.threes.model.Levels;
 import com.pnpdevelopers.patryk.threes.temporary.GameData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
@@ -53,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] gameArray, levelLengths;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
-    private ArrayList<Level> levels;
-    private Level currentLevel;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -65,27 +62,25 @@ public class MainActivity extends AppCompatActivity {
         gameleft = false;
         setUpViews();
 
-        prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        editor = prefs.edit();
-        highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
+        setUpPrefs();
+        setUpHighScore();
+        setUpMediaPlayer();
+        setUpTextSwitcher();
+
+
         gameData = new GameData();
         gameArray = gameData.getGameArray();
         levelLengths = gameData.getLevelLenghtsArray();
         progressScope = levelLengths[0];
-
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
-        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
-        setUpMediaPlayer();
-        Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
-
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
         progressBar.setMax(progressScope);
+
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             @Override
             public void onClick() {
                 super.onClick();
+
                 if (Conditions.succesCondition(number)) {
                     success();
                 } else {
@@ -100,55 +95,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        regresBar.startAnimation(scale);
-        scoreView.startAnimation(in);
-        highScoreView.startAnimation(in);
-        progressBar.startAnimation(in);
-        nextLevel.startAnimation(in);
-
-
-//        Levels levelArrayDirectory = new Levels();
-//        levels = levelArrayDirectory.getLevels();
-
-//        currentLevel = levels.get(0);
+        StartInitialAnimations();
         loop = gameLoop(time).start();
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(gameleft){
-            startActivity(gameStop());
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        loop.cancel();
-        mediaPlayer.stop();
-        gameleft = true;
-    }
 
 
 
-    public Level setLevel(List<Level> levels, int currentScore ) {
-        for (Level level : levels) {
-            if (currentScore == level.getScopeFrom()-1) {
-                return level;
-            }
-        }return currentLevel;
-    }
+
+
 
     public CustomCountDownTimer gameLoop(int time){
         return new CustomCountDownTimer(time, 50000) {
             @Override
             public void onTick(long millisUntilFinished) {
-//               currentLevel = setLevel(levels, scoreCount);
-//               gameArray = currentLevel.getRandomTab().getNumbertab();
-//               progressScope = currentLevel.getProgressScope();
-
                number = gameArray[inLevelIterator];
                animation.start();
                textSwitcher.setText(String.valueOf(number));
@@ -231,6 +192,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setUpTextSwitcher() {
+        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
+                android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
+                android.R.anim.slide_out_right);
+        textSwitcher.setInAnimation(in);
+        textSwitcher.setOutAnimation(out);
+
+        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            public View makeView() {
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(70);
+                myText.setTextColor(Color.WHITE);
+                return myText;
+            }
+        });
+    }
+
     private void setUpViews() {
         in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         scale = AnimationUtils.loadAnimation(this,R.anim.scale);
@@ -241,6 +221,45 @@ public class MainActivity extends AppCompatActivity {
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
+
+
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
+
+    }
+
+    private void StartInitialAnimations() {
+        regresBar.startAnimation(scale);
+        scoreView.startAnimation(in);
+        highScoreView.startAnimation(in);
+        progressBar.startAnimation(in);
+        nextLevel.startAnimation(in);
+    }
+
+    private void setUpHighScore() {
+        highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
+        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
+    }
+
+    private void setUpPrefs() {
+        prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+        editor = prefs.edit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(gameleft){
+            startActivity(gameStop());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        loop.cancel();
+        mediaPlayer.stop();
+        gameleft = true;
     }
 
     @Override

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.Level;
 import com.pnpdevelopers.patryk.threes.model.Levels;
+import com.pnpdevelopers.patryk.threes.temporary.GameData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -45,11 +46,12 @@ public class MainActivity extends AppCompatActivity {
     private Vibrator vibe;
     private MediaPlayer mediaPlayer;
     //regular variables
+    private GameData gameData;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private CustomCountDownTimer loop;
-    private int[] currentArray;
-    private int progressStatus, progressScope = 13, level = 1, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
+    private int[] gameArray, levelLengths;
+    private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
     private boolean gameleft;
     private ArrayList<Level> levels;
     private Level currentLevel;
@@ -66,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
+        gameData = new GameData();
+        gameArray = gameData.getGameArray();
+        levelLengths = gameData.getLevelLenghtsArray();
+        progressScope = levelLengths[0];
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
@@ -73,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setUpMediaPlayer();
         Utils.textSwitcherConfiguration(textSwitcher, MainActivity.this);
 
-        nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
+        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
         progressBar.setMax(progressScope);
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -101,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.startAnimation(in);
 
 
-        Levels levelArrayDirectory = new Levels();
-        levels = levelArrayDirectory.getLevels();
+//        Levels levelArrayDirectory = new Levels();
+//        levels = levelArrayDirectory.getLevels();
 
-        currentLevel = levels.get(0);
+//        currentLevel = levels.get(0);
         loop = gameLoop(time).start();
     }
 
@@ -125,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
         gameleft = true;
     }
 
+
+
     public Level setLevel(List<Level> levels, int currentScore ) {
         for (Level level : levels) {
             if (currentScore == level.getScopeFrom()-1) {
@@ -137,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
         return new CustomCountDownTimer(time, 50000) {
             @Override
             public void onTick(long millisUntilFinished) {
-               currentLevel = setLevel(levels, scoreCount);
-               currentArray = currentLevel.getRandomTab().getNumbertab();
-               progressScope = currentLevel.getProgressScope();
+//               currentLevel = setLevel(levels, scoreCount);
+//               gameArray = currentLevel.getRandomTab().getNumbertab();
+//               progressScope = currentLevel.getProgressScope();
 
-               number = currentArray[inLevelIterator];
+               number = gameArray[inLevelIterator];
                animation.start();
                textSwitcher.setText(String.valueOf(number));
                setGameProgress();
@@ -214,10 +222,10 @@ public class MainActivity extends AppCompatActivity {
     private void setGameProgress(){
         if (progressBar.getProgress() == progressBar.getMax()) {
             Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
-            nextLevel.setText(getString(R.string.level) + String.valueOf(level) + getString(R.string.next_level_progress));
             level++;
-            inLevelIterator = 0;
+            nextLevel.setText(getString(R.string.level) + String.valueOf(level+1) + getString(R.string.next_level_progress));
             progressStatus = 0;
+            progressScope = levelLengths[level];
             progressBar.setProgress(progressStatus);
             progressBar.setMax(progressScope);
         }

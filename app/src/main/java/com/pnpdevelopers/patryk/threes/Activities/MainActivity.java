@@ -61,19 +61,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         gameleft = false;
         setUpViews();
-
-        setUpPrefs();
-        setUpHighScore();
-        setUpMediaPlayer();
         setUpTextSwitcher();
+        setUpData();
+        setUpBaseValues();
+        setUpMediaPlayer();
 
 
-        gameData = new GameData();
-        gameArray = gameData.getGameArray();
-        levelLengths = gameData.getLevelLenghtsArray();
-        progressScope = levelLengths[0];
-        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
-        progressBar.setMax(progressScope);
+
+
+
 
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -95,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        StartInitialAnimations();
+        startInitialAnimations();
         loop = gameLoop(time).start();
     }
 
@@ -107,13 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public CustomCountDownTimer gameLoop(int time){
-        return new CustomCountDownTimer(time, 50000) {
+        return new CustomCountDownTimer(time, time+100) {
             @Override
             public void onTick(long millisUntilFinished) {
-               number = gameArray[inLevelIterator];
                animation.start();
-               textSwitcher.setText(String.valueOf(number));
-               setGameProgress();
             }
 
             @Override
@@ -132,18 +125,15 @@ public class MainActivity extends AppCompatActivity {
         regresBar.clearAnimation();
         loop.start();
         scoreCount++;
-        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-        if (scoreCount == highScore && scoreCount != 0) {
-            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
-        }
-        if (scoreCount > highScore) {
-            editor.putInt(HIGH_SCORE_KEY, scoreCount);
-            editor.commit();
-            highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
-        }
-        vibe.vibrate(40);
-        progressBar.setProgress(++progressStatus);
         inLevelIterator++;
+        progressStatus++;
+        number = gameArray[inLevelIterator];
+        textSwitcher.setText(String.valueOf(number));
+        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+        checkIfHighScore();
+        checkIfNextLevel();
+        progressBar.setProgress(progressStatus);
+        vibe.vibrate(40);
     }
 
     public void fail(){
@@ -167,6 +157,29 @@ public class MainActivity extends AppCompatActivity {
                 .putExtra("scoreKey", String.valueOf(scoreCount));
     }
 
+    private void checkIfNextLevel(){
+        if (progressBar.getProgress() == progressBar.getMax()) {
+            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
+            level++;
+            nextLevel.setText(getString(R.string.level) + String.valueOf(level+1) + getString(R.string.next_level_progress));
+            progressStatus = 0;
+            progressScope = levelLengths[level];
+            progressBar.setMax(progressScope);
+        }
+    }
+
+    private void checkIfHighScore(){
+        if (scoreCount == highScore && scoreCount != 0) {
+            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
+        }
+        if (scoreCount > highScore) {
+            editor.putInt(HIGH_SCORE_KEY, scoreCount);
+            editor.commit();
+            highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
+        }
+    }
+
+
     private void setUpMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
@@ -178,18 +191,6 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.setVolume(0,0);
         }
 
-    }
-
-    private void setGameProgress(){
-        if (progressBar.getProgress() == progressBar.getMax()) {
-            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
-            level++;
-            nextLevel.setText(getString(R.string.level) + String.valueOf(level+1) + getString(R.string.next_level_progress));
-            progressStatus = 0;
-            progressScope = levelLengths[level];
-            progressBar.setProgress(progressStatus);
-            progressBar.setMax(progressScope);
-        }
     }
 
     public void setUpTextSwitcher() {
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void StartInitialAnimations() {
+    private void startInitialAnimations() {
         regresBar.startAnimation(scale);
         scoreView.startAnimation(in);
         highScoreView.startAnimation(in);
@@ -236,14 +237,22 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.startAnimation(in);
     }
 
-    private void setUpHighScore() {
+    private void setUpBaseValues() {
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
+        progressScope = levelLengths[0];
+        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
+        progressBar.setMax(progressScope);
+        number = gameArray[inLevelIterator];
+        textSwitcher.setText(String.valueOf(number));
     }
 
-    private void setUpPrefs() {
+    private void setUpData() {
         prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
+        gameData = new GameData();
+        gameArray = gameData.getGameArray();
+        levelLengths = gameData.getLevelLenghtsArray();
     }
 
     @Override

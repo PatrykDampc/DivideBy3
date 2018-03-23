@@ -21,7 +21,7 @@ public class GameData {
         this.gameArray = generateGameArray(levelsNumbers,levelLenghtsArray);
     }
 
-    private List<tLevel> initializeLevels(){   // levelLenght must be less than numbersFrom - numbersTo
+    private List<tLevel> initializeLevels(){   // levelLength must be less than numbersTo - numbersFrom
         levels = new ArrayList<>();
         levels.add(new tLevel(3,100,13));
         levels.add(new tLevel(101,200,29));

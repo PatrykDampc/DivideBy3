@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private CustomCountDownTimer loop;
     private int[] gameArray, levelLengths;
-    private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500, number;
+    private static int number;
+    private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameleft;
 
 
@@ -58,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        gameleft = false;
         setUpViews();
         setUpTextSwitcher();
         setUpData();
@@ -238,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBaseValues() {
+        gameleft = false;
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         progressScope = levelLengths[0];
@@ -275,6 +277,10 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Utils.fullScreenIfHasFocus(hasFocus, this);
+    }
+
+    public static int getNumber(){
+        return number;
     }
 
 }

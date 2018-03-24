@@ -45,15 +45,16 @@
         <TextSwitcher
             android:id="@+id/numberTextSwitcherID"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical|fill_vertical|center_horizontal|center"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="60dp"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintBottom_toBottomOf="@+id/regresBar"
             app:layout_constraintEnd_toEndOf="@+id/regresBar"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBarID"
             app:layout_constraintTop_toTopOf="@+id/regresBar" />
 
         <ProgressBar
@@ -73,7 +74,6 @@
             android:progressDrawable="@drawable/regres_bar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressBarID" />
 

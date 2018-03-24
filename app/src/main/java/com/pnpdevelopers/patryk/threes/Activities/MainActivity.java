@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] gameArray, levelLengths;
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
-    private boolean gameleft;
+    private boolean gameLeft;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         startInitialAnimations();
         loop = gameLoop(time).start();
+        Debug.startMethodTracing("gowno");
     }
 
 
@@ -239,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBaseValues() {
-        gameleft = false;
+        gameLeft = false;
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         progressScope = levelLengths[0];
@@ -260,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(gameleft){
+        if(gameLeft){
             startActivity(gameStop());
         }
     }
@@ -270,7 +272,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         loop.cancel();
         mediaPlayer.stop();
-        gameleft = true;
+        gameLeft = true;
+       Debug.stopMethodTracing();
     }
 
     @Override

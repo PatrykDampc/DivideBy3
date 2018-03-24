@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
+    private boolean showIsOn;
+    Handler handler = new Handler();
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -101,15 +104,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
     public CustomCountDownTimer gameLoop(int time){
         return new CustomCountDownTimer(time, time+100) {
             @Override
             public void onTick(long millisUntilFinished) {
-               animation.start();
+
             }
 
             @Override
@@ -137,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
+        animation.start();
     }
 
     public void fail(){
+        showIsOn = false;
         startActivity(gameStop().putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
@@ -241,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBaseValues() {
+        showIsOn = true;
         gameLeft = false;
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
@@ -249,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setMax(progressScope);
         number = gameArray[inLevelIterator];
         textSwitcher.setText(String.valueOf(number));
+        animation.start();
     }
 
     private void setUpData() {

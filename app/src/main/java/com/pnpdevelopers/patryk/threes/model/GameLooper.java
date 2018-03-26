@@ -18,9 +18,9 @@ public abstract class GameLooper {
                 Runnable runnable = new Runnable() {
                     public void run() {
                         int time;
-                        score == 0 ? time = 0 : time = 2500;
-                        handler.postDelayed(this, time);
-                        success();
+//                        score == 0 ? time = 0 : time = 2500;
+//                        handler.postDelayed(this, time);
+//                        success();
                     }
                 };
 

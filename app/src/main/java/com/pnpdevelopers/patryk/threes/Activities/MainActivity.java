@@ -24,11 +24,14 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.temporary.GameData;
+import com.pnpdevelopers.patryk.threes.model.GameData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
@@ -53,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private int[] gameArray, levelLengths;
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
+    private TimerTask timerTask;
+    private Timer timer;
     private boolean gameLeft;
-    private boolean showIsOn;
+    private boolean isRunning;
     Handler handler = new Handler();
 
 
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         //noinspection AndroidLintClickableViewAccessibility
         layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             @Override
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onClick();
 
                 if (Conditions.succesCondition(number)) {
+                    timer.cancel();
                     success();
                 } else {
                     fail();
@@ -91,17 +98,46 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                loop.cancel();
-                loop.onFinish();
+
+                if(Conditions.succesCondition(number)){
+                    fail();
+                } else {
+                    timer.cancel();
+                    success();
+                }
+
+//                loop.cancel();
+//                loop.onFinish();
             }
         });
 
         startInitialAnimations();
-        loop = gameLoop(time).start();
-        Debug.startMethodTracing("gowno");
+//        loop = gameLoop(time).start();
+        startTimer();
+        //Debug.startMethodTracing("gowno");
     }
 
+    public void startTimer(){
+        timerTask = new TimerTask() {
 
+            @Override
+            public void run() {
+                runOnUiThread(() -> {
+                    if(inLevelIterator == 0){
+                        firstIteration();
+                    }
+                    else if(Conditions.succesCondition(number)){
+                        fail();
+                    }else {
+                        success();
+                    }
+                });
+            }
+        };
+        timer= new Timer();
+        timer.scheduleAtFixedRate(timerTask,0,2500);
+        isRunning= true;
+    }
 
 
     public CustomCountDownTimer gameLoop(int time){
@@ -122,12 +158,16 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    public void success() {
-        loop.cancel();
-        regresBar.clearAnimation();
-        loop.start();
-        scoreCount++;
+    public void firstIteration(){
+        number = gameArray[inLevelIterator];
+        textSwitcher.setText(String.valueOf(number));
+        progressBar.setProgress(progressStatus);
+        animation.start();
+    }
+
+    public void success(){
         inLevelIterator++;
+        scoreCount++;
         progressStatus++;
         number = gameArray[inLevelIterator];
         textSwitcher.setText(String.valueOf(number));
@@ -140,10 +180,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fail(){
-        showIsOn = false;
         startActivity(gameStop().putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
+//    public void success() {
+//        loop.cancel();
+//        regresBar.clearAnimation();
+//        loop.start();
+//        scoreCount++;
+//        inLevelIterator++;
+//        progressStatus++;
+//        number = gameArray[inLevelIterator];
+//        textSwitcher.setText(String.valueOf(number));
+//        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+//        checkIfHighScore();
+//        checkIfNextLevel();
+//        progressBar.setProgress(progressStatus);
+//        vibe.vibrate(40);
+//        animation.start();
+//    }
+
+//    public void fail(){
+//        showIsOn = false;
+//        startActivity(gameStop().putExtra("numberKey", number));
+//        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -153,8 +214,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Intent gameStop(){
-        loop.cancel();
+        timer.cancel();
         mediaPlayer.stop();
+        mediaPlayer.release();
         layout.setOnTouchListener(null);
         return new Intent(MainActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -242,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBaseValues() {
-        showIsOn = true;
         gameLeft = false;
         highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
@@ -273,10 +334,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        loop.cancel();
-        mediaPlayer.stop();
-        gameLeft = true;
-       Debug.stopMethodTracing();
+//        loop.cancel();
+//        mediaPlayer.stop();
+//        gameLeft = true;
+      // Debug.stopMethodTracing();
     }
 
     @Override

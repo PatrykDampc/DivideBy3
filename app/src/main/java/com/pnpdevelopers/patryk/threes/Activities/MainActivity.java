@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-       // Debug.startMethodTracing();
         setUpViews();
         setUpTextSwitcher();
         setUpSharedPrefsAndGameData();
@@ -95,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
         inLevelIterator++;
         scoreCount++;
         progressStatus++;
-        number = gameArray[inLevelIterator];
-        textSwitcher.setText(String.valueOf(number));
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         checkIfHighScore();
         checkIfNextLevel();
@@ -196,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             myText.setTextColor(Color.WHITE);
             return myText;
         });
+
     }
 
     private void setUpViews() {
@@ -254,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         stopGameActions();
-     // Debug.stopMethodTracing();
     }
 
     @Override

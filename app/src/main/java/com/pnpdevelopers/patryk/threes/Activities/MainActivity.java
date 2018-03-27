@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
         setUpMediaPlayer();
         startInitialAnimations();
         setUpTouchListeners();
-        startGameIteration();
+        startGameAction();
 
     }
 
-    public void startGameIteration() {
+    public void startGameAction() {
         number = gameArray[inLevelIterator];
         textSwitcher.setText(String.valueOf(number));
         animation.start();
@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(runnable,time);
     }
 
-
     public void success(){
         handler.removeCallbacks(runnable);
         handler = null;
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
-        startGameIteration();
+        startGameAction();
     }
 
     public void fail(){
@@ -109,31 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 .putExtra("scoreKey", String.valueOf(scoreCount))
                 .putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-    }
-
-    private void setUpTouchListeners() {
-        //noinspection AndroidLintClickableViewAccessibility
-        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-            @Override
-            public void onClick() {
-                super.onClick();
-                if (Conditions.succesCondition(number)) {
-                    success();
-                } else {
-                    fail();
-                }
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                if(Conditions.succesCondition(number)){
-                    fail();
-                } else {
-                    success();
-                }
-            }
-        });
-
     }
 
     private void stopGameActions() {
@@ -163,6 +137,39 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
             highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
+    }
+
+    private void startInitialAnimations() {
+        regresBar.startAnimation(scale);
+        scoreView.startAnimation(in);
+        highScoreView.startAnimation(in);
+        progressBar.startAnimation(in);
+        nextLevel.startAnimation(in);
+    }
+
+    private void setUpTouchListeners() {
+        //noinspection AndroidLintClickableViewAccessibility
+        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            @Override
+            public void onClick() {
+                super.onClick();
+                if (Conditions.succesCondition(number)) {
+                    success();
+                } else {
+                    fail();
+                }
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                if(Conditions.succesCondition(number)){
+                    fail();
+                } else {
+                    success();
+                }
+            }
+        });
+
     }
 
     private void setUpMediaPlayer() {
@@ -211,14 +218,6 @@ public class MainActivity extends AppCompatActivity {
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
-    }
-
-    private void startInitialAnimations() {
-        regresBar.startAnimation(scale);
-        scoreView.startAnimation(in);
-        highScoreView.startAnimation(in);
-        progressBar.startAnimation(in);
-        nextLevel.startAnimation(in);
     }
 
     private void setUpBaseValues() {

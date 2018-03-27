@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
@@ -21,17 +20,12 @@ import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.GameData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
-import com.pnpdevelopers.patryk.threes.util.CustomCountDownTimer;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
@@ -52,15 +46,12 @@ public class MainActivity extends AppCompatActivity {
     private GameData gameData;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private CustomCountDownTimer loop;
     private int[] gameArray, levelLengths;
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
-    private TimerTask timerTask;
-    private Timer timer;
     private boolean gameLeft;
-    private boolean isRunning;
-    Handler handler = new Handler();
+    private Handler handler;
+    private Runnable runnable;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -68,104 +59,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+       // Debug.startMethodTracing();
         setUpViews();
         setUpTextSwitcher();
-        setUpData();
+        setUpSharedPrefsAndGameData();
         setUpBaseValues();
         setUpMediaPlayer();
-
-
-
-
-
-
-
-        //noinspection AndroidLintClickableViewAccessibility
-        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
-            @Override
-            public void onClick() {
-                super.onClick();
-
-                if (Conditions.succesCondition(number)) {
-                    timer.cancel();
-                    success();
-                } else {
-                    fail();
-                }
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-
-                if(Conditions.succesCondition(number)){
-                    fail();
-                } else {
-                    timer.cancel();
-                    success();
-                }
-
-//                loop.cancel();
-//                loop.onFinish();
-            }
-        });
-
         startInitialAnimations();
-//        loop = gameLoop(time).start();
-        startTimer();
-        //Debug.startMethodTracing("gowno");
+        setUpTouchListeners();
+        startGameIteration();
+
     }
 
-    public void startTimer(){
-        timerTask = new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(() -> {
-                    if(inLevelIterator == 0){
-                        firstIteration();
-                    }
-                    else if(Conditions.succesCondition(number)){
-                        fail();
-                    }else {
-                        success();
-                    }
-                });
-            }
-        };
-        timer= new Timer();
-        timer.scheduleAtFixedRate(timerTask,0,2500);
-        isRunning= true;
-    }
-
-
-    public CustomCountDownTimer gameLoop(int time){
-        return new CustomCountDownTimer(time, time+100) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                if (!Conditions.succesCondition(number)) {
-                    success();
-                } else {
-                    fail();
-                }
-            }
-        };
-    }
-
-    public void firstIteration(){
+    public void startGameIteration() {
         number = gameArray[inLevelIterator];
         textSwitcher.setText(String.valueOf(number));
-        progressBar.setProgress(progressStatus);
         animation.start();
+        handler = new Handler();
+        runnable = () -> {
+            if (!Conditions.succesCondition(number)) {
+                success();
+            } else {
+                fail();
+            }
+        };
+        handler.postDelayed(runnable,time);
     }
 
+
     public void success(){
+        handler.removeCallbacks(runnable);
+        handler = null;
         inLevelIterator++;
         scoreCount++;
         progressStatus++;
@@ -176,51 +102,48 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
-        animation.start();
+        startGameIteration();
     }
 
     public void fail(){
-        startActivity(gameStop().putExtra("numberKey", number));
-        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-    }
-//    public void success() {
-//        loop.cancel();
-//        regresBar.clearAnimation();
-//        loop.start();
-//        scoreCount++;
-//        inLevelIterator++;
-//        progressStatus++;
-//        number = gameArray[inLevelIterator];
-//        textSwitcher.setText(String.valueOf(number));
-//        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-//        checkIfHighScore();
-//        checkIfNextLevel();
-//        progressBar.setProgress(progressStatus);
-//        vibe.vibrate(40);
-//        animation.start();
-//    }
-
-//    public void fail(){
-//        showIsOn = false;
-//        startActivity(gameStop().putExtra("numberKey", number));
-//        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-//    }
-
-    @Override
-    public void onBackPressed() {
-        startActivity(gameStop());
-        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-        super.onBackPressed();
-    }
-
-    public Intent gameStop(){
-        timer.cancel();
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        layout.setOnTouchListener(null);
-        return new Intent(MainActivity.this, StartActivity.class)
+        stopGameActions();
+        startActivity(new Intent(MainActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(scoreCount));
+                .putExtra("scoreKey", String.valueOf(scoreCount))
+                .putExtra("numberKey", number));
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+    }
+
+    private void setUpTouchListeners() {
+        //noinspection AndroidLintClickableViewAccessibility
+        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+            @Override
+            public void onClick() {
+                super.onClick();
+                if (Conditions.succesCondition(number)) {
+                    success();
+                } else {
+                    fail();
+                }
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                if(Conditions.succesCondition(number)){
+                    fail();
+                } else {
+                    success();
+                }
+            }
+        });
+
+    }
+
+    private void stopGameActions() {
+        handler.removeCallbacks(runnable);
+        mediaPlayer.stop();
+        layout.setOnTouchListener(null);
+        gameLeft = true;
     }
 
     private void checkIfNextLevel(){
@@ -245,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void setUpMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
@@ -267,14 +189,12 @@ public class MainActivity extends AppCompatActivity {
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
 
-        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            public View makeView() {
-                TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(70);
-                myText.setTextColor(Color.WHITE);
-                return myText;
-            }
+        textSwitcher.setFactory(() -> {
+            TextView myText = new TextView(MainActivity.this);
+            myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            myText.setTextSize(70);
+            myText.setTextColor(Color.WHITE);
+            return myText;
         });
     }
 
@@ -310,12 +230,9 @@ public class MainActivity extends AppCompatActivity {
         progressScope = levelLengths[0];
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
         progressBar.setMax(progressScope);
-        number = gameArray[inLevelIterator];
-        textSwitcher.setText(String.valueOf(number));
-        animation.start();
     }
 
-    private void setUpData() {
+    private void setUpSharedPrefsAndGameData() {
         prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
         gameData = new GameData();
@@ -327,23 +244,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(gameLeft){
-            startActivity(gameStop());
+            startActivity(new Intent(MainActivity.this, StartActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    .putExtra("scoreKey", String.valueOf(scoreCount)));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        loop.cancel();
-//        mediaPlayer.stop();
-//        gameLeft = true;
-      // Debug.stopMethodTracing();
+        stopGameActions();
+     // Debug.stopMethodTracing();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         Utils.fullScreenIfHasFocus(hasFocus, this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        stopGameActions();
+        startActivity(new Intent(MainActivity.this, StartActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra("scoreKey", String.valueOf(scoreCount)));
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+        super.onBackPressed();
     }
 
     public static int getNumber(){

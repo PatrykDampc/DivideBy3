@@ -8,13 +8,13 @@ import java.util.List;
  * Created by pszen on 13.03.2018.
  */
 
-public class GameData {
+public class LevelData {
     int[] levelLenghtsArray;
     int[] gameArray;
     List<Level> levels;
     List<List<Integer>> levelsNumbers;
 
-    public GameData() {
+    public LevelData() {
         this.levels = initializeLevels();
         this.levelLenghtsArray = initializeLevelLengthsArray();
         this.levelsNumbers = createLevelsNumbers(levels);

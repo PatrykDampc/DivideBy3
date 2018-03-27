@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.GameData;
+import com.pnpdevelopers.patryk.threes.model.LevelData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Vibrator vibe;
     private MediaPlayer mediaPlayer;
     //regular variables
-    private GameData gameData;
+    private LevelData levelData;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private int[] gameArray, levelLengths;
@@ -232,9 +232,9 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSharedPrefsAndGameData() {
         prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
-        gameData = new GameData();
-        gameArray = gameData.getGameArray();
-        levelLengths = gameData.getLevelLenghtsArray();
+        levelData = new LevelData();
+        gameArray = levelData.getGameArray();
+        levelLengths = levelData.getLevelLenghtsArray();
     }
 
     @Override

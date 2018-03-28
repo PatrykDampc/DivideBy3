@@ -14,6 +14,7 @@ public class GameActions {
 
     private int number;
     private int[] gameArray, levelLengths;
+    private Context mContext;
 
 
 
@@ -21,7 +22,8 @@ public class GameActions {
     public GameActions(Context context, LevelData levelData) {
         gameArray = levelData.getGameArray();
         levelLengths = levelData.getLevelLenghtsArray();
-        setUpTextSwitcher(context);
+        this.mContext = context;
+        setUpTextSwitcher();
     }
 
     public void gameAction(int inLevelIterator){
@@ -31,16 +33,16 @@ public class GameActions {
 
 
 
-    public void setUpTextSwitcher(Context context) {
-        Animation in = AnimationUtils.loadAnimation(context,
+    public void setUpTextSwitcher() {
+        Animation in = AnimationUtils.loadAnimation(mContext,
                 android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(context,
+        Animation out = AnimationUtils.loadAnimation(mContext,
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
 
         textSwitcher.setFactory(() -> {
-            TextView myText = new TextView(context);
+            TextView myText = new TextView(mContext);
             myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             myText.setTextSize(70);
             myText.setTextColor(Color.WHITE);

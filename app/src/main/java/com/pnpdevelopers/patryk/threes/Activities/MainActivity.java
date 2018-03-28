@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +26,23 @@ import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
 import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
 
 public class MainActivity extends AppCompatActivity {
     //Views
-    private ConstraintLayout layout;
-  //  private TextSwitcher textSwitcher;
-    private ProgressBar regresBar, progressBar;
-    private TextView scoreView, highScoreView, nextLevel;
+    @BindView(R.id.mainActivityLayoutID)  ConstraintLayout layout;
+    @BindView(R.id.numberTextSwitcherID) TextSwitcher textSwitcher;
+    @BindView(R.id.progressBarID)  ProgressBar progressBar;
+    @BindView(R.id.regresBar)  ProgressBar regresBar;
+    @BindView(R.id.scoreID)  TextView scoreView;
+    @BindView(R.id.highScoreTextViewID)  TextView highScoreView;
+    @BindView(R.id.nextLevelID)  TextView  nextLevel;
+
     //Special effects
     private ObjectAnimator animation;
     private Animation in, scale;
@@ -69,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
         setUpMediaPlayer();
         startInitialAnimations();
         setUpTouchListeners();
-
-
-
         startGameAction();
 
     }
@@ -212,14 +217,8 @@ public class MainActivity extends AppCompatActivity {
     private void setUpViews() {
         in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         scale = AnimationUtils.loadAnimation(this,R.anim.scale);
-        layout = findViewById(R.id.mainActivityLayoutID);
-    //    textSwitcher = findViewById(R.id.numberTextSwitcherID);
-        scoreView = findViewById(R.id.scoreID);
-        highScoreView = findViewById(R.id.highScoreTextViewID);
-        regresBar = findViewById(R.id.regresBar);
-        progressBar = findViewById(R.id.progressBarID);
-        nextLevel = findViewById(R.id.nextLevelID);
-
+        ButterKnife.bind(this);
+        
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 

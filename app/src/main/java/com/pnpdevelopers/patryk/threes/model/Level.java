@@ -9,10 +9,10 @@ public class Level {
     int numbersTo;
     int levelLenght;
 
-    public Level(int numbersFrom, int numbersTo, int levelLenght) {
+    public Level(int numbersFrom, int numbersTo, int levelLength) {
         this.numbersFrom = numbersFrom;
         this.numbersTo = numbersTo;
-        this.levelLenght = levelLenght;
+        this.levelLenght = levelLength;
     }
 
     public int getNumbersFrom() {

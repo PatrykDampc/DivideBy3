@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         gameMusic = new GameMusic(MainActivity.this, mediaPlayer, preferenceManager);
         gameMusic.setUpMusicPlayer(R.raw.bensound_funkysuspense, true);
 
-       setUpTextSwitcher();
+        setUpTextSwitcher();
         setUpSharedPrefsAndGameData();
         setUpBaseValues();
         startInitialAnimations();
@@ -226,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
     private void setUpSharedPrefsAndGameData() {
 
         levelData = new LevelData();
-        gameArray = levelData.getGameArray();
-        levelLengths = levelData.getLevelLenghtsArray();
+        gameArray = levelData.createGameArray();
+        levelLengths = levelData.createLevelLengthsArray();
     }
 
     @Override

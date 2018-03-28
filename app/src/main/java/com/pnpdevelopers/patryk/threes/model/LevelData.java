@@ -15,14 +15,11 @@ public class LevelData {
     List<List<Integer>> levelsNumbers;
 
     public LevelData() {
-        this.levels = initializeLevels();
-        this.levelLenghtsArray = initializeLevelLengthsArray();
-        this.levelsNumbers = createLevelsNumbers(levels);
-        this.gameArray = generateGameArray(levelsNumbers,levelLenghtsArray);
     }
 
-    private List<Level> initializeLevels(){   // levelLength must be less than numbersTo - numbersFrom
-        levels = new ArrayList<>();
+
+
+    private List<Level> createLevels(List<Level> levels){   // levelLength must be less than numbersTo - numbersFrom
         levels.add(new Level(3,100,13));
         levels.add(new Level(101,200,20));
         levels.add(new Level(201,310,30));
@@ -39,12 +36,31 @@ public class LevelData {
         return levels;
     }
 
-    private int[] initializeLevelLengthsArray(){
+    public int[] createLevelLengthsArray(){
+        List<Level> levels = createLevels(new ArrayList<>());
         int[] levelLenghtsArray = new int[levels.size()];
         for(int i = 0; i < levels.size(); i++){
             levelLenghtsArray[i] = levels.get(i).getLevelLenght();
         }
         return levelLenghtsArray;
+    }
+
+    public int[] createGameArray(){
+        int[] levelLengthsArray = createLevelLengthsArray();
+        List<List<Integer>> levelsNumbers = createLevelsNumbers(createLevels(new ArrayList<>()));
+        int gameLength = sumIntInArray(levelLengthsArray);
+        int[] gameArray = new int[gameLength];
+        int level = 0;
+        int iterator = 0;
+        for(int i = 0; i < gameLength; i++){
+            gameArray[i] = levelsNumbers.get(level).get(iterator);
+            if(levelLengthsArray[level] == iterator && level<levelsNumbers.size()-1){
+                level++;
+                iterator=0;
+            }
+            iterator++;
+        }
+        return gameArray;
     }
 
     private List<List<Integer>> createLevelsNumbers(List<Level> levels){
@@ -67,22 +83,6 @@ public class LevelData {
         return shuffledArrayList;
     }
 
-    private int[] generateGameArray(List<List<Integer>> levelsNumbers, int[] levelLenghtsArray){
-        int gameLength = sumIntInArray(levelLenghtsArray);
-        int[] gameArray = new int[gameLength];
-        int level = 0;
-        int iterator = 0;
-        for(int i = 0; i < gameLength; i++){
-            gameArray[i] = levelsNumbers.get(level).get(iterator);
-            if(levelLenghtsArray[level] == iterator && level<levelsNumbers.size()-1){
-                level++;
-                iterator=0;
-            }
-            iterator++;
-        }
-        return gameArray;
-    }
-
 
     private int sumIntInArray(int[] arrayToSum){
         int sum = 0;
@@ -92,11 +92,5 @@ public class LevelData {
         return sum;
     }
 
-    public int[] getLevelLenghtsArray() {
-        return levelLenghtsArray;
-    }
 
-    public int[] getGameArray() {
-        return gameArray;
-    }
 }

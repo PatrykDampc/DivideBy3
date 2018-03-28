@@ -142,11 +142,12 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:onClick="musicMuteSwitch"
         ads:layout_constraintBottom_toTopOf="@+id/adView"
         ads:layout_constraintEnd_toStartOf="@+id/copyrightViewID"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:srcCompat="@drawable/ic_music_note_white_36dp" />
+        ads:srcCompat="@drawable/ic_music_note_white_36dp"
+        android:onClick="onMusicViewClick"
+        />
 
 
 </android.support.constraint.ConstraintLayout>

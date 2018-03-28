@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
 public class TutorialActivity extends AppCompatActivity {

@@ -1,7 +1,6 @@
 package com.pnpdevelopers.patryk.threes.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -18,28 +17,31 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.function.GameMusic;
+import com.pnpdevelopers.patryk.threes.function.GameMusicIndicator;
+import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
-import com.pnpdevelopers.patryk.threes.util.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import java.util.Random;
 
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
+import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
     private Button startButton, tutorialButton;
     private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyryghtView;
     private ImageView musicView, logoView;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
     private AdView adView;
-    private MediaPlayer mediaPlayer;
+   // private GameMusic mediaPlayer;
     private Random random = new Random();
     private int lostNumber;
     private String score;
     private Animation stampAnimation, inFromTop, inFromBottom;
+
+    MediaPlayer mediaPlayer;
+    PreferenceManager preferenceManager;
+    GameMusic gameMusic;
+    GameMusicIndicator gameMusicIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +50,30 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setUpViews();
+
+        preferenceManager = new PreferenceManager(StartActivity.this);
+        gameMusic = new GameMusic(StartActivity.this, mediaPlayer, preferenceManager);
+        gameMusicIndicator = new GameMusicIndicator(preferenceManager, musicView);
+
+
+
         setUpAnimations();
-        setUpSharedPreferences();
         setUpTouchListeners();
         setUpAdView();
-        setUpMediaPlayer();
         getAndPrintGameData();
         printLostMessage();
+
+
+
+
+
+        gameMusic.setUpMusicPlayer(R.raw.bensound_thejazzpiano, false);
+        gameMusicIndicator.setUpMusicIndicator();
+
     }
 
     private void getAndPrintGameData() {
-        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(HIGH_SCORE_KEY, 0)));
+        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY, 0)));
         //receiving scores from lost game session
         Intent intent = getIntent();
         lostNumber = intent.getIntExtra("numberKey", 0);
@@ -66,19 +81,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
     }
 
-    private void setUpMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-        if(prefs.getBoolean(MUSIC_KEY, true)){
-            mediaPlayer.setVolume(0.3f,0.3f);
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
-        } else {
-            mediaPlayer.setVolume(0,0);
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        }
-    }
 
     private void setUpAdView() {
         //        adView = findViewById(R.id.adView);
@@ -91,10 +93,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         tutorialButton.setOnClickListener(this);
     }
 
-    private void setUpSharedPreferences() {
-        prefs = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
-        editor = prefs.edit();
-    }
 
     private void setUpAnimations() {
         stampAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp);
@@ -142,17 +140,8 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         numberViewStart.setTypeface(type);
     }
 
-    public void musicMuteSwitch(View view){
-        if(prefs.getBoolean(MUSIC_KEY, true)) {
-            editor.putBoolean(MUSIC_KEY, false);
-            mediaPlayer.setVolume(0,0);
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        } else {
-            editor.putBoolean(MUSIC_KEY, true);
-            mediaPlayer.setVolume(0.3f,0.3f);
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
-        }
-        editor.apply();
+    public void onMusicViewClick(View view){
+        gameMusic.musicMuteSwitch(gameMusicIndicator);
     }
 
     public void printLostMessage(){
@@ -177,14 +166,14 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     protected void onPause() {
         super.onPause();
-        mediaPlayer.pause();
+        gameMusic.getMediaPlayer().pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.start();
-        mediaPlayer.seekTo(random.nextInt(100000));
+        gameMusic.getMediaPlayer().start();
+        gameMusic.getMediaPlayer().seekTo(random.nextInt(100000));
     }
 
     @Override
@@ -197,8 +186,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 break;
             case R.id.tutorialButtonID:
                 onPause();
-                editor.putBoolean(PreferenceManager.IS_FIRST_TIME_LAUNCH, true);
-                editor.apply();
+                preferenceManager.getEditor().putBoolean(PreferenceManager.IS_FIRST_TIME_LAUNCH, true).apply();
                 startActivity(new Intent(this, TutorialActivity.class));
                 overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
                 break;

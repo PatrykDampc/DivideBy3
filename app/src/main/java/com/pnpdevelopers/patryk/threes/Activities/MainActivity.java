@@ -4,13 +4,14 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.GameActions;
+import com.pnpdevelopers.patryk.threes.function.GameMusic;
+import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.model.LevelData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -29,9 +31,7 @@ import com.pnpdevelopers.patryk.threes.util.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.HIGH_SCORE_KEY;
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.MUSIC_KEY;
-import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES_KEY;
+import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class MainActivity extends AppCompatActivity {
     //Views
@@ -47,20 +47,19 @@ public class MainActivity extends AppCompatActivity {
     private ObjectAnimator animation;
     private Animation in, scale;
     private Vibrator vibe;
-    private MediaPlayer mediaPlayer;
     //regular variables
-  //  private LevelData levelData;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
-    private int[] /*gameArray ,*/ levelLengths;
+   private LevelData levelData;
+    private int[] gameArray;
+    private int[] levelLengths;
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
     private Handler handler;
     private Runnable runnable;
 
-    LevelData levelData = new LevelData();
-    GameActions gameActions = new GameActions(this ,levelData);
+    PreferenceManager preferenceManager;
+    GameMusic gameMusic;
+    MediaPlayer mediaPlayer;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -71,10 +70,14 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         setUpViews();
-      //  setUpTextSwitcher();
+
+        preferenceManager = new PreferenceManager(MainActivity.this);
+        gameMusic = new GameMusic(MainActivity.this, mediaPlayer, preferenceManager);
+        gameMusic.setUpMusicPlayer(R.raw.bensound_funkysuspense, true);
+
+       setUpTextSwitcher();
         setUpSharedPrefsAndGameData();
         setUpBaseValues();
-        setUpMediaPlayer();
         startInitialAnimations();
         setUpTouchListeners();
         startGameAction();
@@ -82,9 +85,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGameAction() {
-//        number = gameArray[inLevelIterator];
-//        textSwitcher.setText(String.valueOf(number));
-        gameActions.gameAction(inLevelIterator);
+        number = gameArray[inLevelIterator];
+        textSwitcher.setText(String.valueOf(number));
 
         animation.start();
         handler = new Handler();
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopGameActions() {
         handler.removeCallbacks(runnable);
-        mediaPlayer.stop();
+        gameMusic.getMediaPlayer().stop();
         layout.setOnTouchListener(null);
         gameLeft = true;
     }
@@ -144,8 +146,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
         }
         if (scoreCount > highScore) {
-            editor.putInt(HIGH_SCORE_KEY, scoreCount);
-            editor.commit();
+            preferenceManager.getEditor().putInt(HIGH_SCORE_KEY, scoreCount).apply();
             highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
     }
@@ -183,36 +184,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setUpMediaPlayer() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer = MediaPlayer.create(this, R.raw.bensound_funkysuspense);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-        if(prefs.getBoolean(MUSIC_KEY, true)){
-            mediaPlayer.setVolume(1,1);
-        } else {
-            mediaPlayer.setVolume(0,0);
-        }
+
+
+    public void setUpTextSwitcher() {
+        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
+                android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
+                android.R.anim.slide_out_right);
+        textSwitcher.setInAnimation(in);
+        textSwitcher.setOutAnimation(out);
+
+        textSwitcher.setFactory(() -> {
+            TextView myText = new TextView(MainActivity.this);
+            myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            myText.setTextSize(70);
+            myText.setTextColor(Color.WHITE);
+            return myText;
+        });
 
     }
-
-//    public void setUpTextSwitcher() {
-//        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
-//                android.R.anim.slide_in_left);
-//        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
-//                android.R.anim.slide_out_right);
-//        textSwitcher.setInAnimation(in);
-//        textSwitcher.setOutAnimation(out);
-//
-//        textSwitcher.setFactory(() -> {
-//            TextView myText = new TextView(MainActivity.this);
-//            myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-//            myText.setTextSize(70);
-//            myText.setTextColor(Color.WHITE);
-//            return myText;
-//        });
-//
-//    }
 
     private void setUpViews() {
         in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
@@ -226,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpBaseValues() {
         gameLeft = false;
-        highScore = prefs.getInt(HIGH_SCORE_KEY, 0);
+        highScore = preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY, 0);
         highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
         progressScope = levelLengths[0];
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
@@ -234,10 +224,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpSharedPrefsAndGameData() {
-        prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        editor = prefs.edit();
+
         levelData = new LevelData();
-   //     gameArray = levelData.getGameArray();
+        gameArray = levelData.getGameArray();
         levelLengths = levelData.getLevelLenghtsArray();
     }
 

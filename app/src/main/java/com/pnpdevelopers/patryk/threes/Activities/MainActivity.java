@@ -213,8 +213,7 @@ public class MainActivity extends AppCompatActivity {
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
-
-
+        
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 

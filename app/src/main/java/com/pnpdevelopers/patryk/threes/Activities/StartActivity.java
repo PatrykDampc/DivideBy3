@@ -40,51 +40,36 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private int lostNumber;
     private String score;
     private Animation stampAnimation, inFromTop, inFromBottom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        stampAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp);
-        stampAnimation.reset();
-        inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
-        inFromTop.reset();
-        inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
-        inFromBottom.reset();
+        setUpViews();
+        setUpAnimations();
+        setUpSharedPreferences();
+        setUpTouchListeners();
+        setUpAdView();
+        setUpMediaPlayer();
+        getAndPrintGameData();
+        printLostMessage();
+    }
 
-        //setup
-        copyryghtView = findViewById(R.id.copyrightViewID);
-        logoView = findViewById(R.id.logoViewID);
-        highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
-        scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
-        numberViewStart = findViewById(R.id.startActivityNumberViewID);
-        musicView = findViewById(R.id.musicButtonID);
-        startButton = findViewById(R.id.playButtonID);
-        tutorialButton = findViewById(R.id.tutorialButtonID);
-        prefs = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
-        editor = prefs.edit();
+    private void getAndPrintGameData() {
+        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(HIGH_SCORE_KEY, 0)));
+        //receiving scores from lost game session
+        Intent intent = getIntent();
+        lostNumber = intent.getIntExtra("numberKey", 0);
+        score = intent.getStringExtra("scoreKey");
+        scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
+    }
+
+    private void setUpMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer = MediaPlayer.create(this, R.raw.bensound_thejazzpiano);
-
         mediaPlayer.setLooping(true);
-        numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
-                getResources().getColor(R.color.colorAccentLostMessageGradient),
-                getResources().getColor(R.color.colorAccent),
-                Shader.TileMode.REPEAT));
-        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/SPETETRIAL.ttf");
-        numberViewStart.setTypeface(type);
-
-
-        startButton.setOnClickListener(this);
-        tutorialButton.setOnClickListener(this);
-//        adView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
-//        adView.loadAd(adRequest);
-
-        //reading saved high score
-
-
         mediaPlayer.start();
         if(prefs.getBoolean(MUSIC_KEY, true)){
             mediaPlayer.setVolume(0.3f,0.3f);
@@ -93,23 +78,40 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
             mediaPlayer.setVolume(0,0);
             musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
         }
+    }
 
-        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(prefs.getInt(HIGH_SCORE_KEY, 0)));
-        //receiving scores from lost game session
-        Intent intent = getIntent();
-        lostNumber = intent.getIntExtra("numberKey", 0);
-        score = intent.getStringExtra("scoreKey");
-        printLostMessage();
-        scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
+    private void setUpAdView() {
+        //        adView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
+//        adView.loadAd(adRequest);
+    }
 
-        highScoreViewStart.clearAnimation();
-        logoView.clearAnimation();
-        numberViewStart.clearAnimation();
-        scoreViewStart.clearAnimation();
-        startButton.clearAnimation();
-        tutorialButton.clearAnimation();
-        copyryghtView.clearAnimation();
-        musicView.clearAnimation();
+    private void setUpTouchListeners() {
+        startButton.setOnClickListener(this);
+        tutorialButton.setOnClickListener(this);
+    }
+
+    private void setUpSharedPreferences() {
+        prefs = getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
+        editor = prefs.edit();
+    }
+
+    private void setUpAnimations() {
+        stampAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp);
+        stampAnimation.reset();
+        inFromTop = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
+        inFromTop.reset();
+        inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
+        inFromBottom.reset();
+
+        //        highScoreViewStart.clearAnimation();
+//        logoView.clearAnimation();
+//        numberViewStart.clearAnimation();
+//        scoreViewStart.clearAnimation();
+//        startButton.clearAnimation();
+//        tutorialButton.clearAnimation();
+//        copyryghtView.clearAnimation();
+//        musicView.clearAnimation();
 
         scoreViewStart.startAnimation(inFromBottom);
         startButton.startAnimation(inFromBottom);
@@ -119,6 +121,57 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         highScoreViewStart.startAnimation(inFromTop);
         logoView.startAnimation(inFromTop);
         numberViewStart.startAnimation(stampAnimation);
+
+    }
+
+    private void setUpViews() {
+        copyryghtView = findViewById(R.id.copyrightViewID);
+        logoView = findViewById(R.id.logoViewID);
+        highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
+        scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
+        numberViewStart = findViewById(R.id.startActivityNumberViewID);
+        musicView = findViewById(R.id.musicButtonID);
+        startButton = findViewById(R.id.playButtonID);
+        tutorialButton = findViewById(R.id.tutorialButtonID);
+
+        numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
+                getResources().getColor(R.color.colorAccentLostMessageGradient),
+                getResources().getColor(R.color.colorAccent),
+                Shader.TileMode.REPEAT));
+        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/SPETETRIAL.ttf");
+        numberViewStart.setTypeface(type);
+    }
+
+    public void musicMuteSwitch(View view){
+        if(prefs.getBoolean(MUSIC_KEY, true)) {
+            editor.putBoolean(MUSIC_KEY, false);
+            mediaPlayer.setVolume(0,0);
+            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
+        } else {
+            editor.putBoolean(MUSIC_KEY, true);
+            mediaPlayer.setVolume(0.3f,0.3f);
+            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        }
+        editor.apply();
+    }
+
+    public void printLostMessage(){
+        if(score == null){
+            scoreViewStart.setVisibility(View.GONE);
+        }
+        if( lostNumber == 0){
+            numberViewStart.setVisibility(View.GONE);
+        } else if(Conditions.isDivisibleByThree(lostNumber)){
+            int result = lostNumber/3;
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }  else if (String.valueOf(lostNumber).contains("3")){
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ StartActivity.this.getString(R.string.contains));
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }  else {
+            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) + "...");
+            startButton.setText(StartActivity.this.getString(R.string.tryagain));
+        }
     }
 
     @Override
@@ -153,39 +206,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 break;
         }
     }
-
-    public void musicMute(View view){
-        if(prefs.getBoolean(MUSIC_KEY, true)) {
-            editor.putBoolean(MUSIC_KEY, false);
-            mediaPlayer.setVolume(0,0);
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        } else {
-            editor.putBoolean(MUSIC_KEY, true);
-            mediaPlayer.setVolume(0.3f,0.3f);
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
-        }
-        editor.apply();
-    }
-
-    public void printLostMessage(){
-        if(score == null){
-            scoreViewStart.setVisibility(View.GONE);
-        }
-        if( lostNumber == 0){
-            numberViewStart.setVisibility(View.GONE);
-        } else if(Conditions.isDivisibleByThree(lostNumber)){
-            int result = lostNumber/3;
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }  else if (String.valueOf(lostNumber).contains("3")){
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ StartActivity.this.getString(R.string.contains));
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }  else {
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) + "...");
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }
-    }
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

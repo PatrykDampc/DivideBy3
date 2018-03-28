@@ -5,23 +5,21 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.model.GameActions;
 import com.pnpdevelopers.patryk.threes.model.LevelData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -34,7 +32,7 @@ import static com.pnpdevelopers.patryk.threes.util.PreferenceManager.PREFERENCES
 public class MainActivity extends AppCompatActivity {
     //Views
     private ConstraintLayout layout;
-    private TextSwitcher textSwitcher;
+  //  private TextSwitcher textSwitcher;
     private ProgressBar regresBar, progressBar;
     private TextView scoreView, highScoreView, nextLevel;
     //Special effects
@@ -43,15 +41,18 @@ public class MainActivity extends AppCompatActivity {
     private Vibrator vibe;
     private MediaPlayer mediaPlayer;
     //regular variables
-    private LevelData levelData;
+  //  private LevelData levelData;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private int[] gameArray, levelLengths;
+    private int[] /*gameArray ,*/ levelLengths;
     private static int number;
     private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
     private Handler handler;
     private Runnable runnable;
+
+    LevelData levelData = new LevelData();
+    GameActions gameActions = new GameActions(this ,levelData);
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -62,19 +63,24 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         setUpViews();
-        setUpTextSwitcher();
+      //  setUpTextSwitcher();
         setUpSharedPrefsAndGameData();
         setUpBaseValues();
         setUpMediaPlayer();
         startInitialAnimations();
         setUpTouchListeners();
+
+
+
         startGameAction();
 
     }
 
     public void startGameAction() {
-        number = gameArray[inLevelIterator];
-        textSwitcher.setText(String.valueOf(number));
+//        number = gameArray[inLevelIterator];
+//        textSwitcher.setText(String.valueOf(number));
+        gameActions.gameAction(inLevelIterator);
+
         animation.start();
         handler = new Handler();
         runnable = () -> {
@@ -185,35 +191,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setUpTextSwitcher() {
-        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
-                android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
-                android.R.anim.slide_out_right);
-        textSwitcher.setInAnimation(in);
-        textSwitcher.setOutAnimation(out);
-
-        textSwitcher.setFactory(() -> {
-            TextView myText = new TextView(MainActivity.this);
-            myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            myText.setTextSize(70);
-            myText.setTextColor(Color.WHITE);
-            return myText;
-        });
-
-    }
+//    public void setUpTextSwitcher() {
+//        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
+//                android.R.anim.slide_in_left);
+//        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
+//                android.R.anim.slide_out_right);
+//        textSwitcher.setInAnimation(in);
+//        textSwitcher.setOutAnimation(out);
+//
+//        textSwitcher.setFactory(() -> {
+//            TextView myText = new TextView(MainActivity.this);
+//            myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+//            myText.setTextSize(70);
+//            myText.setTextColor(Color.WHITE);
+//            return myText;
+//        });
+//
+//    }
 
     private void setUpViews() {
         in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         scale = AnimationUtils.loadAnimation(this,R.anim.scale);
         layout = findViewById(R.id.mainActivityLayoutID);
-        textSwitcher = findViewById(R.id.numberTextSwitcherID);
+    //    textSwitcher = findViewById(R.id.numberTextSwitcherID);
         scoreView = findViewById(R.id.scoreID);
         highScoreView = findViewById(R.id.highScoreTextViewID);
         regresBar = findViewById(R.id.regresBar);
         progressBar = findViewById(R.id.progressBarID);
         nextLevel = findViewById(R.id.nextLevelID);
-        
+
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
@@ -232,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
         levelData = new LevelData();
-        gameArray = levelData.getGameArray();
+   //     gameArray = levelData.getGameArray();
         levelLengths = levelData.getLevelLenghtsArray();
     }
 

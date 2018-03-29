@@ -5,19 +5,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pnpdevelopers.patryk.threes.Activities.MainActivity;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 
-public class ProgressBarHandle {
+public class ProgressHandler {
     int[] mLevelLengths;
     ProgressBar progressBar;
     Context context;
     TextView nextLevelTxt;
     int iterator;
+
+    public int getLevel() {
+        return level;
+    }
+
     int level;
 
-    public ProgressBarHandle(LevelLengths levelLengths, ProgressBar progressBar, Context context, TextView textView) {
+    public ProgressHandler(LevelLengths levelLengths, ProgressBar progressBar, Context context, TextView textView) {
         this.mLevelLengths = levelLengths.getLevelLengths();
         this.progressBar = progressBar;
         this.context = context;

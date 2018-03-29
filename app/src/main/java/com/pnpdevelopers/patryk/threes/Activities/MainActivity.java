@@ -16,7 +16,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.function.GameControls;
@@ -24,8 +23,7 @@ import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
-import com.pnpdevelopers.patryk.threes.function.ProgressBarHandle;
-import com.pnpdevelopers.patryk.threes.model.Level;
+import com.pnpdevelopers.patryk.threes.function.ProgressHandler;
 import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
@@ -47,23 +45,20 @@ public class MainActivity extends AppCompatActivity {
     private Animation in, scale;
     private Vibrator vibe;
 
-    private Level mLevel;
-    private LevelNumbers mLevelNumbers;
-    private LevelLengths mLevelLengths;
     private int[] gameArray;
-    private int[] levelLengths;
-
     private static int number;
-    private int progressStatus, progressScope, level = 0, scoreCount = 0;
+    private int scoreCount = 0;
 
     private boolean gameLeft;
     private Context context = this;
-    private ProgressBarHandle progressBarHandle;
 
-    PreferenceManager preferenceManager;
-    GameMusic gameMusic;
-    HighScore highScore;
-    GameMechanics gameMechanics;
+    private ProgressHandler progressHandler;
+    private PreferenceManager preferenceManager;
+    private GameMusic gameMusic;
+    private HighScore highScore;
+    private GameMechanics gameMechanics;
+    private LevelNumbers mLevelNumbers;
+    private LevelLengths mLevelLengths;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -82,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
         highScore = new HighScore(context,preferenceManager);
         mLevelNumbers = new LevelNumbers();
         mLevelLengths = new LevelLengths();
-        progressBarHandle = new ProgressBarHandle(mLevelLengths,progressBar,context,nextLevel);
+        progressHandler = new ProgressHandler(mLevelLengths,progressBar,context,nextLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
-        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
+        nextLevel.setText(getString(R.string.level) + String.valueOf(progressHandler.getLevel() + 1) + getString(R.string.next_level_progress));
 
         setBaseGameValues();
 
@@ -111,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setBaseGameValues() {
         gameArray = mLevelNumbers.createGameArray();
-        levelLengths = mLevelLengths.getLevelLengths();
     }
 
     public void atActionBeginning(){
@@ -122,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void success(){
         scoreCount++;
-        progressBarHandle.incrementProgress();
+        progressHandler.incrementProgress();
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
 
         highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
-        if(progressBarHandle.isNextLevel())progressBarHandle.nextLevel();
+        if(progressHandler.isNextLevel()) progressHandler.nextLevel();
         vibe.vibrate(40);
         gameMechanics.skipGameAction();
     }
@@ -142,20 +136,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopGameActions() {
         gameMechanics.stopGameAction();
-        gameMusic.getMediaPlayer().stop();
+        gameMusic.stop();
         layout.setOnTouchListener(null);
         gameLeft = true;
-    }
-
-    private void checkIfNextLevel(){
-        if (progressBar.getProgress() == progressBar.getMax()) {
-            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
-            level++;
-            nextLevel.setText(getString(R.string.level) + String.valueOf(level+1) + getString(R.string.next_level_progress));
-            progressStatus = 0;
-            progressScope = levelLengths[level];
-            progressBar.setMax(progressScope);
-        }
     }
 
     private void startInitialAnimations() {
@@ -197,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(gameMechanics.getTime());
+        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(2500);
 
         Animation in = AnimationUtils.loadAnimation(MainActivity.this,
                 android.R.anim.slide_in_left);

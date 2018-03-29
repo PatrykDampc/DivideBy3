@@ -13,8 +13,8 @@ public class Game {
     private GameControls gameControls = new GameControls();
     private GameMechanics gameMechanics;
     private Level mLevel = new Level();
-    private LevelNumbers mLevelNumbers = new LevelNumbers(mLevel);
-    private LevelLengths mLevelLengths = new LevelLengths(mLevel);
+    private LevelNumbers mLevelNumbers = new LevelNumbers();
+    private LevelLengths mLevelLengths = new LevelLengths();
     private int[] gameArray;
     private int[] levelLengths;
     private Context context;

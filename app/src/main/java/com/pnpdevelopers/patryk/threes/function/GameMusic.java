@@ -41,6 +41,10 @@ public class GameMusic {
         setUpMusicMutedOrNot();
     }
 
+    public void stop(){
+        mediaPlayer.stop();
+    }
+
     public void setUpMusicMutedOrNot(){
         if(preferenceManager.isMusicOn()){
             mediaPlayer.setVolume(0.3f,0.3f);

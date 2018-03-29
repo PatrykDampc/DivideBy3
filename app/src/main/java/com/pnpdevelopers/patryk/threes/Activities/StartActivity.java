@@ -1,10 +1,10 @@
 package com.pnpdevelopers.patryk.threes.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,13 +32,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private int lostNumber;
     private String score;
     private Animation stampAnimation, inFromTop, inFromBottom;
+    private Context context = this;
 
-    MediaPlayer mediaPlayer;
-    PreferenceManager preferenceManager;
-    GameMusic gameMusic;
-    GameMusicIndicator gameMusicIndicator;
-    HighScore highScore;
-    LostMessagePrinter lostMessagePrinter;
+    private PreferenceManager preferenceManager;
+    private GameMusic gameMusic;
+    private GameMusicIndicator gameMusicIndicator;
+    private HighScore highScore;
+    private LostMessagePrinter lostMessagePrinter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +50,18 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         setUpAnimations();
         setUpTouchListeners();
 
-        preferenceManager = new PreferenceManager(StartActivity.this);
-        gameMusic = new GameMusic(StartActivity.this, mediaPlayer, preferenceManager);
+        preferenceManager = new PreferenceManager(context);
+        gameMusic = new GameMusic(context, preferenceManager);
         gameMusicIndicator = new GameMusicIndicator(preferenceManager, musicView);
-        highScore = new HighScore(StartActivity.this,preferenceManager);
-        lostMessagePrinter = new LostMessagePrinter(StartActivity.this);
+        highScore = new HighScore(context,preferenceManager);
+        lostMessagePrinter = new LostMessagePrinter(context);
 
-        highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
         Intent intent = getIntent();
         lostNumber = intent.getIntExtra("numberKey", 0);
         score = intent.getStringExtra("scoreKey");
+
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
+        highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
 
         gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
         gameMusicIndicator.setUpMusicIndicator();

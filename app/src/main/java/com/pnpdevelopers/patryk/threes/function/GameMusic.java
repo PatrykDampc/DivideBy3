@@ -23,9 +23,8 @@ public class GameMusic {
 
     private Random random = new Random();
 
-    public GameMusic(Context context, MediaPlayer mediaPlayer, PreferenceManager preferenceManager) {
+    public GameMusic(Context context, PreferenceManager preferenceManager) {
         this.context = context;
-        this.mediaPlayer = mediaPlayer;
         this.preferenceManager = preferenceManager;
     }
 

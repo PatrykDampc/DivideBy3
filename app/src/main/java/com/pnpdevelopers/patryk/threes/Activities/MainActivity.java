@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -60,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean gameLeft;
     private Handler handler;
     private Runnable runnable;
+    private Context context = this;
 
     PreferenceManager preferenceManager;
     GameMusic gameMusic;
-    MediaPlayer mediaPlayer;
     HighScore highScore;
     GameMechanics gameMechanics;
 
@@ -80,19 +79,35 @@ public class MainActivity extends AppCompatActivity {
         startInitialAnimations();
         setUpTouchListeners();
 
-        preferenceManager = new PreferenceManager(MainActivity.this);
-        gameMusic = new GameMusic(MainActivity.this, mediaPlayer, preferenceManager);
-        highScore = new HighScore(MainActivity.this,preferenceManager);
+        preferenceManager = new PreferenceManager(context);
+        gameMusic = new GameMusic(context, preferenceManager);
+        highScore = new HighScore(context,preferenceManager);
         mLevel = new Level();
         mLevelNumbers = new LevelNumbers(mLevel);
         mLevelLengths = new LevelLengths(mLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
-        highScoreView.setText(this.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
+        highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
 
         setBaseGameValues();
-        startGameAction();
+       // startGameAction();
+
+        gameMechanics = new GameMechanics() {
+            @Override
+            protected void onTimerStart() {
+                atActionBeginning();
+            }
+
+            @Override
+            protected void onTimerFinish() {
+                if (!Conditions.successCondition(number)) {
+                    success();
+                } else {
+                    fail();
+                }
+            }
+        };
 
     }
 
@@ -123,8 +138,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void success(){
-        handler.removeCallbacks(runnable);
-        handler = null;
+        gameMechanics.skipGameAction();
+//        handler.removeCallbacks(runnable);
+//        handler = null;
         inLevelIterator++;
         scoreCount++;
         progressStatus++;
@@ -133,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
-        startGameAction();
+       // startGameAction();
     }
 
     public void fail(){
@@ -146,7 +162,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopGameActions() {
-        handler.removeCallbacks(runnable);
+        gameMechanics.stopGameAction();
+//        handler.removeCallbacks(runnable);
+//        handler = null;
         gameMusic.getMediaPlayer().stop();
         layout.setOnTouchListener(null);
         gameLeft = true;

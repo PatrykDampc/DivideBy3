@@ -8,10 +8,7 @@ public abstract class GameMechanics {
     private int time;
 
 
-    public GameMechanics(Handler handler, Runnable runnable, int time) {
-        this.handler = handler;
-        this.runnable = runnable;
-        this.time = time;
+    public GameMechanics() {
     }
 
 
@@ -27,6 +24,17 @@ public abstract class GameMechanics {
     protected abstract void onTimerStart();
 
     protected abstract void onTimerFinish();
+
+    public void stopGameAction(){
+        handler.removeCallbacks(runnable);
+        handler = null;
+    }
+
+    public void skipGameAction(){
+        handler.removeCallbacks(runnable);
+        handler = null;
+        startGameAction();
+    }
 
 
 

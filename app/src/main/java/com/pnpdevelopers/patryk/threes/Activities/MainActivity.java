@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void success(){
-        gameMechanics.skipGameAction();
         inLevelIterator++;
         scoreCount++;
         progressStatus++;
@@ -127,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
+        gameMechanics.skipGameAction();
     }
 
     public void fail(){

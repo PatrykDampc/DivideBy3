@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.pnpdevelopers.patryk.threes.Activities.MainActivity;
-import com.pnpdevelopers.patryk.threes.util.Conditions;
+import com.pnpdevelopers.patryk.threes.function.GameControls;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class MainActivityTest {
     @Test
     public void clickOnConstraintLayout () throws InterruptedException {
         for(int i =0; i < 1200;i++) {
-            if(Conditions.successCondition(MainActivity.getNumber())){
+            if(GameControls.successCondition(MainActivity.getNumber())){
                 Log.d("click", String.valueOf(MainActivity.getNumber()));
                 onView(withId(R.id.mainActivityLayoutID)).perform(click());
             }else{

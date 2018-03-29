@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.util.Conditions;
 
 public class LostMessagePrinter {
     private Context context;
@@ -23,11 +22,11 @@ public class LostMessagePrinter {
         }
         if( lostNumber == 0){
             numberViewStart.setVisibility(View.GONE);
-        } else if(Conditions.isDivisibleByThree(lostNumber)){
+        } else if(GameControls.isDivisibleByThree(lostNumber)){
             int result = lostNumber/3;
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
             startButton.setText(context.getString(R.string.tryagain));
-        }  else if (Conditions.containsThree(lostNumber)){
+        }  else if (GameControls.containsThree(lostNumber)){
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ context.getString(R.string.contains));
             startButton.setText(context.getString(R.string.tryagain));
         }  else {

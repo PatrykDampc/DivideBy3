@@ -1,10 +1,6 @@
-package com.pnpdevelopers.patryk.threes.util;
+package com.pnpdevelopers.patryk.threes.function;
 
-/**
- * Created by patryk on 04.03.2018.
- */
-
-public class Conditions {
+public class GameControls {
 
     public static boolean isDivisibleByThree(int number){
         return number%3 == 0 ? true : false;
@@ -15,6 +11,4 @@ public class Conditions {
     public static boolean successCondition(int number){
         return isDivisibleByThree(number) || containsThree(number);
     }
-
-
 }

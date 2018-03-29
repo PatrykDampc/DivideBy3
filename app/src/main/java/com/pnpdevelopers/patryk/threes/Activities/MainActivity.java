@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.function.GameControls;
 import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
@@ -27,7 +28,6 @@ import com.pnpdevelopers.patryk.threes.function.ProgressBarHandle;
 import com.pnpdevelopers.patryk.threes.model.Level;
 import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
-import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 
 import butterknife.BindView;
@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private LevelLengths mLevelLengths;
     private int[] gameArray;
     private int[] levelLengths;
+
     private static int number;
-    private int progressStatus, progressScope, level = 0,  inLevelIterator = 0, scoreCount = 0, time = 2500;
+    private int progressStatus, progressScope, level = 0, scoreCount = 0;
+
     private boolean gameLeft;
     private Context context = this;
     private ProgressBarHandle progressBarHandle;
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(context);
         gameMusic = new GameMusic(context, preferenceManager);
         highScore = new HighScore(context,preferenceManager);
+
         mLevel = new Level();
         mLevelNumbers = new LevelNumbers(mLevel);
         mLevelLengths = new LevelLengths(mLevel);
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
 
         setBaseGameValues();
+
         gameMechanics = new GameMechanics() {
             @Override
             protected void onTimerStart() {
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onTimerFinish() {
-                if (!Conditions.successCondition(number)) {
+                if (!GameControls.successCondition(number)) {
                     success();
                 } else {
                     fail();
@@ -113,16 +117,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void atActionBeginning(){
-        number = gameArray[inLevelIterator];
+        number = gameArray[scoreCount];
         textSwitcher.setText(String.valueOf(number));
         animation.start();
     }
 
     public void success(){
-        inLevelIterator++;
         scoreCount++;
         progressBarHandle.incrementProgress();
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+
         highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
         if(progressBarHandle.isNextLevel())progressBarHandle.nextLevel();
         vibe.vibrate(40);
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 super.onClick();
-                if (Conditions.successCondition(number)) {
+                if (GameControls.successCondition(number)) {
                     success();
                 } else {
                     fail();
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                if(Conditions.successCondition(number)){
+                if(GameControls.successCondition(number)){
                     fail();
                 } else {
                     success();
@@ -195,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
+        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(gameMechanics.getTime());
 
         Animation in = AnimationUtils.loadAnimation(MainActivity.this,
                 android.R.anim.slide_in_left);

@@ -5,6 +5,11 @@ import android.os.Handler;
 public abstract class GameMechanics {
     private Handler handler;
     private Runnable runnable;
+
+    public int getTime() {
+        return time;
+    }
+
     private int time = 2500;
 
 

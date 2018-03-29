@@ -25,7 +25,9 @@ import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
-import com.pnpdevelopers.patryk.threes.model.LevelData;
+import com.pnpdevelopers.patryk.threes.model.Level;
+import com.pnpdevelopers.patryk.threes.model.LevelLengths;
+import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 import com.pnpdevelopers.patryk.threes.util.Utils;
@@ -48,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private Animation in, scale;
     private Vibrator vibe;
     //regular variables
-   private LevelData levelData;
+    private Level mLevel;
+    private LevelNumbers mLevelNumbers;
+    private LevelLengths mLevelLengths;
     private int[] gameArray;
     private int[] levelLengths;
     private static int number;
@@ -79,7 +83,9 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(MainActivity.this);
         gameMusic = new GameMusic(MainActivity.this, mediaPlayer, preferenceManager);
         highScore = new HighScore(MainActivity.this,preferenceManager);
-        levelData = new LevelData();
+        mLevel = new Level();
+        mLevelNumbers = new LevelNumbers(mLevel);
+        mLevelLengths = new LevelLengths(mLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(this.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
@@ -91,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBaseGameValues() {
-        gameArray = levelData.createGameArray();
-        levelLengths = levelData.createLevelLengthsArray();
+        gameArray = mLevelNumbers.createGameArray();
+        levelLengths = mLevelLengths.getLevelLengths();
         progressScope = levelLengths[0];
         progressBar.setMax(progressScope);
     }
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         atActionBeginning();
         handler = new Handler();
         runnable = () -> {
-            if (!Conditions.succesCondition(number)) {
+            if (!Conditions.successCondition(number)) {
                 success();
             } else {
                 fail();
@@ -171,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 super.onClick();
-                if (Conditions.succesCondition(number)) {
+                if (Conditions.successCondition(number)) {
                     success();
                 } else {
                     fail();
@@ -180,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                if(Conditions.succesCondition(number)){
+                if(Conditions.successCondition(number)){
                     fail();
                 } else {
                     success();

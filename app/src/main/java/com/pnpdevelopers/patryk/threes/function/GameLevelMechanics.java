@@ -6,7 +6,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.model.LevelData;
+import com.pnpdevelopers.patryk.threes.model.Level;
+import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 
 public class GameLevelMechanics {
     private ProgressBar progressBar;
@@ -15,8 +16,8 @@ public class GameLevelMechanics {
     private int progressStatus;
     private int progressScope;
     private int[] levelLengths;
-
-    private LevelData levelData = new LevelData();
+    private Level mLevel;
+    private LevelNumbers levelNumbers = new LevelNumbers(mLevel);
 
 
     public GameLevelMechanics(Context context, ProgressBar progressBar) {

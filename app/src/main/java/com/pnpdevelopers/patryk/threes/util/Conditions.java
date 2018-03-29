@@ -10,10 +10,10 @@ public class Conditions {
         return number%3 == 0 ? true : false;
     }
 
-    public static boolean succesCondition(int number){
-        boolean containsThree = String.valueOf(number).contains("3");
-        boolean isDivisible =  number%3==0;
-        return containsThree || isDivisible;
+    public static boolean containsThree(int number){ return String.valueOf(number).contains("3");}
+
+    public static boolean successCondition(int number){
+        return isDivisibleByThree(number) || containsThree(number);
     }
 
 

@@ -27,7 +27,7 @@ public class LostMessagePrinter {
             int result = lostNumber/3;
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
             startButton.setText(context.getString(R.string.tryagain));
-        }  else if (String.valueOf(lostNumber).contains("3")){
+        }  else if (Conditions.containsThree(lostNumber)){
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ context.getString(R.string.contains));
             startButton.setText(context.getString(R.string.tryagain));
         }  else {

@@ -8,54 +8,45 @@ import java.util.List;
  * Created by pszen on 13.03.2018.
  */
 
-public class LevelData {
-    public int[] getLevelLenghtsArray() {
-        return levelLenghtsArray;
-    }
+public class LevelNumbers {
+    Level level;
 
-    public void setLevelLenghtsArray(int[] levelLenghtsArray) {
-        this.levelLenghtsArray = levelLenghtsArray;
-    }
-
-    int[] levelLenghtsArray;
-    int[] gameArray;
-    List<Level> levels;
-    List<List<Integer>> levelsNumbers;
-
-    public LevelData() {
+    public LevelNumbers(Level level) {
+        this.level = level;
     }
 
 
 
-    private List<Level> createLevels(List<Level> levels){   // levelLength must be less than numbersTo - numbersFrom
-        levels.add(new Level(3,100,13));
-        levels.add(new Level(101,200,20));
-        levels.add(new Level(201,310,30));
-        levels.add(new Level(396,720,50));
-        levels.add(new Level(721,999,60));
-        levels.add(new Level(1000,2000,70));
-        levels.add(new Level(2001,3100,70));
-        levels.add(new Level(3960,7200,70));
-        levels.add(new Level(7210,9999,70));
-        levels.add(new Level(10000,20000 ,70));
-        levels.add(new Level(20001,31000,70));
-        levels.add(new Level(39600,72000,70));
-        levels.add(new Level(72001,99999,1000));
-        return levels;
-    }
 
-    public int[] createLevelLengthsArray(){
-        List<Level> levels = createLevels(new ArrayList<>());
-        int[] levelLenghtsArray = new int[levels.size()];
+//    private List<Level> createLevels(List<Level> levels){   // levelLength must be less than numbersTo - numbersFrom
+//        levels.add(new Level(3,100,13));
+//        levels.add(new Level(101,200,20));
+//        levels.add(new Level(201,310,30));
+//        levels.add(new Level(396,720,50));
+//        levels.add(new Level(721,999,60));
+//        levels.add(new Level(1000,2000,70));
+//        levels.add(new Level(2001,3100,70));
+//        levels.add(new Level(3960,7200,70));
+//        levels.add(new Level(7210,9999,70));
+//        levels.add(new Level(10000,20000 ,70));
+//        levels.add(new Level(20001,31000,70));
+//        levels.add(new Level(39600,72000,70));
+//        levels.add(new Level(72001,99999,1000));
+//        return levels;
+//    }
+
+    private int[] createLevelLengthsArray(){
+        List<Level> levels = level.getLevels();
+        int[] levelLengthsArray = new int[levels.size()];
         for(int i = 0; i < levels.size(); i++){
-            levelLenghtsArray[i] = levels.get(i).getLevelLenght();
+            levelLengthsArray[i] = levels.get(i).getLevelLength();
         }
-        return levelLenghtsArray;
+        return levelLengthsArray;
     }
 
     public int[] createGameArray(){
         int[] levelLengthsArray = createLevelLengthsArray();
-        List<List<Integer>> levelsNumbers = createLevelsNumbers(createLevels(new ArrayList<>()));
+        List<List<Integer>> levelsNumbers = createLevelsNumbers(level.getLevels());
         int gameLength = sumIntInArray(levelLengthsArray);
         int[] gameArray = new int[gameLength];
         int level = 0;

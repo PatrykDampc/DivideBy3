@@ -1,10 +1,5 @@
 package com.pnpdevelopers.patryk.threes;
 
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.ViewAssertion;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -16,9 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
@@ -40,7 +32,7 @@ public class MainActivityTest {
     @Test
     public void clickOnConstraintLayout () throws InterruptedException {
         for(int i =0; i < 1200;i++) {
-            if(Conditions.succesCondition(MainActivity.getNumber())){
+            if(Conditions.successCondition(MainActivity.getNumber())){
                 Log.d("click", String.valueOf(MainActivity.getNumber()));
                 onView(withId(R.id.mainActivityLayoutID)).perform(click());
             }else{

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">3\'s!</string>
-    <string name="high_score">Rekord:</string>
+    <string name="high_score">"Rekord: "</string>
     <string name="score">Wynik:</string>
-    <string name="your_score">Twój wynik:</string>
+    <string name="your_score">"Twój wynik: "</string>
     <string name="your_lost">KONIEC GRY!\n</string>
     <string name="contains">ZAWIERA \"3\"!</string>
-    <string name="next_level">Następny poziom:</string>
+    <string name="next_level">"Następny poziom: "</string>
     <string name="next">Dalej</string>
     <string name="skip">Pomiń</string>
     <string name="start">Start</string>

@@ -9,12 +9,12 @@ public class PreferenceManager {
     public static final String MUSIC_KEY = "MUSIC_KEY";
     public static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";
 
-    private Context context;
+
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
     public PreferenceManager(Context context) {
-        this.context = context;
+
         prefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }

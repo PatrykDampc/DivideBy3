@@ -31,7 +31,7 @@ public class GameMusicIndicator {
         } else {
             musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
         }
-        preferenceManager.getEditor().apply();
+//        preferenceManager.getEditor().apply();
     }
 
 }

@@ -29,14 +29,14 @@ public class GameMusic {
         this.preferenceManager = preferenceManager;
     }
 
-    public void setUpMusicPlayer(int audioFileId, boolean startFromBeggining){
+    public void setUpMusic(int audioFileId, boolean startFromBeggining){
         mediaPlayer = MediaPlayer.create(context, audioFileId);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
         if(!startFromBeggining) {
-            mediaPlayer.seekTo(random.nextInt(100000));
+            startMusicFromRandom();
         }
-        setUpMusic();
+        setUpMusicMutedOrNot();
 
     }
 
@@ -47,17 +47,22 @@ public class GameMusic {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, true);
         }
         gameMusicIndicator.musicTndicatorSwitch();
-        setUpMusic();
+        setUpMusicMutedOrNot();
         preferenceManager.getEditor().apply();
 
     }
 
-    public void setUpMusic(){
+    public void setUpMusicMutedOrNot(){
         if(preferenceManager.isMusicOn()){
             mediaPlayer.setVolume(0.3f,0.3f);
         } else {
             mediaPlayer.setVolume(0,0);
         }
+    }
+
+    public void startMusicFromRandom(){
+        mediaPlayer.start();
+        mediaPlayer.seekTo(random.nextInt(100000));
     }
 
 

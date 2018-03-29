@@ -9,6 +9,14 @@ import java.util.List;
  */
 
 public class LevelData {
+    public int[] getLevelLenghtsArray() {
+        return levelLenghtsArray;
+    }
+
+    public void setLevelLenghtsArray(int[] levelLenghtsArray) {
+        this.levelLenghtsArray = levelLenghtsArray;
+    }
+
     int[] levelLenghtsArray;
     int[] gameArray;
     List<Level> levels;
@@ -36,13 +44,13 @@ public class LevelData {
         return levels;
     }
 
-    public int[] createLevelLengthsArray(){
+    public void createLevelLengthsArray(){
         List<Level> levels = createLevels(new ArrayList<>());
         int[] levelLenghtsArray = new int[levels.size()];
         for(int i = 0; i < levels.size(); i++){
             levelLenghtsArray[i] = levels.get(i).getLevelLenght();
         }
-        return levelLenghtsArray;
+         setLevelLenghtsArray(levelLenghtsArray);
     }
 
     public int[] createGameArray(){

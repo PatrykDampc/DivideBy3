@@ -19,21 +19,16 @@ import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.GameMusicIndicator;
+import com.pnpdevelopers.patryk.threes.function.HighScore;
+import com.pnpdevelopers.patryk.threes.function.LostMessagePrinter;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
-import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.Utils;
-
-import java.util.Random;
-
-import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
     private Button startButton, tutorialButton;
     private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyryghtView;
     private ImageView musicView, logoView;
     private AdView adView;
-   // private GameMusic mediaPlayer;
-    private Random random = new Random();
     private int lostNumber;
     private String score;
     private Animation stampAnimation, inFromTop, inFromBottom;
@@ -42,6 +37,8 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     PreferenceManager preferenceManager;
     GameMusic gameMusic;
     GameMusicIndicator gameMusicIndicator;
+    HighScore highScore;
+    LostMessagePrinter lostMessagePrinter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,49 +47,31 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setUpViews();
+        setUpAnimations();
+        setUpTouchListeners();
 
         preferenceManager = new PreferenceManager(StartActivity.this);
         gameMusic = new GameMusic(StartActivity.this, mediaPlayer, preferenceManager);
         gameMusicIndicator = new GameMusicIndicator(preferenceManager, musicView);
+        highScore = new HighScore(StartActivity.this,preferenceManager);
+        lostMessagePrinter = new LostMessagePrinter(StartActivity.this);
 
-
-
-        setUpAnimations();
-        setUpTouchListeners();
-        setUpAdView();
-        getAndPrintGameData();
-        printLostMessage();
-
-
-
-
-
-        gameMusic.setUpMusicPlayer(R.raw.bensound_thejazzpiano, false);
-        gameMusicIndicator.setUpMusicIndicator();
-
-    }
-
-    private void getAndPrintGameData() {
-        highScoreViewStart.setText(this.getString(R.string.high_score) + " " + String.valueOf(preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY, 0)));
-        //receiving scores from lost game session
+        highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
         Intent intent = getIntent();
         lostNumber = intent.getIntExtra("numberKey", 0);
         score = intent.getStringExtra("scoreKey");
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
-    }
 
+        gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
+        gameMusicIndicator.setUpMusicIndicator();
+        lostMessagePrinter.print(startButton,numberViewStart,scoreViewStart, score,lostNumber);
 
-    private void setUpAdView() {
-        //        adView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();   // reklamy
-//        adView.loadAd(adRequest);
     }
 
     private void setUpTouchListeners() {
         startButton.setOnClickListener(this);
         tutorialButton.setOnClickListener(this);
     }
-
 
     private void setUpAnimations() {
         stampAnimation = AnimationUtils.loadAnimation(this, R.anim.stamp);
@@ -101,16 +80,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         inFromTop.reset();
         inFromBottom = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_bottom);
         inFromBottom.reset();
-
-        //        highScoreViewStart.clearAnimation();
-//        logoView.clearAnimation();
-//        numberViewStart.clearAnimation();
-//        scoreViewStart.clearAnimation();
-//        startButton.clearAnimation();
-//        tutorialButton.clearAnimation();
-//        copyryghtView.clearAnimation();
-//        musicView.clearAnimation();
-
         scoreViewStart.startAnimation(inFromBottom);
         startButton.startAnimation(inFromBottom);
         tutorialButton.startAnimation(inFromBottom);
@@ -144,25 +113,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         gameMusic.musicMuteSwitch(gameMusicIndicator);
     }
 
-    public void printLostMessage(){
-        if(score == null){
-            scoreViewStart.setVisibility(View.GONE);
-        }
-        if( lostNumber == 0){
-            numberViewStart.setVisibility(View.GONE);
-        } else if(Conditions.isDivisibleByThree(lostNumber)){
-            int result = lostNumber/3;
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }  else if (String.valueOf(lostNumber).contains("3")){
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ StartActivity.this.getString(R.string.contains));
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }  else {
-            numberViewStart.setText(StartActivity.this.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) + "...");
-            startButton.setText(StartActivity.this.getString(R.string.tryagain));
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -172,8 +122,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        gameMusic.getMediaPlayer().start();
-        gameMusic.getMediaPlayer().seekTo(random.nextInt(100000));
+       gameMusic.startMusicFromRandom();
     }
 
     @Override

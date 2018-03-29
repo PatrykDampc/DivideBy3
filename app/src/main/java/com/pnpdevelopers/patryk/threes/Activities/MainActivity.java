@@ -21,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
+import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.model.LevelData;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
@@ -30,8 +32,6 @@ import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class MainActivity extends AppCompatActivity {
     //Views
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] gameArray;
     private int[] levelLengths;
     private static int number;
-    private int progressStatus, progressScope, level = 0, highScore, inLevelIterator = 0, scoreCount = 0, time = 2500;
+    private int progressStatus, progressScope, level = 0,  inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
     private Handler handler;
     private Runnable runnable;
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     PreferenceManager preferenceManager;
     GameMusic gameMusic;
     MediaPlayer mediaPlayer;
+    HighScore highScore;
+    GameMechanics gameMechanics;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -68,27 +70,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        gameLeft = false;
 
         setUpViews();
+        startInitialAnimations();
+        setUpTouchListeners();
 
         preferenceManager = new PreferenceManager(MainActivity.this);
         gameMusic = new GameMusic(MainActivity.this, mediaPlayer, preferenceManager);
-        gameMusic.setUpMusicPlayer(R.raw.bensound_funkysuspense, true);
+        highScore = new HighScore(MainActivity.this,preferenceManager);
+        levelData = new LevelData();
 
-        setUpTextSwitcher();
-        setUpSharedPrefsAndGameData();
-        setUpBaseValues();
-        startInitialAnimations();
-        setUpTouchListeners();
+        gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
+        highScoreView.setText(this.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
+        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
+
+        setBaseGameValues();
         startGameAction();
 
     }
 
-    public void startGameAction() {
-        number = gameArray[inLevelIterator];
-        textSwitcher.setText(String.valueOf(number));
+    private void setBaseGameValues() {
+        gameArray = levelData.createGameArray();
+        levelLengths = levelData.createLevelLengthsArray();
+        progressScope = levelLengths[0];
+        progressBar.setMax(progressScope);
+    }
 
-        animation.start();
+    public void startGameAction() {
+        atActionBeginning();
         handler = new Handler();
         runnable = () -> {
             if (!Conditions.succesCondition(number)) {
@@ -100,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(runnable,time);
     }
 
+    public void atActionBeginning(){
+        number = gameArray[inLevelIterator];
+        textSwitcher.setText(String.valueOf(number));
+        animation.start();
+    }
+
     public void success(){
         handler.removeCallbacks(runnable);
         handler = null;
@@ -107,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         scoreCount++;
         progressStatus++;
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-        checkIfHighScore();
+        highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
@@ -138,16 +154,6 @@ public class MainActivity extends AppCompatActivity {
             progressStatus = 0;
             progressScope = levelLengths[level];
             progressBar.setMax(progressScope);
-        }
-    }
-
-    private void checkIfHighScore(){
-        if (scoreCount == highScore && scoreCount != 0) {
-            Toast.makeText(MainActivity.this, MainActivity.this.getText(R.string.new_record), Toast.LENGTH_SHORT).show();
-        }
-        if (scoreCount > highScore) {
-            preferenceManager.getEditor().putInt(HIGH_SCORE_KEY, scoreCount).apply();
-            highScoreView.setText(MainActivity.this.getText(R.string.high_score) +" "+ String.valueOf(scoreCount));
         }
     }
 
@@ -184,9 +190,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setUpViews() {
+        in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
+        scale = AnimationUtils.loadAnimation(this,R.anim.scale);
+        ButterKnife.bind(this);
+        
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
 
-
-    public void setUpTextSwitcher() {
         Animation in = AnimationUtils.loadAnimation(MainActivity.this,
                 android.R.anim.slide_in_left);
         Animation out = AnimationUtils.loadAnimation(MainActivity.this,
@@ -201,33 +212,6 @@ public class MainActivity extends AppCompatActivity {
             myText.setTextColor(Color.WHITE);
             return myText;
         });
-
-    }
-
-    private void setUpViews() {
-        in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
-        scale = AnimationUtils.loadAnimation(this,R.anim.scale);
-        ButterKnife.bind(this);
-        
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(time);
-
-    }
-
-    private void setUpBaseValues() {
-        gameLeft = false;
-        highScore = preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY, 0);
-        highScoreView.setText(this.getText(R.string.high_score) + " " + String.valueOf(highScore));
-        progressScope = levelLengths[0];
-        nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
-        progressBar.setMax(progressScope);
-    }
-
-    private void setUpSharedPrefsAndGameData() {
-
-        levelData = new LevelData();
-        gameArray = levelData.createGameArray();
-        levelLengths = levelData.createLevelLengthsArray();
     }
 
     @Override

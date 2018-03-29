@@ -8,9 +8,9 @@ public class LevelLengths {
     }
 
     public int[] getLevelLengths(){
-        int[] levelLengths = new int[level.getLevels().size()];
+        int[] levelLengths = new int[Levels.getLevels().size()];
         for(int i=0;i < levelLengths.length; i++){
-            levelLengths[i] = level.getLevels().get(i).getLevelLength();
+            levelLengths[i] = Levels.getLevels().get(i).getLevelLength();
         }
         return levelLengths;
     }

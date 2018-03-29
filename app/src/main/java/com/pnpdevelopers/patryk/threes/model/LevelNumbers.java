@@ -36,7 +36,7 @@ public class LevelNumbers {
 //    }
 
     private int[] createLevelLengthsArray(){
-        List<Level> levels = level.getLevels();
+        List<Level> levels = Levels.getLevels();
         int[] levelLengthsArray = new int[levels.size()];
         for(int i = 0; i < levels.size(); i++){
             levelLengthsArray[i] = levels.get(i).getLevelLength();
@@ -46,7 +46,7 @@ public class LevelNumbers {
 
     public int[] createGameArray(){
         int[] levelLengthsArray = createLevelLengthsArray();
-        List<List<Integer>> levelsNumbers = createLevelsNumbers(level.getLevels());
+        List<List<Integer>> levelsNumbers = createLevelsNumbers(Levels.getLevels());
         int gameLength = sumIntInArray(levelLengthsArray);
         int[] gameArray = new int[gameLength];
         int level = 0;

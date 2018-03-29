@@ -23,6 +23,7 @@ import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.function.ProgressBarHandle;
 import com.pnpdevelopers.patryk.threes.model.Level;
 import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private int progressStatus, progressScope, level = 0,  inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
     private Context context = this;
+    private ProgressBarHandle progressBarHandle;
 
     PreferenceManager preferenceManager;
     GameMusic gameMusic;
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         mLevel = new Level();
         mLevelNumbers = new LevelNumbers(mLevel);
         mLevelLengths = new LevelLengths(mLevel);
+        progressBarHandle = new ProgressBarHandle(mLevelLengths.getLevelLengths(),progressBar,context,nextLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
@@ -107,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
     private void setBaseGameValues() {
         gameArray = mLevelNumbers.createGameArray();
         levelLengths = mLevelLengths.getLevelLengths();
-        progressScope = levelLengths[0];
-        progressBar.setMax(progressScope);
     }
 
     public void atActionBeginning(){
@@ -120,11 +121,10 @@ public class MainActivity extends AppCompatActivity {
     public void success(){
         inLevelIterator++;
         scoreCount++;
-        progressStatus++;
+        progressBarHandle.incrementProgress();
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
         highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
-        checkIfNextLevel();
-        progressBar.setProgress(progressStatus);
+        if(progressBarHandle.isNextLevel())progressBarHandle.nextLevel();
         vibe.vibrate(40);
         gameMechanics.skipGameAction();
     }

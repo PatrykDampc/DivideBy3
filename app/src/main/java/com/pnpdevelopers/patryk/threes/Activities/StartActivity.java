@@ -22,18 +22,15 @@ import com.pnpdevelopers.patryk.threes.function.GameMusicIndicator;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.LostMessagePrinter;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
-import com.pnpdevelopers.patryk.threes.util.Utils;
 
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
     private Button startButton, tutorialButton;
-    private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyryghtView;
+    private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyrightView;
     private ImageView musicView, logoView;
-    private AdView adView;
-    private int lostNumber;
-    private String score;
     private Animation stampAnimation, inFromTop, inFromBottom;
-    private Context context = this;
+    private AdView adView;
 
+    private Context context = this;
     private PreferenceManager preferenceManager;
     private GameMusic gameMusic;
     private GameMusicIndicator gameMusicIndicator;
@@ -45,7 +42,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
         setUpViews();
         setUpAnimations();
         setUpTouchListeners();
@@ -57,15 +53,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         lostMessagePrinter = new LostMessagePrinter(context);
 
         Intent intent = getIntent();
-        lostNumber = intent.getIntExtra("numberKey", 0);
-        score = intent.getStringExtra("scoreKey");
-
-        scoreViewStart.setText(this.getString(R.string.your_score) + " " + score);
+        scoreViewStart.setText(this.getString(R.string.your_score) + " " + intent.getStringExtra("scoreKey"));
         highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
-
         gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
         gameMusicIndicator.setUpMusicIndicator();
-        lostMessagePrinter.print(startButton,numberViewStart,scoreViewStart, score,lostNumber);
+        lostMessagePrinter.print(startButton,numberViewStart,scoreViewStart,
+                intent.getStringExtra("scoreKey"),
+                intent.getIntExtra("numberKey", 0));
 
     }
 
@@ -84,7 +78,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         scoreViewStart.startAnimation(inFromBottom);
         startButton.startAnimation(inFromBottom);
         tutorialButton.startAnimation(inFromBottom);
-        copyryghtView.startAnimation(inFromBottom);
+        copyrightView.startAnimation(inFromBottom);
         musicView.startAnimation(inFromBottom);
         highScoreViewStart.startAnimation(inFromTop);
         logoView.startAnimation(inFromTop);
@@ -93,7 +87,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     }
 
     private void setUpViews() {
-        copyryghtView = findViewById(R.id.copyrightViewID);
+        copyrightView = findViewById(R.id.copyrightViewID);
         logoView = findViewById(R.id.logoViewID);
         highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
         scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
@@ -147,8 +141,16 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        Utils.fullScreenIfHasFocus(hasFocus, this);
+            super.onWindowFocusChanged(hasFocus);
+            if (hasFocus) {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
     }
 
 }

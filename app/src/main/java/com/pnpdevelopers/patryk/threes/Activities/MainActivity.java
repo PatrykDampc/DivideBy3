@@ -28,13 +28,12 @@ import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.Conditions;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
-import com.pnpdevelopers.patryk.threes.util.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-    //Views
+
     @BindView(R.id.mainActivityLayoutID)  ConstraintLayout layout;
     @BindView(R.id.numberTextSwitcherID) TextSwitcher textSwitcher;
     @BindView(R.id.progressBarID)  ProgressBar progressBar;
@@ -43,11 +42,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.highScoreTextViewID)  TextView highScoreView;
     @BindView(R.id.nextLevelID)  TextView  nextLevel;
 
-    //Special effects
     private ObjectAnimator animation;
     private Animation in, scale;
     private Vibrator vibe;
-    //regular variables
+
     private Level mLevel;
     private LevelNumbers mLevelNumbers;
     private LevelLengths mLevelLengths;
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     GameMusic gameMusic;
     HighScore highScore;
     GameMechanics gameMechanics;
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -88,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
 
         setBaseGameValues();
-
         gameMechanics = new GameMechanics() {
             @Override
             protected void onTimerStart() {
@@ -114,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         progressScope = levelLengths[0];
         progressBar.setMax(progressScope);
     }
-
 
     public void atActionBeginning(){
         number = gameArray[inLevelIterator];
@@ -237,7 +232,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Utils.fullScreenIfHasFocus(hasFocus, this);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     @Override

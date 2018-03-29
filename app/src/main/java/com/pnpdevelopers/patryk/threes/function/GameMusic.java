@@ -7,17 +7,8 @@ import java.util.Random;
 
 import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.MUSIC_KEY;
 
-
 public class GameMusic {
     private Context context;
-
-    public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
-    public void setMediaPlayer(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-    }
-
     private MediaPlayer mediaPlayer;
     private PreferenceManager preferenceManager;
 
@@ -28,11 +19,11 @@ public class GameMusic {
         this.preferenceManager = preferenceManager;
     }
 
-    public void setUpMusic(int audioFileId, boolean startFromBeggining){
+    public void setUpMusic(int audioFileId, boolean startFromBeginning){
         mediaPlayer = MediaPlayer.create(context, audioFileId);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-        if(!startFromBeggining) {
+        if(!startFromBeginning) {
             startMusicFromRandom();
         }
         setUpMusicMutedOrNot();
@@ -46,9 +37,8 @@ public class GameMusic {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, true);
         }
         gameMusicIndicator.musicTndicatorSwitch();
-        setUpMusicMutedOrNot();
         preferenceManager.getEditor().apply();
-
+        setUpMusicMutedOrNot();
     }
 
     public void setUpMusicMutedOrNot(){
@@ -64,5 +54,7 @@ public class GameMusic {
         mediaPlayer.seekTo(random.nextInt(100000));
     }
 
-
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
 }

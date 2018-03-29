@@ -24,7 +24,6 @@ import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.function.ProgressHandler;
-import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private HighScore highScore;
     private GameMechanics gameMechanics;
     private LevelNumbers mLevelNumbers;
-    private LevelLengths mLevelLengths;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -76,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         gameMusic = new GameMusic(context, preferenceManager);
         highScore = new HighScore(context,preferenceManager);
         mLevelNumbers = new LevelNumbers();
-        mLevelLengths = new LevelLengths();
-        progressHandler = new ProgressHandler(mLevelLengths,progressBar,context,nextLevel);
+        progressHandler = new ProgressHandler(progressBar,context,nextLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
@@ -117,9 +114,11 @@ public class MainActivity extends AppCompatActivity {
     public void success(){
         scoreCount++;
         progressHandler.incrementProgress();
+        highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
+
         scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
 
-        highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
+
         if(progressHandler.isNextLevel()) progressHandler.nextLevel();
         vibe.vibrate(40);
         gameMechanics.skipGameAction();

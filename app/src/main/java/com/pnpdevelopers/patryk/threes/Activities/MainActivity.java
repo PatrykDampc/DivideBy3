@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -57,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private static int number;
     private int progressStatus, progressScope, level = 0,  inLevelIterator = 0, scoreCount = 0, time = 2500;
     private boolean gameLeft;
-    private Handler handler;
-    private Runnable runnable;
     private Context context = this;
 
     PreferenceManager preferenceManager;
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         nextLevel.setText(getString(R.string.level) + String.valueOf(level + 1) + getString(R.string.next_level_progress));
 
         setBaseGameValues();
-       // startGameAction();
 
         gameMechanics = new GameMechanics() {
             @Override
@@ -108,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        gameMechanics.startGameTimer();
 
     }
 
@@ -118,18 +115,6 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setMax(progressScope);
     }
 
-    public void startGameAction() {
-        atActionBeginning();
-        handler = new Handler();
-        runnable = () -> {
-            if (!Conditions.successCondition(number)) {
-                success();
-            } else {
-                fail();
-            }
-        };
-        handler.postDelayed(runnable,time);
-    }
 
     public void atActionBeginning(){
         number = gameArray[inLevelIterator];
@@ -139,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void success(){
         gameMechanics.skipGameAction();
-//        handler.removeCallbacks(runnable);
-//        handler = null;
         inLevelIterator++;
         scoreCount++;
         progressStatus++;
@@ -149,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         checkIfNextLevel();
         progressBar.setProgress(progressStatus);
         vibe.vibrate(40);
-       // startGameAction();
     }
 
     public void fail(){
@@ -163,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopGameActions() {
         gameMechanics.stopGameAction();
-//        handler.removeCallbacks(runnable);
-//        handler = null;
         gameMusic.getMediaPlayer().stop();
         layout.setOnTouchListener(null);
         gameLeft = true;

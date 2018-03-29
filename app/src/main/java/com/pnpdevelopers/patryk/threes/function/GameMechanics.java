@@ -5,14 +5,14 @@ import android.os.Handler;
 public abstract class GameMechanics {
     private Handler handler;
     private Runnable runnable;
-    private int time;
+    private int time = 2500;
 
 
     public GameMechanics() {
     }
 
 
-    public void startGameAction() {
+    public void startGameTimer() {
         onTimerStart();
         handler = new Handler();
         runnable = () -> {
@@ -21,23 +21,19 @@ public abstract class GameMechanics {
         handler.postDelayed(runnable,time);
     }
 
-    protected abstract void onTimerStart();
-
-    protected abstract void onTimerFinish();
-
     public void stopGameAction(){
         handler.removeCallbacks(runnable);
-        handler = null;
     }
 
     public void skipGameAction(){
         handler.removeCallbacks(runnable);
-        handler = null;
-        startGameAction();
+        startGameTimer();
     }
 
 
+    protected abstract void onTimerStart();
 
+    protected abstract void onTimerFinish();
 
 
 }

@@ -44,13 +44,13 @@ public class LevelData {
         return levels;
     }
 
-    public void createLevelLengthsArray(){
+    public int[] createLevelLengthsArray(){
         List<Level> levels = createLevels(new ArrayList<>());
         int[] levelLenghtsArray = new int[levels.size()];
         for(int i = 0; i < levels.size(); i++){
             levelLenghtsArray[i] = levels.get(i).getLevelLenght();
         }
-         setLevelLenghtsArray(levelLenghtsArray);
+        return levelLenghtsArray;
     }
 
     public int[] createGameArray(){
@@ -98,6 +98,11 @@ public class LevelData {
             sum+=i;
         }
         return sum;
+    }
+
+    public int getLevelLength(int level){
+        int[] levelLengths = createLevelLengthsArray();
+        return levelLengths[level]; 
     }
 
 

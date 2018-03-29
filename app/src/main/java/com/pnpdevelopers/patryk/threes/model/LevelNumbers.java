@@ -11,9 +11,7 @@ import java.util.List;
 public class LevelNumbers {
     Level level;
 
-    public LevelNumbers(Level level) {
-        this.level = level;
-    }
+
 
 
 

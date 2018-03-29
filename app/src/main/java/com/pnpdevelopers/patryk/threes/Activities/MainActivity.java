@@ -80,11 +80,9 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(context);
         gameMusic = new GameMusic(context, preferenceManager);
         highScore = new HighScore(context,preferenceManager);
-
-        mLevel = new Level();
-        mLevelNumbers = new LevelNumbers(mLevel);
-        mLevelLengths = new LevelLengths(mLevel);
-        progressBarHandle = new ProgressBarHandle(mLevelLengths.getLevelLengths(),progressBar,context,nextLevel);
+        mLevelNumbers = new LevelNumbers();
+        mLevelLengths = new LevelLengths();
+        progressBarHandle = new ProgressBarHandle(mLevelLengths,progressBar,context,nextLevel);
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));

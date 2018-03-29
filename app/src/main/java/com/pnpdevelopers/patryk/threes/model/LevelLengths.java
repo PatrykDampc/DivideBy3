@@ -3,9 +3,6 @@ package com.pnpdevelopers.patryk.threes.model;
 public class LevelLengths {
     Level level;
 
-    public LevelLengths(Level level) {
-        this.level = level;
-    }
 
     public int[] getLevelLengths(){
         int[] levelLengths = new int[Levels.getLevels().size()];

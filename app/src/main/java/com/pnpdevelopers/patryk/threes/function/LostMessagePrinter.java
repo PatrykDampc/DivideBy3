@@ -22,11 +22,11 @@ public class LostMessagePrinter {
         }
         if( lostNumber == 0){
             numberViewStart.setVisibility(View.GONE);
-        } else if(GameControls.isDivisibleByThree(lostNumber)){
+        } else if(GameConditions.isDivisibleByThree(lostNumber)){
             int result = lostNumber/3;
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
             startButton.setText(context.getString(R.string.tryagain));
-        }  else if (GameControls.containsThree(lostNumber)){
+        }  else if (GameConditions.containsThree(lostNumber)){
             numberViewStart.setText(context.getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ context.getString(R.string.contains));
             startButton.setText(context.getString(R.string.tryagain));
         }  else {

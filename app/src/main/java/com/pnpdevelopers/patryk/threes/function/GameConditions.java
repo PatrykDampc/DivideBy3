@@ -1,6 +1,6 @@
 package com.pnpdevelopers.patryk.threes.function;
 
-public class GameControls {
+public class GameConditions {
 
     public static boolean isDivisibleByThree(int number){
         return number%3 == 0 ? true : false;

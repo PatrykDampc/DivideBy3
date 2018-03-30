@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -18,19 +17,13 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.function.GameControls;
-import com.pnpdevelopers.patryk.threes.function.GameMechanics;
-import com.pnpdevelopers.patryk.threes.function.GameMusic;
-import com.pnpdevelopers.patryk.threes.function.HighScore;
-import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
-import com.pnpdevelopers.patryk.threes.function.ProgressHandler;
-import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
+import com.pnpdevelopers.patryk.threes.function.Game;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     @BindView(R.id.mainActivityLayoutID)  ConstraintLayout layout;
     @BindView(R.id.numberTextSwitcherID) TextSwitcher textSwitcher;
@@ -38,25 +31,14 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.regresBar)  ProgressBar regresBar;
     @BindView(R.id.scoreID)  TextView scoreView;
     @BindView(R.id.highScoreTextViewID)  TextView highScoreView;
-    @BindView(R.id.nextLevelID)  TextView  nextLevel;
+    @BindView(R.id.nextLevelID)  TextView nextLevelView;
 
-    private ObjectAnimator animation;
     private Animation in, scale;
-    private Vibrator vibe;
-
-    private int[] gameArray;
-    private static int number;
-    private int scoreCount = 0;
+    private ObjectAnimator animation;
 
     private boolean gameLeft;
     private Context context = this;
-
-    private ProgressHandler progressHandler;
-    private PreferenceManager preferenceManager;
-    private GameMusic gameMusic;
-    private HighScore highScore;
-    private GameMechanics gameMechanics;
-    private LevelNumbers mLevelNumbers;
+    private Game game;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -70,72 +52,32 @@ public class MainActivity extends AppCompatActivity {
         startInitialAnimations();
         setUpTouchListeners();
 
-        preferenceManager = new PreferenceManager(context);
-        gameMusic = new GameMusic(context, preferenceManager);
-        highScore = new HighScore(context,preferenceManager);
-        mLevelNumbers = new LevelNumbers();
-        progressHandler = new ProgressHandler(progressBar,context,nextLevel);
-
-        gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
-        highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
-        nextLevel.setText(getString(R.string.level) + String.valueOf(progressHandler.getLevel() + 1) + getString(R.string.next_level_progress));
-
-        setBaseGameValues();
-
-        gameMechanics = new GameMechanics() {
+        game = new Game(animation,progressBar,nextLevelView,scoreView,highScoreView,textSwitcher,context) {
             @Override
-            protected void onTimerStart() {
-                atActionBeginning();
-            }
-
-            @Override
-            protected void onTimerFinish() {
-                if (!GameControls.successCondition(number)) {
-                    success();
-                } else {
-                    fail();
-                }
+            public void gameStopAction() {
+                onStopGameActions();
             }
         };
-        gameMechanics.startGameTimer();
+        game.gameSetup();
+        game.start();
+
+
+
 
     }
 
-    private void setBaseGameValues() {
-        gameArray = mLevelNumbers.createGameArray();
-    }
 
-    public void atActionBeginning(){
-        number = gameArray[scoreCount];
-        textSwitcher.setText(String.valueOf(number));
-        animation.start();
-    }
-
-    public void success(){
-        scoreCount++;
-        progressHandler.incrementProgress();
-        highScore.checkIfAndPutNewHighScore(scoreCount,highScoreView);
-
-        scoreView.setText(MainActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-
-
-        if(progressHandler.isNextLevel()) progressHandler.nextLevel();
-        vibe.vibrate(40);
-        gameMechanics.skipGameAction();
-    }
 
     public void fail(){
-        stopGameActions();
-        startActivity(new Intent(MainActivity.this, StartActivity.class)
+        onStopGameActions();
+        startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(scoreCount))
-                .putExtra("numberKey", number));
+                .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount()))
+                .putExtra("numberKey", game.getNumber()));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
 
-    private void stopGameActions() {
-        gameMechanics.stopGameAction();
-        gameMusic.stop();
+    private void onStopGameActions() {
         layout.setOnTouchListener(null);
         gameLeft = true;
     }
@@ -145,29 +87,21 @@ public class MainActivity extends AppCompatActivity {
         scoreView.startAnimation(in);
         highScoreView.startAnimation(in);
         progressBar.startAnimation(in);
-        nextLevel.startAnimation(in);
+        nextLevelView.startAnimation(in);
     }
 
     private void setUpTouchListeners() {
         //noinspection AndroidLintClickableViewAccessibility
-        layout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+        layout.setOnTouchListener(new OnSwipeTouchListener(GameActivity.this) {
             @Override
             public void onClick() {
                 super.onClick();
-                if (GameControls.successCondition(number)) {
-                    success();
-                } else {
-                    fail();
-                }
+                game.onTouch();
             }
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                if(GameControls.successCondition(number)){
-                    fail();
-                } else {
-                    success();
-                }
+                game.onSwipe();
             }
         });
 
@@ -177,19 +111,18 @@ public class MainActivity extends AppCompatActivity {
         in = AnimationUtils.loadAnimation(this,R.anim.slide_in_from_top);
         scale = AnimationUtils.loadAnimation(this,R.anim.scale);
         ButterKnife.bind(this);
-        
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(2500);
 
-        Animation in = AnimationUtils.loadAnimation(MainActivity.this,
+        Animation in = AnimationUtils.loadAnimation(GameActivity.this,
                 android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(MainActivity.this,
+        Animation out = AnimationUtils.loadAnimation(GameActivity.this,
                 android.R.anim.slide_out_right);
         textSwitcher.setInAnimation(in);
         textSwitcher.setOutAnimation(out);
 
         textSwitcher.setFactory(() -> {
-            TextView myText = new TextView(MainActivity.this);
+            TextView myText = new TextView(GameActivity.this);
             myText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             myText.setTextSize(70);
             myText.setTextColor(Color.WHITE);
@@ -201,16 +134,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(gameLeft){
-            startActivity(new Intent(MainActivity.this, StartActivity.class)
+            startActivity(new Intent(GameActivity.this, StartActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra("scoreKey", String.valueOf(scoreCount)));
+                    .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount())));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopGameActions();
+        onStopGameActions();
     }
 
     @Override
@@ -229,17 +162,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        stopGameActions();
-        startActivity(new Intent(MainActivity.this, StartActivity.class)
+        onStopGameActions();
+        startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(scoreCount)));
+                .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount())));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         super.onBackPressed();
     }
 
-    public static int getNumber(){
-        return number;
-    }
+
 
 }
 

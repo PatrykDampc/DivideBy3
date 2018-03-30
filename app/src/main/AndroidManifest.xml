@@ -43,7 +43,7 @@
 
 
         <activity
-            android:name="com.pnpdevelopers.patryk.threes.Activities.MainActivity"
+            android:name="com.pnpdevelopers.patryk.threes.Activities.GameActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
 

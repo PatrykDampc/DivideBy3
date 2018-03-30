@@ -8,7 +8,7 @@
         android:layout_weight="30"
         android:background="@color/darkGrayBackground"
         android:keepScreenOn="true"
-        tools:context="com.pnpdevelopers.patryk.threes.Activities.MainActivity"
+        tools:context="com.pnpdevelopers.patryk.threes.Activities.GameActivity"
         tools:layout_editor_absoluteY="81dp">
 
 

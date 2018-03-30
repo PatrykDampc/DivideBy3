@@ -26,12 +26,13 @@ public class ProgressHandler {
         this.progressBar = progressBar;
         this.context = context;
         this.nextLevelTxt = textView;
-        progressBar.setMax(mLevelLengths[0]);
         progressIterator = 1;
         level = 0;
     }
 
-
+    public void setUpProgressBar(){
+        progressBar.setMax(mLevelLengths[0]);
+    }
 
     public void incrementProgress(){
         progressBar.setProgress(progressIterator);
@@ -54,4 +55,10 @@ public class ProgressHandler {
         progressBar.setMax(mLevelLengths[level]);
         Toast.makeText(context.getApplicationContext(), context.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
     }
+
+    public void setLevel(){
+        if(isNextLevel())
+            nextLevel();
+    }
+
 }

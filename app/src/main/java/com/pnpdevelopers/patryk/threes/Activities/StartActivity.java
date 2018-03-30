@@ -125,7 +125,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         switch (v.getId()) {
             case R.id.playButtonID:
                 onPause();
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, GameActivity.class));
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
             case R.id.tutorialButtonID:

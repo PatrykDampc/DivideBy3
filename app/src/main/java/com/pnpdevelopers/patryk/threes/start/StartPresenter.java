@@ -19,7 +19,17 @@ public class StartPresenter implements StartContract.Presenter{
     }
 
     @Override
-    public void muteButtonClick() {
-        mView.muteMusic();
+    public void musicButtonClick() {
+        mView.muteUnmuteMusic();
+    }
+
+    @Override
+    public void mute() {
+
+    }
+
+    @Override
+    public void unMute() {
+
     }
 }

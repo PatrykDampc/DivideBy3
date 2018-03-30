@@ -11,6 +11,7 @@ public interface GameContract {
     interface Presenter{
         void startGame();
         void numberClick();
+        void numberSwipe();
         void fail();
         void success();
     }

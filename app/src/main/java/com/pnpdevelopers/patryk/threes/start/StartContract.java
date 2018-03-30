@@ -5,7 +5,7 @@ public interface StartContract {
     interface View{
         void startGame();
         void showTutorial();
-        void muteMusic();
+        void muteUnmuteMusic();
         void showScore();
         void showRecord();
     }
@@ -13,6 +13,8 @@ public interface StartContract {
     interface Presenter{
         void startGameButtonClick();
         void tutorialButtonClick();
-        void muteButtonClick();
+        void musicButtonClick();
+        void mute();
+        void unMute();
     }
 }

@@ -21,6 +21,11 @@ public class GamePresenter implements GameContract.Presenter {
     }
 
     @Override
+    public void numberSwipe(){
+
+    }
+
+    @Override
     public void fail() {
         mView.backToStartActivity();
     }

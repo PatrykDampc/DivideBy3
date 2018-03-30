@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -17,7 +18,14 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
-import com.pnpdevelopers.patryk.threes.function.Game;
+import com.pnpdevelopers.patryk.threes.function.GameConditions;
+import com.pnpdevelopers.patryk.threes.function.GameMechanics;
+import com.pnpdevelopers.patryk.threes.function.GameMusic;
+import com.pnpdevelopers.patryk.threes.function.HighScore;
+import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.function.ProgressHandler;
+import com.pnpdevelopers.patryk.threes.function.Score;
+import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 
 import butterknife.BindView;
@@ -36,9 +44,21 @@ public class GameActivity extends AppCompatActivity {
     private Animation in, scale;
     private ObjectAnimator animation;
 
+    private Vibrator vibe;
+
+    private int[] gameArray;
+    private static int number;
+
     private boolean gameLeft;
     private Context context = this;
-    private Game game;
+
+    private ProgressHandler progressHandler;
+    private PreferenceManager preferenceManager;
+    private GameMusic gameMusic;
+    private HighScore highScore;
+    private GameMechanics gameMechanics;
+    private LevelNumbers mLevelNumbers;
+    private Score score;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -52,25 +72,76 @@ public class GameActivity extends AppCompatActivity {
         startInitialAnimations();
         setUpTouchListeners();
 
-        game = new Game(animation,progressBar,nextLevelView,scoreView,highScoreView,textSwitcher) {
+        preferenceManager = new PreferenceManager(context);
+        gameMusic = new GameMusic(context, preferenceManager);
+        highScore = new HighScore(context,preferenceManager);
+        mLevelNumbers = new LevelNumbers();
+        progressHandler = new ProgressHandler(progressBar,context, nextLevelView);
+        score = new Score(context);
+
+        gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
+        highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
+        nextLevelView.setText(getString(R.string.level) + String.valueOf(progressHandler.getLevel() + 1) + getString(R.string.next_level_progress));
+
+        setBaseGameValues();
+
+        gameMechanics = new GameMechanics() {
             @Override
-            public void gameStopAction() {
-                onStopGameActions();
+            protected void onTimerStart() {
+                atActionBeginning();
+            }
+
+            @Override
+            protected void onTimerFinish() {
+                if (!GameConditions.successCondition(number)) {
+                    success();
+                } else {
+                    fail();
+                }
             }
         };
-        game.gameSetup();
-        game.start();
+        gameMechanics.startGameTimer();
 
     }
 
-    private void onStopGameActions() {
-        layout.setOnTouchListener(null);
-        game.stop();
+    private void setBaseGameValues() {
+        gameArray = mLevelNumbers.createGameArray();
+    }
+
+    public void atActionBeginning(){
+        number = gameArray[score.getScoreCount()];
+        textSwitcher.setText(String.valueOf(number));
+        animation.start();
+    }
+
+    public void success(){
+        score.setAndPutScore(scoreView);
+        progressHandler.incrementProgress();
+        highScore.checkIfAndPutNewHighScore(score.getScoreCount(),highScoreView);
+
+        //scoreView.setText(GameActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
+
+
+        if(progressHandler.isNextLevel()) progressHandler.nextLevel();
+        vibe.vibrate(40);
+
+        gameMechanics.skipGameAction();
+    }
+
+    public void fail(){
+        stopGameActions();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount()))
-                .putExtra("numberKey", game.getNumber()));
+                .putExtra("scoreKey", String.valueOf(score.getScoreCount()))
+                .putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
+    }
+
+    private void stopGameActions() {
+        gameMechanics.stopGameAction();
+        gameMusic.stop();
+        layout.setOnTouchListener(null);
+        gameLeft = true;
     }
 
     private void startInitialAnimations() {
@@ -87,12 +158,20 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 super.onClick();
-                game.onTouch();
+                if (GameConditions.successCondition(number)) {
+                    success();
+                } else {
+                    fail();
+                }
             }
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                game.onSwipe();
+                if(GameConditions.successCondition(number)){
+                    fail();
+                } else {
+                    success();
+                }
             }
         });
 
@@ -103,6 +182,7 @@ public class GameActivity extends AppCompatActivity {
         scale = AnimationUtils.loadAnimation(this,R.anim.scale);
         ButterKnife.bind(this);
 
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(2500);
 
         Animation in = AnimationUtils.loadAnimation(GameActivity.this,
@@ -127,15 +207,14 @@ public class GameActivity extends AppCompatActivity {
         if(gameLeft){
             startActivity(new Intent(GameActivity.this, StartActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount())));
+                    .putExtra("scoreKey", String.valueOf(score.getScoreCount())));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        gameLeft = true;
-        game.stop();
+        stopGameActions();
     }
 
     @Override
@@ -154,13 +233,16 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        gameLeft = true;
-        game.stop();
+        stopGameActions();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount())));
+                .putExtra("scoreKey", String.valueOf(score.getScoreCount())));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         super.onBackPressed();
+    }
+
+    public static int getNumber(){
+        return number;
     }
 
 }

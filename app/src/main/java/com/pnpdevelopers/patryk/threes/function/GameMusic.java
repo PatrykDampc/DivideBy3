@@ -31,15 +31,14 @@ public class GameMusic {
 
     }
 
-    public void musicMuteSwitch(GameMusicIndicator gameMusicIndicator){
+    public void musicMuteSwitch(){
         if(preferenceManager.isMusicOn()) {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, false);
         } else {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, true);
         }
-        gameMusicIndicator.musicIndicatorSwitch();
-        preferenceManager.getEditor().apply();
         setUpMusicMutedOrNot();
+        preferenceManager.getEditor().apply();
     }
 
     public void stop(){

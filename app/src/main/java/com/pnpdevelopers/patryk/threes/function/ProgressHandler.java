@@ -13,7 +13,7 @@ public class ProgressHandler {
     private int[] mLevelLengths = levelLengths.getLevelLengths();
     private ProgressBar progressBar;
     private Context context  = MyApplication.getAppContext();
-    private int progressIterator;
+    private int progress;
     private int level;
 
     public int getLevel() {
@@ -23,19 +23,19 @@ public class ProgressHandler {
     public ProgressHandler(ProgressBar progressBar) {
         this.progressBar = progressBar;
         progressBar.setMax(mLevelLengths[0]);
-        progressIterator = 1;
+        progress = 1;
         level = 0;
     }
 
 
     public void incrementProgress(){
-        progressBar.setProgress(progressIterator);
-        progressIterator++;
+        progressBar.setProgress(progress);
+        progress++;
         setLevel();
     }
 
     public void zeroProgress(){
-        progressIterator = 1;
+        progress = 1;
         progressBar.setProgress(0);
     }
 

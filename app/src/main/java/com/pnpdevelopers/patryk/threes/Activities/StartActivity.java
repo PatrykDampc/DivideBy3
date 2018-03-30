@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
-import com.pnpdevelopers.patryk.threes.function.GameMusicIndicator;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
 import com.pnpdevelopers.patryk.threes.function.LostMessagePrinter;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
@@ -31,7 +30,6 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
 
     private PreferenceManager preferenceManager = new PreferenceManager();
     private GameMusic gameMusic = new GameMusic(preferenceManager);
-    private GameMusicIndicator gameMusicIndicator;
     private HighScore  highScore = new HighScore(preferenceManager);
     private LostMessagePrinter  lostMessagePrinter = new LostMessagePrinter();
 
@@ -44,13 +42,13 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         setUpAnimations();
         setUpTouchListeners();
 
-        gameMusicIndicator = new GameMusicIndicator(preferenceManager, musicView);
+
 
         Intent intent = getIntent();
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + intent.getStringExtra("scoreKey"));
         highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
         gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
-        gameMusicIndicator.setUpMusicIndicator();
+
         lostMessagePrinter.print(startButton,numberViewStart,scoreViewStart,
                 intent.getStringExtra("scoreKey"),
                 intent.getIntExtra("numberKey", 0));
@@ -96,10 +94,23 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
                 Shader.TileMode.REPEAT));
         Typeface type = Typeface.createFromAsset(getAssets(),"fonts/SPETETRIAL.ttf");
         numberViewStart.setTypeface(type);
+
+        if(preferenceManager.isMusicOn()){
+            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        } else {
+            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
+        }
+
     }
 
     public void onMusicViewClick(View view){
-        gameMusic.musicMuteSwitch(gameMusicIndicator);
+        gameMusic.musicMuteSwitch();
+        if(preferenceManager.isMusicOn()) {
+            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
+        } else {
+            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        }
+        preferenceManager.getEditor().apply();
     }
 
     @Override

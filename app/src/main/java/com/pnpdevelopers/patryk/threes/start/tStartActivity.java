@@ -15,7 +15,6 @@ public class tStartActivity extends AppCompatActivity implements StartContract.V
     @BindView(R.id.playButtonID) Button startButton;
     @BindView(R.id.tutorialButtonID) Button tutorialButton;
     @BindView(R.id.musicButtonID) ImageView musicView;
-    boolean isMute;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +37,16 @@ public class tStartActivity extends AppCompatActivity implements StartContract.V
 
     @Override
     public void muteMusic() {
+
+    }
+
+    @Override
+    public void showScore() {
+
+    }
+
+    @Override
+    public void showRecord() {
 
     }
 }

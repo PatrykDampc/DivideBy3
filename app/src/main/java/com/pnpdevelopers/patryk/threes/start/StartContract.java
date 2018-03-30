@@ -6,12 +6,13 @@ public interface StartContract {
         void startGame();
         void showTutorial();
         void muteMusic();
+        void showScore();
+        void showRecord();
     }
 
     interface Presenter{
         void startGameButtonClick();
         void tutorialButtonClick();
         void muteButtonClick();
-
     }
 }

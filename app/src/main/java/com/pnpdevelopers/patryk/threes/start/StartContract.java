@@ -8,13 +8,14 @@ public interface StartContract {
         void muteUnmuteMusic();
         void showScore();
         void showRecord();
+        void mute();
+        void unMute();
     }
 
     interface Presenter{
         void startGameButtonClick();
         void tutorialButtonClick();
         void musicButtonClick();
-        void mute();
-        void unMute();
+
     }
 }

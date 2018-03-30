@@ -1,10 +1,17 @@
 package com.pnpdevelopers.patryk.threes.start;
 
+import android.content.Context;
+
+import com.pnpdevelopers.patryk.threes.function.GameMusic;
+
 public class StartPresenter implements StartContract.Presenter{
     StartContract.View mView;
+    Context context;
+
 
     public StartPresenter(StartContract.View view) {
         this.mView = view;
+
     }
 
     ////        Presenter methods       ////
@@ -23,13 +30,4 @@ public class StartPresenter implements StartContract.Presenter{
         mView.muteUnmuteMusic();
     }
 
-    @Override
-    public void mute() {
-
-    }
-
-    @Override
-    public void unMute() {
-
-    }
 }

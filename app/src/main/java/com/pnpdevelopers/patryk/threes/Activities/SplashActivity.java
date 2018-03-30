@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
+import com.pnpdevelopers.patryk.threes.start.tStartActivity;
 
 /**
  * Created by patryk on 19.02.2018.

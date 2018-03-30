@@ -19,6 +19,11 @@ public class GameMusic {
         this.preferenceManager = preferenceManager;
     }
 
+    public void setUpMusic(int audioFileId){
+        mediaPlayer = MediaPlayer.create(context, audioFileId);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+    }
     public void setUpMusic(int audioFileId, boolean startFromBeginning){
         mediaPlayer = MediaPlayer.create(context, audioFileId);
         mediaPlayer.setLooping(true);
@@ -36,7 +41,7 @@ public class GameMusic {
         } else {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, true);
         }
-        gameMusicIndicator.musicTndicatorSwitch();
+        gameMusicIndicator.musicIndicatorSwitch();
         preferenceManager.getEditor().apply();
         setUpMusicMutedOrNot();
     }
@@ -58,6 +63,13 @@ public class GameMusic {
         mediaPlayer.seekTo(random.nextInt(100000));
     }
 
+    public void muteMusic(){
+        mediaPlayer.setVolume(0,0);
+    }
+
+    public void unMuteMusic(){
+        mediaPlayer.setVolume(0.3f,0.3f);
+    }
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }

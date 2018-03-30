@@ -25,7 +25,7 @@ public class GameMusicIndicator {
 
     }
 
-    public void musicTndicatorSwitch(){
+    public void musicIndicatorSwitch(){
         if(preferenceManager.isMusicOn()) {
             musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
         } else {

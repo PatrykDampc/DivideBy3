@@ -9,12 +9,10 @@ public class PreferenceManager {
     public static final String MUSIC_KEY = "MUSIC_KEY";
     public static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH_KEY";
 
-
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
     public PreferenceManager(Context context) {
-
         prefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }
@@ -31,10 +29,6 @@ public class PreferenceManager {
     public boolean isFirstTimeLaunch() {
         return prefs.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
-
-
-
-
 
     public SharedPreferences getPrefs() {
         return prefs;

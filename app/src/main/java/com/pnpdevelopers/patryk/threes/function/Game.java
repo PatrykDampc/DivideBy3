@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
 
 public abstract class Game {
     private ObjectAnimator animation;
@@ -21,10 +22,10 @@ public abstract class Game {
 
     private int[] gameArray;
     private int number;
-    private Context context;
+    private Context context = MyApplication.getAppContext();
 
-    private Vibrator  vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    private ProgressHandler  progressHandler = new ProgressHandler(progressBar,context,nextLevelView);
+    private Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    private ProgressHandler progressHandler = new ProgressHandler(progressBar,context,nextLevelView);
     private PreferenceManager preferenceManager = new PreferenceManager(context);
     private GameMusic gameMusic = new GameMusic(context, preferenceManager);
     private HighScore highScore = new HighScore(context,preferenceManager);
@@ -35,26 +36,24 @@ public abstract class Game {
     public Score getScore() {
         return score;
     }
-
     public void setScore(Score score) {
         this.score = score;
     }
     public int getNumber() {
         return number;
     }
-
     public void setNumber(int number) {
         this.number = number;
     }
 
-    public Game(ObjectAnimator animation, ProgressBar progressBar, TextView nextLevelView, TextView scoreView, TextView highScoreView, TextSwitcher textSwitcher, Context context) {
+    public Game(ObjectAnimator animation, ProgressBar progressBar, TextView nextLevelView, TextView scoreView, TextView highScoreView, TextSwitcher textSwitcher) {
         this.animation = animation;
         this.progressBar = progressBar;
         this.nextLevelView = nextLevelView;
         this.scoreView = scoreView;
         this.highScoreView = highScoreView;
         this.textSwitcher = textSwitcher;
-        this.context = context.getApplicationContext();
+
     }
 
     public void gameSetup(){
@@ -89,7 +88,6 @@ public abstract class Game {
         animation.start();
     }
 
-
     public void success(){
         score.setAndPutScore(scoreView);
         progressHandler.incrementProgress();
@@ -98,7 +96,6 @@ public abstract class Game {
         vibe.vibrate(40);
         gameMechanics.skipGameAction();
     }
-
 
     public void stop(){
         gameMechanics.stopGameAction();
@@ -123,6 +120,4 @@ public abstract class Game {
             success();
         }
     }
-
-
 }

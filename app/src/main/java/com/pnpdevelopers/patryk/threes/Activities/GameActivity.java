@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity {
         startInitialAnimations();
         setUpTouchListeners();
 
-        game = new Game(animation,progressBar,nextLevelView,scoreView,highScoreView,textSwitcher,context) {
+        game = new Game(animation,progressBar,nextLevelView,scoreView,highScoreView,textSwitcher) {
             @Override
             public void gameStopAction() {
                 onStopGameActions();

@@ -9,23 +9,21 @@ import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.model.LevelLengths;
 
 public class ProgressHandler {
-    LevelLengths levelLengths = new LevelLengths();
-    int[] mLevelLengths = levelLengths.getLevelLengths();
-    ProgressBar progressBar;
-    Context context;
-    TextView nextLevelTxt;
-    int progressIterator;
+    private LevelLengths levelLengths = new LevelLengths();
+    private int[] mLevelLengths = levelLengths.getLevelLengths();
+    private ProgressBar progressBar;
+    private Context context;
+    private int progressIterator;
+    private int level;
 
     public int getLevel() {
         return level;
     }
 
-    int level;
-
     public ProgressHandler(ProgressBar progressBar, Context context, TextView textView) {
         this.progressBar = progressBar;
         this.context = context;
-        this.nextLevelTxt = textView;
+        TextView nextLevelTxt = textView;
         progressIterator = 1;
         level = 0;
     }
@@ -43,7 +41,6 @@ public class ProgressHandler {
         progressIterator = 1;
         progressBar.setProgress(0);
     }
-
 
     public boolean isNextLevel(){
         return progressBar.getProgress() == progressBar.getMax();

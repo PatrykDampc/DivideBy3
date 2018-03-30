@@ -3,27 +3,23 @@ package com.pnpdevelopers.patryk.threes.function;
 import android.content.Context;
 import android.media.MediaPlayer;
 
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
+
 import java.util.Random;
 
 import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.MUSIC_KEY;
 
 public class GameMusic {
-    private Context context;
+    private Context context = MyApplication.getAppContext();
     private MediaPlayer mediaPlayer;
     private PreferenceManager preferenceManager;
 
     private Random random = new Random();
 
-    public GameMusic(Context context, PreferenceManager preferenceManager) {
-        this.context = context;
+    public GameMusic(PreferenceManager preferenceManager) {
         this.preferenceManager = preferenceManager;
     }
 
-    public void setUpMusic(int audioFileId){
-        mediaPlayer = MediaPlayer.create(context, audioFileId);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-    }
     public void setUpMusic(int audioFileId, boolean startFromBeginning){
         mediaPlayer = MediaPlayer.create(context, audioFileId);
         mediaPlayer.setLooping(true);

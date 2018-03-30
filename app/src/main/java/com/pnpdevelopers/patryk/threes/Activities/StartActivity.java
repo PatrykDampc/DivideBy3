@@ -1,6 +1,5 @@
 package com.pnpdevelopers.patryk.threes.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -30,12 +29,11 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     private Animation stampAnimation, inFromTop, inFromBottom;
     private AdView adView;
 
-    private Context context = this;
-    private PreferenceManager preferenceManager;
-    private GameMusic gameMusic;
+    private PreferenceManager preferenceManager = new PreferenceManager();
+    private GameMusic gameMusic = new GameMusic(preferenceManager);
     private GameMusicIndicator gameMusicIndicator;
-    private HighScore highScore;
-    private LostMessagePrinter lostMessagePrinter;
+    private HighScore  highScore = new HighScore(preferenceManager);
+    private LostMessagePrinter  lostMessagePrinter = new LostMessagePrinter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +44,7 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
         setUpAnimations();
         setUpTouchListeners();
 
-        preferenceManager = new PreferenceManager(context);
-        gameMusic = new GameMusic(context, preferenceManager);
         gameMusicIndicator = new GameMusicIndicator(preferenceManager, musicView);
-        highScore = new HighScore(context,preferenceManager);
-        lostMessagePrinter = new LostMessagePrinter(context);
 
         Intent intent = getIntent();
         scoreViewStart.setText(this.getString(R.string.your_score) + " " + intent.getStringExtra("scoreKey"));

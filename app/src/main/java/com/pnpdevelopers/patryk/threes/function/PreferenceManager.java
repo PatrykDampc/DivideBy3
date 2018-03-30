@@ -3,6 +3,8 @@ package com.pnpdevelopers.patryk.threes.function;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
+
 public class PreferenceManager {
     public static final String PREFERENCES_KEY = "Prefs";
     public static final String HIGH_SCORE_KEY = "HIGH_SCORE_KEY_BALANCED";
@@ -11,8 +13,9 @@ public class PreferenceManager {
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+    private Context context = MyApplication.getAppContext();
 
-    public PreferenceManager(Context context) {
+    public PreferenceManager() {
         prefs = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }

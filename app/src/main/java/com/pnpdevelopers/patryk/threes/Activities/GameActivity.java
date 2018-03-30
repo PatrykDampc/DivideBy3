@@ -53,12 +53,12 @@ public class GameActivity extends AppCompatActivity {
     private Context context = this;
 
     private ProgressHandler progressHandler;
-    private PreferenceManager preferenceManager;
-    private GameMusic gameMusic;
-    private HighScore highScore;
+    private PreferenceManager  preferenceManager = new PreferenceManager();
+    private GameMusic  gameMusic = new GameMusic(preferenceManager);
+    private HighScore  highScore = new HighScore(preferenceManager);
     private GameMechanics gameMechanics;
-    private LevelNumbers mLevelNumbers;
-    private Score score;
+    private LevelNumbers  mLevelNumbers = new LevelNumbers();
+    private Score score = new Score();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -72,12 +72,9 @@ public class GameActivity extends AppCompatActivity {
         startInitialAnimations();
         setUpTouchListeners();
 
-        preferenceManager = new PreferenceManager(context);
-        gameMusic = new GameMusic(context, preferenceManager);
-        highScore = new HighScore(context,preferenceManager);
-        mLevelNumbers = new LevelNumbers();
-        progressHandler = new ProgressHandler(progressBar,context, nextLevelView);
-        score = new Score(context);
+
+        progressHandler = new ProgressHandler(progressBar);
+
 
         gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
@@ -118,13 +115,7 @@ public class GameActivity extends AppCompatActivity {
         score.setAndPutScore(scoreView);
         progressHandler.incrementProgress();
         highScore.checkIfAndPutNewHighScore(score.getScoreCount(),highScoreView);
-
-        //scoreView.setText(GameActivity.this.getText(R.string.score) +" "+ String.valueOf(scoreCount));
-
-
-        if(progressHandler.isNextLevel()) progressHandler.nextLevel();
         vibe.vibrate(40);
-
         gameMechanics.skipGameAction();
     }
 

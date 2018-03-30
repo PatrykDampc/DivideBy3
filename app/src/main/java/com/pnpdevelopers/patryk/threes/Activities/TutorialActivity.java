@@ -37,7 +37,7 @@ public class TutorialActivity extends AppCompatActivity {
 
 
         // Checking for first time launch - before calling setContentView()
-        prefManager = new PreferenceManager(this);
+        prefManager = new PreferenceManager();
 //        if (!prefManager.isFirstTimeLaunch()) {
 //            launchHomeScreen();
 //            finish();

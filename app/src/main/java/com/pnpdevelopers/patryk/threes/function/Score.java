@@ -4,14 +4,14 @@ import android.content.Context;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
 
 public class Score {
 
     private int scoreCount = 0;
-    private Context context;
+    private Context context  = MyApplication.getAppContext();
 
-    public Score(Context context) {
-        this.context = context;
+    public Score() {
     }
 
     public void setAndPutScore(TextView scoreView){

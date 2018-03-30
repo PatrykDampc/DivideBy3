@@ -6,13 +6,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
 
 public class LostMessagePrinter {
-    private Context context;
+    private Context context = MyApplication.getAppContext();
 
 
-    public LostMessagePrinter(Context context) {
-        this.context = context;
+    public LostMessagePrinter(){
     }
 
 

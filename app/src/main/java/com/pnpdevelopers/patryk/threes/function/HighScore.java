@@ -5,17 +5,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.util.MyApplication;
 
 import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class HighScore {
     private PreferenceManager preferenceManager;
-    private Context context;
+    private Context context = MyApplication.getAppContext();
     private int highScore;
 
-    public HighScore(Context context, PreferenceManager preferenceManager) {
+    public HighScore(PreferenceManager preferenceManager) {
         this.preferenceManager = preferenceManager;
-        this.context = context;
         highScore = preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY,0);
     }
 

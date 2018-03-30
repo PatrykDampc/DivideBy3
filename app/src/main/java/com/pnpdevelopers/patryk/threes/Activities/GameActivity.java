@@ -61,25 +61,16 @@ public class GameActivity extends AppCompatActivity {
         game.gameSetup();
         game.start();
 
-
-
-
     }
 
-
-
-    public void fail(){
-        onStopGameActions();
+    private void onStopGameActions() {
+        layout.setOnTouchListener(null);
+        game.stop();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount()))
                 .putExtra("numberKey", game.getNumber()));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
-    }
-
-    private void onStopGameActions() {
-        layout.setOnTouchListener(null);
-        gameLeft = true;
     }
 
     private void startInitialAnimations() {
@@ -143,7 +134,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        onStopGameActions();
+        gameLeft = true;
+        game.stop();
     }
 
     @Override
@@ -162,15 +154,14 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        onStopGameActions();
+        gameLeft = true;
+        game.stop();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .putExtra("scoreKey", String.valueOf(game.getScore().getScoreCount())));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         super.onBackPressed();
     }
-
-
 
 }
 

@@ -54,7 +54,7 @@ public abstract class Game {
         this.scoreView = scoreView;
         this.highScoreView = highScoreView;
         this.textSwitcher = textSwitcher;
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
     public void gameSetup(){
@@ -73,7 +73,7 @@ public abstract class Game {
                 if (!GameConditions.successCondition(number)) {
                     success();
                 } else {
-                    gameStop();
+                    stop();
                 }
             }
         };
@@ -100,7 +100,7 @@ public abstract class Game {
     }
 
 
-    public void gameStop(){
+    public void stop(){
         gameMechanics.stopGameAction();
         gameMusic.stop();
         gameStopAction();
@@ -112,13 +112,13 @@ public abstract class Game {
         if (GameConditions.successCondition(number)) {
             success();
         } else {
-            gameStop();
+            stop();
         }
     }
 
     public void onSwipe(){
         if(GameConditions.successCondition(number)) {
-            gameStop();
+            stop();
         } else {
             success();
         }

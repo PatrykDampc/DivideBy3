@@ -22,9 +22,8 @@ import com.pnpdevelopers.patryk.threes.function.GameConditions;
 import com.pnpdevelopers.patryk.threes.function.GameMechanics;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
-import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 import com.pnpdevelopers.patryk.threes.function.ProgressHandler;
-import com.pnpdevelopers.patryk.threes.function.Score;
+import com.pnpdevelopers.patryk.threes.function.ScoreCounter;
 import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 import com.pnpdevelopers.patryk.threes.util.OnSwipeTouchListener;
 
@@ -32,7 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class GameActivity extends AppCompatActivity {
-
     @BindView(R.id.mainActivityLayoutID)  ConstraintLayout layout;
     @BindView(R.id.numberTextSwitcherID) TextSwitcher textSwitcher;
     @BindView(R.id.progressBarID)  ProgressBar progressBar;
@@ -41,24 +39,21 @@ public class GameActivity extends AppCompatActivity {
     @BindView(R.id.highScoreTextViewID)  TextView highScoreView;
     @BindView(R.id.nextLevelID)  TextView nextLevelView;
 
-    private Animation in, scale;
+    private Animation switcherIn, switcherOut, switcherScaleOut, in, scale;
     private ObjectAnimator animation;
-
     private Vibrator vibe;
 
     private int[] gameArray;
     private static int number;
-
     private boolean gameLeft;
     private Context context = this;
 
-    private ProgressHandler progressHandler;
-    private PreferenceManager  preferenceManager = new PreferenceManager();
-    private GameMusic  gameMusic = new GameMusic(preferenceManager);
-    private HighScore  highScore = new HighScore(preferenceManager);
+    private ProgressHandler progressHandler = new ProgressHandler();
+    private GameMusic  gameMusic = new GameMusic();
+    private HighScore  highScore = new HighScore();
     private GameMechanics gameMechanics;
     private LevelNumbers  mLevelNumbers = new LevelNumbers();
-    private Score score = new Score();
+    private ScoreCounter scoreCounter = new ScoreCounter();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -68,18 +63,10 @@ public class GameActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         gameLeft = false;
 
+        gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
         setUpViews();
         startInitialAnimations();
         setUpTouchListeners();
-
-
-        progressHandler = new ProgressHandler(progressBar);
-
-
-        gameMusic.setUpMusic(R.raw.bensound_funkysuspense, true);
-        highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
-        nextLevelView.setText(getString(R.string.level) + String.valueOf(progressHandler.getLevel() + 1) + getString(R.string.next_level_progress));
-
         setBaseGameValues();
 
         gameMechanics = new GameMechanics() {
@@ -103,18 +90,19 @@ public class GameActivity extends AppCompatActivity {
 
     private void setBaseGameValues() {
         gameArray = mLevelNumbers.createGameArray();
+        progressHandler.setBaseProgress(progressBar);
     }
 
     public void atActionBeginning(){
-        number = gameArray[score.getScoreCount()];
+        number = gameArray[scoreCounter.getScoreCount()];
         textSwitcher.setText(String.valueOf(number));
         animation.start();
     }
 
     public void success(){
-        score.setAndPutScore(scoreView);
-        progressHandler.incrementProgress();
-        highScore.checkIfAndPutNewHighScore(score.getScoreCount(),highScoreView);
+        scoreCounter.setAndPutScore(scoreView);
+        progressHandler.incrementProgress(progressBar);
+        highScore.checkIfAndPutNewHighScore(scoreCounter.getScoreCount(),highScoreView);
         vibe.vibrate(40);
         gameMechanics.skipGameAction();
     }
@@ -123,7 +111,7 @@ public class GameActivity extends AppCompatActivity {
         stopGameActions();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(score.getScoreCount()))
+                .putExtra("scoreKey", String.valueOf(scoreCounter.getScoreCount()))
                 .putExtra("numberKey", number));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
     }
@@ -149,11 +137,13 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 super.onClick();
+                textSwitcher.setOutAnimation(switcherScaleOut);
                 if (GameConditions.successCondition(number)) {
                     success();
                 } else {
                     fail();
                 }
+                textSwitcher.setOutAnimation(switcherOut);
             }
             @Override
             public void onSwipeRight() {
@@ -165,7 +155,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void setUpViews() {
@@ -175,13 +164,12 @@ public class GameActivity extends AppCompatActivity {
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         animation = ObjectAnimator.ofInt(regresBar, "progress", 500, 0).setDuration(2500);
+        switcherIn = AnimationUtils.loadAnimation(GameActivity.this, android.R.anim.slide_in_left);
+        switcherOut = AnimationUtils.loadAnimation(GameActivity.this, android.R.anim.slide_out_right);
+        switcherScaleOut = AnimationUtils.loadAnimation(GameActivity.this,R.anim.scale_out);
 
-        Animation in = AnimationUtils.loadAnimation(GameActivity.this,
-                android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(GameActivity.this,
-                android.R.anim.slide_out_right);
-        textSwitcher.setInAnimation(in);
-        textSwitcher.setOutAnimation(out);
+        textSwitcher.setInAnimation(switcherIn);
+        textSwitcher.setOutAnimation(switcherOut);
 
         textSwitcher.setFactory(() -> {
             TextView myText = new TextView(GameActivity.this);
@@ -190,6 +178,8 @@ public class GameActivity extends AppCompatActivity {
             myText.setTextColor(Color.WHITE);
             return myText;
         });
+        highScoreView.setText(context.getText(R.string.high_score) + String.valueOf(highScore.getHighScore()));
+        nextLevelView.setText(getString(R.string.level) + String.valueOf(progressHandler.getLevel() + 1) + getString(R.string.next_level_progress));
     }
 
     @Override
@@ -198,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
         if(gameLeft){
             startActivity(new Intent(GameActivity.this, StartActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .putExtra("scoreKey", String.valueOf(score.getScoreCount())));
+                    .putExtra("scoreKey", String.valueOf(scoreCounter.getScoreCount())));
         }
     }
 
@@ -227,7 +217,7 @@ public class GameActivity extends AppCompatActivity {
         stopGameActions();
         startActivity(new Intent(GameActivity.this, StartActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                .putExtra("scoreKey", String.valueOf(score.getScoreCount())));
+                .putExtra("scoreKey", String.valueOf(scoreCounter.getScoreCount())));
         overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right);
         super.onBackPressed();
     }

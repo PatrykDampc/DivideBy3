@@ -10,14 +10,9 @@ import com.pnpdevelopers.patryk.threes.util.MyApplication;
 import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.HIGH_SCORE_KEY;
 
 public class HighScore {
-    private PreferenceManager preferenceManager;
+    private PreferenceManager preferenceManager = new PreferenceManager();
     private Context context = MyApplication.getAppContext();
-    private int highScore;
-
-    public HighScore(PreferenceManager preferenceManager) {
-        this.preferenceManager = preferenceManager;
-        highScore = preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY,0);
-    }
+    private int highScore = preferenceManager.getPrefs().getInt(HIGH_SCORE_KEY,0);
 
     public int getHighScore(){
        return highScore;

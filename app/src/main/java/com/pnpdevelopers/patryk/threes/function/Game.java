@@ -30,13 +30,13 @@
 //    private GameMusic gameMusic = new GameMusic(context, preferenceManager);
 //    private HighScore highScore = new HighScore(context,preferenceManager);
 //    private LevelNumbers  mLevelNumbers = new LevelNumbers();
-//    private Score score = new Score(context);
+//    private ScoreCounter score = new ScoreCounter(context);
 //    private GameMechanics gameMechanics;
 //
-//    public Score getScore() {
+//    public ScoreCounter getScore() {
 //        return score;
 //    }
-//    public void setScore(Score score) {
+//    public void setScore(ScoreCounter score) {
 //        this.score = score;
 //    }
 //    public int getNumber() {

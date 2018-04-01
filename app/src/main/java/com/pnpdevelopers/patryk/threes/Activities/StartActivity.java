@@ -1,8 +1,6 @@
 package com.pnpdevelopers.patryk.threes.Activities;
 
 import android.content.Intent;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,43 +14,43 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
 import com.pnpdevelopers.patryk.threes.R;
+import com.pnpdevelopers.patryk.threes.function.GameConditions;
 import com.pnpdevelopers.patryk.threes.function.GameMusic;
 import com.pnpdevelopers.patryk.threes.function.HighScore;
-import com.pnpdevelopers.patryk.threes.function.LostMessagePrinter;
 import com.pnpdevelopers.patryk.threes.function.PreferenceManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class StartActivity extends AppCompatActivity  implements View.OnClickListener {
-    private Button startButton, tutorialButton;
-    private TextView highScoreViewStart, scoreViewStart, numberViewStart, copyrightView;
-    private ImageView musicView, logoView;
+    @BindView(R.id.playButtonID) Button startButton;
+    @BindView(R.id.tutorialButtonID) Button tutorialButton;
+    @BindView(R.id.copyrightViewID) TextView copyrightView;
+    @BindView(R.id.logoViewID) ImageView logoView;
+    @BindView(R.id.musicButtonID) ImageView musicView;
+    @BindView(R.id.highScoreTextViewStartActivityID) TextView highScoreViewStart;
+    @BindView(R.id.startAcvityScoreViewID) TextView scoreViewStart;
+    @BindView(R.id.startActivityNumberViewID) TextView numberViewStart;
+
     private Animation stampAnimation, inFromTop, inFromBottom;
     private AdView adView;
 
     private PreferenceManager preferenceManager = new PreferenceManager();
-    private GameMusic gameMusic = new GameMusic(preferenceManager);
-    private HighScore  highScore = new HighScore(preferenceManager);
-    private LostMessagePrinter  lostMessagePrinter = new LostMessagePrinter();
+    private GameMusic gameMusic = new GameMusic();
+    private HighScore  highScore = new HighScore();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
         setUpViews();
         setUpAnimations();
         setUpTouchListeners();
-
-
-
         Intent intent = getIntent();
-        scoreViewStart.setText(this.getString(R.string.your_score) + " " + intent.getStringExtra("scoreKey"));
-        highScoreViewStart.setText(this.getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
-        gameMusic.setUpMusic(R.raw.bensound_thejazzpiano, false);
-
-        lostMessagePrinter.print(startButton,numberViewStart,scoreViewStart,
-                intent.getStringExtra("scoreKey"),
-                intent.getIntExtra("numberKey", 0));
-
+        printInfo(intent);
     }
 
     private void setUpTouchListeners() {
@@ -79,38 +77,45 @@ public class StartActivity extends AppCompatActivity  implements View.OnClickLis
     }
 
     private void setUpViews() {
-        copyrightView = findViewById(R.id.copyrightViewID);
-        logoView = findViewById(R.id.logoViewID);
-        highScoreViewStart = findViewById(R.id.highScoreTextViewStartActivityID);
-        scoreViewStart = findViewById(R.id.startAcvityScoreViewID);
-        numberViewStart = findViewById(R.id.startActivityNumberViewID);
-        musicView = findViewById(R.id.musicButtonID);
-        startButton = findViewById(R.id.playButtonID);
-        tutorialButton = findViewById(R.id.tutorialButtonID);
+        ButterKnife.bind(this);
+        numberViewStart.setTypeface(Typeface.createFromAsset(getAssets(),"Depressionist_3_Revisited_2010.ttf"));
+        setUpMusicIndicator();
+    }
 
-        numberViewStart.getPaint().setShader(new LinearGradient(10,0,0,numberViewStart.getLineHeight(),
-                getResources().getColor(R.color.colorAccentLostMessageGradient),
-                getResources().getColor(R.color.colorAccent),
-                Shader.TileMode.REPEAT));
-        Typeface type = Typeface.createFromAsset(getAssets(),"fonts/SPETETRIAL.ttf");
-        numberViewStart.setTypeface(type);
-
-        if(preferenceManager.isMusicOn()){
+    private void setUpMusicIndicator() {
+        if(gameMusic.isMusicOn()){
             musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
         } else {
             musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
         }
-
     }
 
     public void onMusicViewClick(View view){
         gameMusic.musicMuteSwitch();
-        if(preferenceManager.isMusicOn()) {
-            musicView.setImageResource(R.drawable.ic_music_note_off_white_36dp);
-        } else {
-            musicView.setImageResource(R.drawable.ic_music_note_white_36dp);
+        setUpMusicIndicator();
+    }
+
+    private void printInfo(Intent intent){
+        String score = intent.getStringExtra("scoreKey");
+        int lostNumber = intent.getIntExtra("numberKey",0);
+        scoreViewStart.setText(getString(R.string.your_score) + " " + score);
+        highScoreViewStart.setText(getString(R.string.high_score) +  String.valueOf(highScore.getHighScore()));
+        if(score == null){
+            scoreViewStart.setVisibility(View.GONE);
         }
-        preferenceManager.getEditor().apply();
+        if( lostNumber == 0){
+            numberViewStart.setVisibility(View.GONE);
+        } else if(GameConditions.isDivisibleByThree(lostNumber)){
+            int result = lostNumber/3;
+            numberViewStart.setText(getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" ÷ 3 = "+ result);
+            startButton.setText(getString(R.string.tryagain));
+        }  else if (GameConditions.containsThree(lostNumber)){
+            numberViewStart.setText(getString(R.string.your_lost) +" "+ String.valueOf(lostNumber) +" "+ getString(R.string.contains));
+            startButton.setText(getString(R.string.tryagain));
+        }  else {
+            numberViewStart.setText(getString(R.string.your_lost) + " " + String.valueOf(lostNumber) + "...");
+            startButton.setText(getString(R.string.tryagain));
+        }
     }
 
     @Override

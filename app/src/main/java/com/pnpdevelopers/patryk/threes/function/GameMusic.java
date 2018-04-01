@@ -12,13 +12,8 @@ import static com.pnpdevelopers.patryk.threes.function.PreferenceManager.MUSIC_K
 public class GameMusic {
     private Context context = MyApplication.getAppContext();
     private MediaPlayer mediaPlayer;
-    private PreferenceManager preferenceManager;
-
+    private PreferenceManager preferenceManager = new PreferenceManager();
     private Random random = new Random();
-
-    public GameMusic(PreferenceManager preferenceManager) {
-        this.preferenceManager = preferenceManager;
-    }
 
     public void setUpMusic(int audioFileId, boolean startFromBeginning){
         mediaPlayer = MediaPlayer.create(context, audioFileId);
@@ -28,7 +23,6 @@ public class GameMusic {
             startMusicFromRandom();
         }
         setUpMusicMutedOrNot();
-
     }
 
     public void musicMuteSwitch(){
@@ -37,8 +31,8 @@ public class GameMusic {
         } else {
             preferenceManager.getEditor().putBoolean(MUSIC_KEY, true);
         }
-        setUpMusicMutedOrNot();
         preferenceManager.getEditor().apply();
+        setUpMusicMutedOrNot();
     }
 
     public void stop(){
@@ -47,10 +41,14 @@ public class GameMusic {
 
     public void setUpMusicMutedOrNot(){
         if(preferenceManager.isMusicOn()){
-            mediaPlayer.setVolume(0.3f,0.3f);
+            unMuteMusic();
         } else {
-            mediaPlayer.setVolume(0,0);
+            muteMusic();
         }
+    }
+
+    public boolean isMusicOn(){
+        return preferenceManager.isMusicOn();
     }
 
     public void startMusicFromRandom(){
@@ -65,6 +63,7 @@ public class GameMusic {
     public void unMuteMusic(){
         mediaPlayer.setVolume(0.3f,0.3f);
     }
+
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }

@@ -6,12 +6,12 @@ import android.widget.TextView;
 import com.pnpdevelopers.patryk.threes.R;
 import com.pnpdevelopers.patryk.threes.util.MyApplication;
 
-public class Score {
+public class ScoreCounter {
 
     private int scoreCount = 0;
     private Context context  = MyApplication.getAppContext();
 
-    public Score() {
+    public ScoreCounter() {
     }
 
     public void setAndPutScore(TextView scoreView){

@@ -11,7 +11,6 @@ import com.pnpdevelopers.patryk.threes.util.MyApplication;
 public class ProgressHandler {
     private LevelLengths levelLengths = new LevelLengths();
     private int[] mLevelLengths = levelLengths.getLevelLengths();
-    private ProgressBar progressBar;
     private Context context  = MyApplication.getAppContext();
     private int progress;
     private int level;
@@ -20,39 +19,41 @@ public class ProgressHandler {
         return level;
     }
 
-    public ProgressHandler(ProgressBar progressBar) {
-        this.progressBar = progressBar;
-        progressBar.setMax(mLevelLengths[0]);
+    public ProgressHandler() {
         progress = 1;
         level = 0;
     }
 
-
-    public void incrementProgress(){
-        progressBar.setProgress(progress);
-        progress++;
-        setLevel();
+    public void setBaseProgress(ProgressBar progressBar){
+        progressBar.setMax(mLevelLengths[0]);
     }
 
-    public void zeroProgress(){
+
+    public void incrementProgress(ProgressBar progressBar){
+        progressBar.setProgress(progress);
+        progress++;
+        setLevel(progressBar);
+    }
+
+    public void zeroProgress(ProgressBar progressBar){
         progress = 1;
         progressBar.setProgress(0);
     }
 
-    public boolean isNextLevel(){
+    public boolean isNextLevel(ProgressBar progressBar){
         return progressBar.getProgress() == progressBar.getMax();
     }
 
-    public void nextLevel(){
+    public void nextLevel(ProgressBar progressBar){
         level++;
-        zeroProgress();
+        zeroProgress(progressBar);
         progressBar.setMax(mLevelLengths[level]);
         Toast.makeText(context.getApplicationContext(), context.getText(R.string.level_up), Toast.LENGTH_SHORT).show();
     }
 
-    public void setLevel(){
-        if(isNextLevel())
-            nextLevel();
+    public void setLevel(ProgressBar progressBar){
+        if(isNextLevel(progressBar))
+            nextLevel(progressBar);
     }
 
 }

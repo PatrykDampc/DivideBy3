@@ -10,13 +10,12 @@ import java.util.List;
 
 public class LevelNumbers {
     Level level;
+    private int[] gameArray;
 
-
-
-
-
-
-//    private List<Level> createLevels(List<Level> levels){   // levelLength must be less than numbersTo - numbersFrom
+    public int[] getGameArray() {
+        return createGameArray();
+    }
+    //    private List<Level> createLevels(List<Level> levels){   // levelLength must be less than numbersTo - numbersFrom
 //        levels.add(new Level(3,100,13));
 //        levels.add(new Level(101,200,20));
 //        levels.add(new Level(201,310,30));
@@ -42,7 +41,7 @@ public class LevelNumbers {
         return levelLengthsArray;
     }
 
-    public int[] createGameArray(){
+    private int[] createGameArray(){
         int[] levelLengthsArray = createLevelLengthsArray();
         List<List<Integer>> levelsNumbers = createLevelsNumbers(Levels.getLevels());
         int gameLength = sumIntInArray(levelLengthsArray);

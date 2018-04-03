@@ -51,15 +51,15 @@ public class GameActivity extends AppCompatActivity {
     private ProgressHandler progressHandler = new ProgressHandler();
     private GameMusic  gameMusic = new GameMusic();
     private HighScore  highScore = new HighScore();
-    private GameMechanics gameMechanics;
-    private LevelNumbers  mLevelNumbers = new LevelNumbers();
+    private LevelNumbers levelNumbers = new LevelNumbers();
     private ScoreCounter scoreCounter = new ScoreCounter();
+    private GameMechanics gameMechanics;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         gameLeft = false;
 
@@ -67,8 +67,8 @@ public class GameActivity extends AppCompatActivity {
         setUpViews();
         startInitialAnimations();
         setUpTouchListeners();
-        setBaseGameValues();
 
+        setBaseGameValues();
         gameMechanics = new GameMechanics() {
             @Override
             protected void onTimerStart() {
@@ -89,7 +89,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setBaseGameValues() {
-        gameArray = mLevelNumbers.createGameArray();
+        gameArray = levelNumbers.getGameArray();
         progressHandler.setBaseProgress(progressBar);
     }
 
@@ -101,10 +101,11 @@ public class GameActivity extends AppCompatActivity {
 
     public void success(){
         scoreCounter.setAndPutScore(scoreView);
-        progressHandler.incrementProgress(progressBar);
         highScore.checkIfAndPutNewHighScore(scoreCounter.getScoreCount(),highScoreView);
-        vibe.vibrate(40);
         gameMechanics.skipGameAction();
+
+        vibe.vibrate(40);
+        progressHandler.incrementProgress(progressBar);
     }
 
     public void fail(){
@@ -229,3 +230,4 @@ public class GameActivity extends AppCompatActivity {
 }
 
 //GÓWNO
+

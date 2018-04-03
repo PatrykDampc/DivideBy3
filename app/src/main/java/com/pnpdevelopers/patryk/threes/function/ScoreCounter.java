@@ -11,8 +11,6 @@ public class ScoreCounter {
     private int scoreCount = 0;
     private Context context  = MyApplication.getAppContext();
 
-    public ScoreCounter() {
-    }
 
     public void setAndPutScore(TextView scoreView){
         scoreCount++;

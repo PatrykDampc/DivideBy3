@@ -7,10 +7,10 @@ import com.pnpdevelopers.patryk.threes.model.LevelNumbers;
 public abstract class GameMechanics {
     private Handler handler;
     private Runnable runnable;
-    private LevelNumbers levelNumbers;
-    int[] gameArray;
+    private LevelNumbers levelNumbers = new LevelNumbers();
+    int[] gameArray = levelNumbers.getGameArray();
     int number;
-    private int iterator;
+    private int iterator = 0;
 
     public int getTime() {
         return time;
@@ -47,11 +47,7 @@ public abstract class GameMechanics {
 
     protected abstract void onTimerFinish();
 
-    public void setUp(){
-        levelNumbers = new LevelNumbers();
-        gameArray = levelNumbers.getGameArray();
-        iterator=0;
-    }
+
     private void nextNumber(){
         this.number = gameArray[iterator];
         iterator++;

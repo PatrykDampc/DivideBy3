@@ -89,7 +89,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setBaseGameValues() {
-        gameArray = gameMechanics.getGameArray();
+        gameArray = levelNumbers.getGameArray();
         progressHandler.setBaseProgress(progressBar);
     }
 
